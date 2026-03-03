@@ -30,10 +30,11 @@
 
 ## Current Iteration Status (2026-03-03)
 - ✅ Completed: task #35 shipped (batched subagent orchestration planner) with deterministic cursor-based batching in `ops/run/plan_subagent_fanout.py` + unit tests.
+- ✅ Completed: task #36 integrated planner into runtime loop path via `ops/run/select_subagent_fanout_batch.py` (live task export + project-scoped batched selection).
 - ✅ Completed: DevEx task #30 (`ops/run/generate-backend-contract-tests.sh`) now has explicit Go binary fallback/override handling.
-- 🚧 Blocked: task #34 (subagent fanout in a single cycle) is held in **Blocked** until planner integration is wired into the autonomous cron execution path.
+- 🚧 Blocked: task #34 remains in **Blocked** pending stable completion of full-queue fanout under runtime worker/time limits (now mitigated by batched cycling).
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
-  - Integrate batched fanout planner into autonomous loop runtime path (new task #36)
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
   - Document canonical Go fallback strategy across all `ops/run` scripts (task #32)
+  - Ship SPA architecture ADR baseline (task #11)

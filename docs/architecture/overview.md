@@ -87,3 +87,8 @@ sequenceDiagram
   2. `go` discovered on `PATH` after Nix profile bin candidates are prepended
   3. Hard failure with actionable hint when unresolved
 - Contract test generation now executes with resolved `GO_BIN`, reducing non-interactive shell drift and making local/CI behavior deterministic.
+- Integrated planner into runtime path via `ops/run/select_subagent_fanout_batch.py`:
+  1. Fetches live `/api/tasks` across all pages.
+  2. Optionally filters by `--project-id` (used for TODO App loop isolation).
+  3. Exports fresh `.run/tasks.json` before selection.
+  4. Invokes `ops/run/plan_subagent_fanout.py` to emit deterministic worker batch + persisted cursor.
