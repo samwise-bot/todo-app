@@ -2,6 +2,7 @@
 
 ## Completed This Iteration
 - [x] Split generated OpenAPI contract tests into separate files (`generated_openapi_mutation_contract_test.go`, `generated_openapi_read_contract_test.go`) and updated generator outputs to reduce diff churn and isolate failures.
+- [x] Updated `ops/run/generate-backend-contract-tests.sh` to use the new `-out-mutation` / `-out-read` flags so backend test automation remains green.
 
 ## Next Iteration (Priority Order)
 - [ ] Expand read-contract coverage for path-param endpoint edge cases (`/api/columns/{id}`, `/api/boards/{id}` invalid-id/shape scenarios).
