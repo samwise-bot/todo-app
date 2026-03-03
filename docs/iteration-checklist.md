@@ -1,11 +1,9 @@
 # Todo-App Iteration Checklist
 
 ## Completed This Iteration
-- [x] Added `make test-backend-contracts` to regenerate backend OpenAPI contract tests and fail on dirty git diff in one command.
-- [x] Attach telemetry summary snippets to PR comments (or checks output) for at-a-glance regression triage without opening artifacts.
-- [x] Add a CI step that runs `make test-backend-contracts` and uploads generated diff context on failure.
+- [x] Unblocked local `make test-backend-contracts` when `go` is not on PATH by adding Nix Go-bin fallback resolution in `ops/run/generate-backend-contract-tests.sh`.
 
 ## Next Iteration (Priority Order)
-- [ ] Unblock local `make test-backend-contracts` on hosts without `go` in PATH (align with `test-backend.sh` toolchain fallback behavior or document required PATH contract).
-- [ ] Document generator CLI usage in `docs/backend-testing.md`, including `-out-mutation`, `-out-read`, and local regeneration workflow.
-- [ ] Add a small CI assertion that the backend contract drift artifact includes both mutation and read test file paths when drift occurs.
+- [ ] Fix board-lane data loading regression in frontend (`Malformed data payloads` state) so kanban lanes render consistently.
+- [ ] Document OpenAPI contract generator CLI usage in `docs/backend-testing.md`, including `-out-mutation`, `-out-read`, and local regeneration workflow.
+- [ ] Add CI assertion that backend contract drift artifacts include both mutation and read generated test file paths when drift occurs.
