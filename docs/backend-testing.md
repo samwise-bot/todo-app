@@ -55,3 +55,39 @@ Regenerate manually with:
 ```
 
 `./ops/run/test-backend.sh` runs this generation step before `go test ./...`, and CI fails if the generated artifact is stale.
+
+## OpenAPI Contract Generator CLI (Local Workflow)
+
+The generator CLI supports separate outputs for mutation and read contracts:
+
+```bash
+cd backend
+go run ./cmd/openapi-contract-test-gen \
+  -in ../docs/openapi/openapi.json \
+  -out-mutation ./tests/generated_openapi_mutation_contract_test.go \
+  -out-read ./tests/generated_openapi_read_contract_test.go
+```
+
+Equivalent single-flag examples:
+
+```bash
+cd backend
+go run ./cmd/openapi-contract-test-gen \
+  -in ../docs/openapi/openapi.json \
+  -out-mutation ./tests/generated_openapi_mutation_contract_test.go
+```
+
+```bash
+cd backend
+go run ./cmd/openapi-contract-test-gen \
+  -in ../docs/openapi/openapi.json \
+  -out-read ./tests/generated_openapi_read_contract_test.go
+```
+
+Before running tests or committing, regenerate and verify generated contracts locally:
+
+```bash
+make generate-backend-contract-tests
+make test-backend
+git diff --exit-code backend/tests/generated_openapi_mutation_contract_test.go backend/tests/generated_openapi_read_contract_test.go
+```
