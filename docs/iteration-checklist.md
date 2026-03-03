@@ -6,6 +6,6 @@
 - [x] Add a CI step that runs `make test-backend-contracts` and uploads generated diff context on failure.
 
 ## Next Iteration (Priority Order)
+- [ ] Unblock local `make test-backend-contracts` on hosts without `go` in PATH (align with `test-backend.sh` toolchain fallback behavior or document required PATH contract).
 - [ ] Document generator CLI usage in `docs/backend-testing.md`, including `-out-mutation`, `-out-read`, and local regeneration workflow.
 - [ ] Add a small CI assertion that the backend contract drift artifact includes both mutation and read test file paths when drift occurs.
-- [ ] Add a short troubleshooting section in `docs/backend-testing.md` for common contract drift causes and expected remediation steps.
