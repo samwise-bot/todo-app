@@ -1,17 +1,13 @@
 # Todo-App Iteration Checklist
 
-## Status From Last Iteration (March 3, 2026)
-- [x] Build frontend principals + assignment UI (create principal, assign/unassign task).
-- [x] Build frontend board/column CRUD UI against new APIs.
-- [x] Add backend tests for validation edge cases (invalid handles, bad IDs, missing required fields) across principals/boards/columns endpoints.
-- [x] Add weekly-review endpoint scaffold (`GET /api/reviews/weekly`) with stale waiting/someday query.
-- [x] Add frontend `lint` and `test` scripts plus minimal baseline test setup.
-- [x] Add API docs examples for principals/boards/columns/reviews routes.
+## Completed This Run (March 3, 2026)
+- [x] Added frontend integration tests for assignment actions (assign/unassign + validation failure states).
+- [x] Added frontend integration tests for board and column actions (create/update/delete + validation failure states).
+- [x] Re-ran frontend and backend test suites after changes.
 
-## Prioritized Next Iteration
-- [x] Add optimistic/error UI feedback for all server actions (inline validation and API error surfacing).
-- [x] Add frontend integration tests for assignment and board/column forms (happy-path and validation failures).
-- [ ] Attach tasks to board columns from UI (set `boardColumnId`) and render board lanes from real column/task relationships.
-- [ ] Expand weekly review output with grouped sections (waiting, someday, overdue scheduled) and unit tests for threshold boundaries.
+## Next Iteration (Priority Order)
+- [ ] Attach tasks to board columns from UI (`boardColumnId`) and render each board lane from real column/task relationships.
+- [ ] Expand weekly review output into grouped sections (waiting, someday, overdue scheduled) and add threshold-boundary unit tests.
 - [ ] Add pagination/filtering for tasks and principals to avoid loading full datasets on each render.
 - [ ] Add OpenAPI-style machine-readable contract for current API surface.
+- [ ] Add lightweight empty/error states for board lanes so missing data is explicit to the user.
