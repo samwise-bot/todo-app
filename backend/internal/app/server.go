@@ -731,6 +731,9 @@ func parsePositiveInt64(raw string, field string) (int64, error) {
 
 func newPaginatedResponse[T any](items []T, total int64, page int, pageSize int) paginatedResponse[T] {
 	totalPages := int((total + int64(pageSize) - 1) / int64(pageSize))
+	if items == nil {
+		items = make([]T, 0)
+	}
 	return paginatedResponse[T]{
 		Items:      items,
 		Page:       page,

@@ -49,6 +49,7 @@
 - ✅ Completed: task #47 moved `Next -> In Progress -> Done` with `/board` default focus for active work assigned to Samwise.
 - ✅ Completed: task #12 moved `Next -> In Progress -> Done` by expanding the SPA migration plan into phased deliverables with explicit acceptance criteria.
 - ✅ Completed: task #13 moved `Next -> In Progress -> Done` with initial board inspector slice (`Board health` counters) and deterministic metric tests.
+- ✅ Completed: task #1 moved `Next -> In Progress -> Done`; backend now returns empty paginated task lists as `items: []` and includes regression coverage for empty inbox queries.
 - ▶ Next milestone:
   - #14 Roadmap: Unified client state store for tasks/boards/columns/principals
   - #15 Roadmap: Offline-first cache strategy for SPA (stale-while-revalidate)

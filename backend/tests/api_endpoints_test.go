@@ -701,6 +701,24 @@ func TestWeeklyReviewEndpointDeterministicOrdering(t *testing.T) {
 	assertIDs("overdueScheduled", []int64{scheduledIDs[1], scheduledIDs[0]})
 }
 
+func TestListTasksInboxReturnsEmptyArrayWhenNoMatches(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, page, tasks := h.jsonRequestPaginated(http.MethodGet, "/api/tasks?state=inbox&page=1&pageSize=20", nil)
+	if status != http.StatusOK {
+		t.Fatalf("expected 200 for empty inbox list, got %d", status)
+	}
+	if tasks == nil {
+		t.Fatal("expected empty array for items, got null")
+	}
+	if len(tasks) != 0 {
+		t.Fatalf("expected 0 tasks, got %d", len(tasks))
+	}
+	if mustInt64(t, page["totalItems"]) != 0 {
+		t.Fatalf("expected totalItems=0, got %v", page["totalItems"])
+	}
+}
+
 func TestListTasksNextOrderingUsesPriorityThenDueDate(t *testing.T) {
 	h := newAPIHarness(t)
 
