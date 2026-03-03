@@ -38,7 +38,8 @@
 - ✅ Completed: task #41 moved `Next -> In Progress -> Done` with a board-first navigation slice (`/board` plus scaffold pages for `/tasks|/projects|/people|/settings`).
 - ✅ Completed: task #42 moved `Next -> In Progress -> Done` with inline board-lane task creation forms (column-local quick add in `/board`).
 - ✅ Completed: route-split extraction increment on `/projects` (real API-backed project list + coverage) aligned to task #41 scope.
+- ✅ Completed: task #47 moved `Next -> In Progress -> Done` with `/board` default focus for active work assigned to Samwise.
 - ▶ Next milestone:
-  - #43 Board UX: inline column creation and column management
-  - #44 Board UX: drag-and-drop movement between columns
-  - #45 Settings: advanced configuration page for board/task defaults and automations
+  - #26 Auth: End-to-end auth test matrix (happy path, invalid creds, expired sessions)
+  - #25 Auth: Security hardening checklist (password policy, CSRF, rate limits)
+  - #24 Auth: Agent principal linking to user identity + audit trail

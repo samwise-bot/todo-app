@@ -132,3 +132,6 @@ sequenceDiagram
 - Extended route-split extraction on `/projects`:
   1. `frontend/app/projects/page.tsx` now fetches real project data from `/api/projects` instead of static scaffold text.
   2. Added regression test `frontend/tests/projects-page.test.tsx` to lock API fetch contract + rendered project names.
+- Added board focus defaults on `/board` route:
+  1. `frontend/app/board/page.tsx` now injects default task filters when absent (`taskAssigneeId=2` for Samwise and active-state focus) before delegating to `_dashboard`.
+  2. Added coverage in `frontend/tests/board-page-defaults.test.tsx` to prevent regressions in default/explicit filter handling.
