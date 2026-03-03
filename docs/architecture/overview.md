@@ -125,3 +125,7 @@ sequenceDiagram
   1. `frontend/app/layout.tsx` now exposes a persistent primary nav (`/board`, `/tasks`, `/projects`, `/people`, `/settings`).
   2. Stub route pages added for `/tasks`, `/projects`, `/people`, and `/settings` to support incremental extraction away from the monolithic dashboard page.
   3. Added `frontend/tests/tasks-page.test.tsx` to keep the new task route scaffold under regression coverage.
+- Added inline board-lane task intake in `frontend/app/ui/board-lanes-section.tsx`:
+  1. Each column now has an inline `Add` form for rapid capture directly in board context.
+  2. Inline create maps lane names to GTD task states (`Inbox -> inbox`, `Next -> next`, `In Progress -> scheduled`, `Blocked -> waiting`, `Done -> done`).
+  3. Inline create binds board column + project id so GTD constraints remain valid while reducing context switches.

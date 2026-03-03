@@ -1,5 +1,7 @@
 import React from 'react';
 import type { BoardLaneView } from '../../lib/board-lanes';
+import { createTaskAction } from '../actions';
+import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
 
@@ -24,6 +26,44 @@ function TaskCard({
   );
 }
 
+function InlineCreateTaskForm({
+  boardName,
+  columnId,
+  columnName,
+  projectId,
+  defaultState
+}: {
+  boardName: string;
+  columnId: number;
+  columnName: string;
+  projectId?: number;
+  defaultState: string;
+}) {
+  async function inlineCreate(formData: FormData) {
+    'use server';
+    if (!projectId) {
+      return;
+    }
+    formData.set('state', defaultState);
+    formData.set('boardColumnId', String(columnId));
+    formData.set('projectId', String(projectId));
+    formData.set('priority', '3');
+    await createTaskAction(INITIAL_ACTION_STATE, formData);
+  }
+
+  return (
+    <form action={inlineCreate} className="form-row" style={{ marginBlock: '0.6rem 0 0.8rem' }}>
+      <input
+        name="title"
+        placeholder={`Add task in ${columnName}`}
+        aria-label={`Task title for ${boardName} / ${columnName}`}
+        required
+      />
+      <button type="submit">Add</button>
+    </form>
+  );
+}
+
 export function BoardLanesSection({
   laneView,
   boards,
@@ -45,6 +85,14 @@ export function BoardLanesSection({
   const projectNames = new Map<number, string>();
   for (const project of projects) {
     projectNames.set(project.id, project.name ?? `Project ${project.id}`);
+  }
+
+  const boardProjectIDs = new Map<number, number>();
+  for (const board of boards) {
+    const maybeProjectID = Number(board.projectId);
+    if (Number.isInteger(maybeProjectID) && maybeProjectID > 0) {
+      boardProjectIDs.set(board.id, maybeProjectID);
+    }
   }
 
   return (
@@ -99,28 +147,51 @@ export function BoardLanesSection({
             <div className="empty-state">No columns defined for this board yet.</div>
           ) : (
             <div className="kanban-scroll" role="region" aria-label={`${board.name} columns`}>
-              {board.columns.map((column) => (
-                <section key={column.id} className="kanban-column">
-                  <div className="column-header-row">
-                    <h4>{column.name}</h4>
-                    <span className="count-pill">{column.tasks.length}</span>
-                  </div>
-                  {column.tasks.length === 0 ? (
-                    <p className="muted">No tasks in this column.</p>
-                  ) : (
-                    <div className="task-stack">
-                      {column.tasks.map((task) => (
-                        <TaskCard
-                          key={task.id}
-                          task={task}
-                          principalName={task.assigneeId ? principalNames.get(task.assigneeId) ?? `Principal ${task.assigneeId}` : 'Unassigned'}
-                          projectName={task.projectId ? projectNames.get(task.projectId) ?? `Project ${task.projectId}` : 'No project'}
-                        />
-                      ))}
+              {board.columns.map((column) => {
+                const normalizedColumn = column.name.trim().toLowerCase();
+                const defaultState =
+                  normalizedColumn === 'inbox'
+                    ? 'inbox'
+                    : normalizedColumn === 'next'
+                      ? 'next'
+                      : normalizedColumn === 'in progress'
+                        ? 'scheduled'
+                        : normalizedColumn === 'blocked'
+                          ? 'waiting'
+                          : normalizedColumn === 'done'
+                            ? 'done'
+                            : 'next';
+
+                return (
+                  <section key={column.id} className="kanban-column">
+                    <div className="column-header-row">
+                      <h4>{column.name}</h4>
+                      <span className="count-pill">{column.tasks.length}</span>
                     </div>
-                  )}
-                </section>
-              ))}
+                    <InlineCreateTaskForm
+                      boardName={board.name}
+                      columnId={column.id}
+                      columnName={column.name}
+                      projectId={boardProjectIDs.get(board.id)}
+                      defaultState={defaultState}
+                    />
+                    {column.tasks.length === 0 ? (
+                      <p className="muted">No tasks in this column.</p>
+                    ) : (
+                      <div className="task-stack">
+                        {column.tasks.map((task) => (
+                          <TaskCard
+                            key={task.id}
+                            task={task}
+                            principalName={task.assigneeId ? principalNames.get(task.assigneeId) ?? `Principal ${task.assigneeId}` : 'Unassigned'}
+                            projectName={task.projectId ? projectNames.get(task.projectId) ?? `Project ${task.projectId}` : 'No project'}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                );
+              })}
             </div>
           )}
         </article>

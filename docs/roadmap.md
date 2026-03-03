@@ -36,7 +36,8 @@
 - ✅ Completed: task #4 moved `Next -> In Progress -> Done`; added frontend API-client regression tests for mixed envelope compatibility (`results.items`) and array-based paged fallback normalization.
 - 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
 - ✅ Completed: task #41 moved `Next -> In Progress -> Done` with a board-first navigation slice (`/board` plus scaffold pages for `/tasks|/projects|/people|/settings`).
+- ✅ Completed: task #42 moved `Next -> In Progress -> Done` with inline board-lane task creation forms (column-local quick add in `/board`).
 - ▶ Next milestone:
-  - #42 Board UX: inline task creation in board/column context
   - #43 Board UX: inline column creation and column management
   - #44 Board UX: drag-and-drop movement between columns
+  - #45 Settings: advanced configuration page for board/task defaults and automations
