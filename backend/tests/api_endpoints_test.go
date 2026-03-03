@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -742,6 +743,72 @@ func TestMetricsExposeWeeklyReviewAndBoardLaneFailureCounters(t *testing.T) {
 	} {
 		if !strings.Contains(metrics, expected) {
 			t.Fatalf("metrics response missing %q:\n%s", expected, metrics)
+		}
+	}
+}
+
+func TestMetricsPrometheusTextFormatCompatibility(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, _ := h.jsonRequest(http.MethodGet, "/api/reviews/weekly?thresholdDays=bad", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for bad thresholdDays, got %d", status)
+	}
+	status, _ = h.jsonRequest(http.MethodGet, "/api/reviews/weekly?thresholdDays=0", nil)
+	if status != http.StatusOK {
+		t.Fatalf("expected 200 for weekly review success, got %d", status)
+	}
+	status, _ = h.jsonRequest(http.MethodGet, "/api/tasks?state=bad", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid tasks state, got %d", status)
+	}
+
+	status, metrics := h.textRequest(http.MethodGet, "/metrics")
+	if status != http.StatusOK {
+		t.Fatalf("metrics: expected 200, got %d", status)
+	}
+
+	for _, pattern := range []string{
+		`(?m)^# HELP todo_app_up .+$`,
+		`(?m)^# TYPE todo_app_up gauge$`,
+		`(?m)^todo_app_up 1$`,
+		`(?m)^# HELP todo_app_task_events_total .+$`,
+		`(?m)^# TYPE todo_app_task_events_total gauge$`,
+		`(?m)^todo_app_task_events_total \d+$`,
+		`(?m)^# HELP todo_app_weekly_review_requests_total .+$`,
+		`(?m)^# TYPE todo_app_weekly_review_requests_total counter$`,
+		`(?m)^todo_app_weekly_review_requests_total 2$`,
+		`(?m)^# HELP todo_app_weekly_review_failures_total .+$`,
+		`(?m)^# TYPE todo_app_weekly_review_failures_total counter$`,
+		`(?m)^todo_app_weekly_review_failures_total 1$`,
+		`(?m)^# HELP todo_app_weekly_review_duration_seconds .+$`,
+		`(?m)^# TYPE todo_app_weekly_review_duration_seconds histogram$`,
+		`(?m)^todo_app_weekly_review_duration_seconds_bucket\{le="\+Inf"\} 2$`,
+		`(?m)^todo_app_weekly_review_duration_seconds_count 2$`,
+		`(?m)^todo_app_weekly_review_duration_seconds_sum [0-9]+\.[0-9]+$`,
+		`(?m)^# HELP todo_app_board_lane_fetch_failures_total .+$`,
+		`(?m)^# TYPE todo_app_board_lane_fetch_failures_total counter$`,
+		`(?m)^todo_app_board_lane_fetch_failures_total\{endpoint="/api/tasks"\} 1$`,
+	} {
+		if !regexp.MustCompile(pattern).MatchString(metrics) {
+			t.Fatalf("metrics response missing required pattern %q:\n%s", pattern, metrics)
+		}
+	}
+
+	metricWithLabels := regexp.MustCompile(`^[a-zA-Z_:][a-zA-Z0-9_:]*\{([^}]*)\} [+-]?\d+(?:\.\d+)?$`)
+	validLabel := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_]*="(?:[^"\\]|\\.)*"$`)
+	for _, line := range strings.Split(metrics, "\n") {
+		if strings.TrimSpace(line) == "" || strings.HasPrefix(line, "#") || !strings.Contains(line, "{") {
+			continue
+		}
+		match := metricWithLabels.FindStringSubmatch(line)
+		if match == nil {
+			t.Fatalf("invalid labeled sample line format: %q", line)
+		}
+		for _, pair := range strings.Split(match[1], ",") {
+			if !validLabel.MatchString(strings.TrimSpace(pair)) {
+				t.Fatalf("invalid label pair in sample line: %q", line)
+			}
 		}
 	}
 }

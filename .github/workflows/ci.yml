@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  openapi-drift:
+    name: OpenAPI Drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+      - name: Regenerate OpenAPI artifact
+        run: ./ops/run/generate-openapi.sh
+      - name: Fail when docs/openapi/openapi.json is stale
+        run: |
+          git diff --exit-code -- docs/openapi/openapi.json || {
+            echo "docs/openapi/openapi.json is stale. Run ./ops/run/generate-openapi.sh and commit the updated file."
+            exit 1
+          }
+
+  backend-test:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+      - name: Go test
+        run: cd backend && go test ./...
+
+  frontend-test:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install deps
+        run: cd frontend && npm ci
+      - name: Vitest
+        run: cd frontend && npm test

@@ -34,7 +34,11 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		n, _ := s.store.TaskEventCount(r.Context())
 		w.Header().Set("Content-Type", "text/plain; version=0.0.4")
+		_, _ = w.Write([]byte("# HELP todo_app_up Service health status.\n"))
+		_, _ = w.Write([]byte("# TYPE todo_app_up gauge\n"))
 		_, _ = w.Write([]byte("todo_app_up 1\n"))
+		_, _ = w.Write([]byte("# HELP todo_app_task_events_total Total stored task events.\n"))
+		_, _ = w.Write([]byte("# TYPE todo_app_task_events_total gauge\n"))
 		_, _ = w.Write([]byte("todo_app_task_events_total " + strconv.FormatInt(n, 10) + "\n"))
 		_, _ = w.Write([]byte(s.metrics.RenderPrometheus()))
 	})

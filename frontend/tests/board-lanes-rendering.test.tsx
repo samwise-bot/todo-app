@@ -51,4 +51,49 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('No tasks in this column.');
     expect(html).toContain('Tasks appear in board lanes only when assigned to a board column.');
   });
+
+  test('renders mixed assigned and unassigned tasks in their respective lanes', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [
+            {
+              id: 2,
+              name: 'Delivery',
+              columns: [
+                {
+                  id: 21,
+                  name: 'Doing',
+                  tasks: [{ id: 201, title: 'Prepare release notes', state: 'next' }]
+                },
+                {
+                  id: 22,
+                  name: 'Done',
+                  tasks: [{ id: 202, title: 'Ship patch', state: 'done' }]
+                }
+              ]
+            }
+          ],
+          tasksWithoutColumn: [{ id: 101, title: 'Inbox triage', state: 'inbox' }],
+          fetchErrors: []
+        }}
+        boards={[{ id: 2, name: 'Delivery' }]}
+        columns={[
+          { id: 21, boardId: 2, name: 'Doing' },
+          { id: 22, boardId: 2, name: 'Done' }
+        ]}
+      />
+    );
+
+    expect(html).toContain('<h3>No column</h3>');
+    expect(html).toContain('Inbox triage (inbox)');
+    expect(html).toContain('<h3>Delivery</h3>');
+    expect(html).toContain('<h4 style="margin-top:0">Doing</h4>');
+    expect(html).toContain('<h4 style="margin-top:0">Done</h4>');
+    expect(html).toContain('Prepare release notes (next)');
+    expect(html).toContain('Ship patch (done)');
+    expect(html).not.toContain('No tasks without a board column.');
+    expect(html).not.toContain('No tasks in this column.');
+    expect(html).not.toContain('No boards yet.');
+  });
 });
