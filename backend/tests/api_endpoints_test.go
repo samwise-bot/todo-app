@@ -270,3 +270,99 @@ func TestBoardAndColumnCRUDEndpoints(t *testing.T) {
 		t.Fatalf("expected 404 for deleted board, got %d", status)
 	}
 }
+
+func TestPrincipalsBoardsColumnsValidationErrors(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, _ := h.jsonRequest(http.MethodPost, "/api/principals", map[string]any{
+		"kind":        "human",
+		"handle":      "bad handle",
+		"displayName": "Alice",
+	})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid principal handle, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPost, "/api/principals", map[string]any{
+		"kind":        "human",
+		"handle":      "alice",
+		"displayName": "",
+	})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for missing displayName, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/boards?projectId=abc", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid boards projectId filter, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPost, "/api/boards", map[string]any{
+		"name": "No Project",
+	})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for missing board projectId, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPatch, "/api/boards/999999", map[string]any{
+		"name": "Does Not Exist",
+	})
+	if status != http.StatusNotFound {
+		t.Fatalf("expected 404 for unknown board id, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/columns?boardId=abc", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid columns boardId filter, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPost, "/api/columns", map[string]any{
+		"name": "No Board",
+	})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for missing column boardId, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPatch, "/api/columns/999999", map[string]any{
+		"name": "Does Not Exist",
+	})
+	if status != http.StatusNotFound {
+		t.Fatalf("expected 404 for unknown column id, got %d", status)
+	}
+}
+
+func TestWeeklyReviewEndpointScaffold(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, _ := h.jsonRequest(http.MethodGet, "/api/reviews/weekly?thresholdDays=bad", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid thresholdDays, got %d", status)
+	}
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Weekly Review Project"})
+	if status != http.StatusCreated {
+		t.Fatalf("create project: expected 201, got %d", status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	status, _ = h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{
+		"title":     "Waiting on feedback",
+		"state":     "waiting",
+		"projectId": projectID,
+	})
+	if status != http.StatusCreated {
+		t.Fatalf("create waiting task: expected 201, got %d", status)
+	}
+
+	status, weekly := h.jsonRequest(http.MethodGet, "/api/reviews/weekly?thresholdDays=0", nil)
+	if status != http.StatusOK {
+		t.Fatalf("weekly review: expected 200, got %d", status)
+	}
+	if mustInt64(t, weekly["thresholdDays"]) != 0 {
+		t.Fatalf("expected thresholdDays=0, got %v", weekly["thresholdDays"])
+	}
+	count := mustInt64(t, weekly["count"])
+	if count < 1 {
+		t.Fatalf("expected at least one stale task, got %d", count)
+	}
+}

@@ -367,6 +367,43 @@ func (s *SQLiteStore) ListTasks(ctx context.Context) ([]domain.Task, error) {
 	return out, rows.Err()
 }
 
+func (s *SQLiteStore) ListStaleTasksForWeeklyReview(ctx context.Context, olderThan time.Duration) ([]domain.Task, error) {
+	if olderThan < 0 {
+		olderThan = 0
+	}
+	cutoff := time.Now().UTC().Add(-olderThan).Format(time.RFC3339)
+	rows, err := s.db.QueryContext(ctx, `
+		SELECT id, title, description, state, project_id, assignee_id, board_column_id, due_at, created_at, updated_at
+		FROM tasks
+		WHERE state IN (?, ?) AND updated_at <= ?
+		ORDER BY updated_at ASC, id ASC
+	`, domain.TaskStateWaiting, domain.TaskStateSomeday, cutoff)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []domain.Task
+	for rows.Next() {
+		var t domain.Task
+		var due, created, updated sql.NullString
+		if err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.State, &t.ProjectID, &t.AssigneeID, &t.BoardColumnID, &due, &created, &updated); err != nil {
+			return nil, err
+		}
+		if due.Valid {
+			d, _ := time.Parse(time.RFC3339, due.String)
+			t.DueAt = &d
+		}
+		if created.Valid {
+			t.CreatedAt, _ = time.Parse(time.RFC3339, created.String)
+		}
+		if updated.Valid {
+			t.UpdatedAt, _ = time.Parse(time.RFC3339, updated.String)
+		}
+		out = append(out, t)
+	}
+	return out, rows.Err()
+}
+
 func (s *SQLiteStore) UpdateTaskState(ctx context.Context, taskID int64, to domain.TaskState, actorID *int64) error {
 	var cur domain.TaskState
 	var projectID *int64

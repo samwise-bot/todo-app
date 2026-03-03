@@ -34,6 +34,7 @@ Local-first GTD + Kanban task system for humans and OpenClaw agents.
 - `GET /api/columns/:id`
 - `PATCH /api/columns/:id`
 - `DELETE /api/columns/:id`
+- `GET /api/reviews/weekly`
 - `GET /api/tasks`
 - `POST /api/tasks`
 - `PATCH /api/tasks/:id/state`

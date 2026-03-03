@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/example/todo-app/backend/internal/domain"
 	"github.com/example/todo-app/backend/internal/store"
@@ -33,6 +34,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/boards/", s.handleBoardByID)
 	mux.HandleFunc("/api/columns", s.handleColumns)
 	mux.HandleFunc("/api/columns/", s.handleColumnByID)
+	mux.HandleFunc("/api/reviews/weekly", s.handleWeeklyReview)
 	mux.HandleFunc("/api/tasks", s.handleTasks)
 	mux.HandleFunc("/api/tasks/", s.handleTaskMutation)
 	return logging(mux)
@@ -443,6 +445,32 @@ func (s *Server) handleColumnByID(w http.ResponseWriter, r *http.Request) {
 	default:
 		writeJSON(w, 405, map[string]string{"error": "method not allowed"})
 	}
+}
+
+func (s *Server) handleWeeklyReview(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeJSON(w, 405, map[string]string{"error": "method not allowed"})
+		return
+	}
+	thresholdDays := int64(14)
+	if v := strings.TrimSpace(r.URL.Query().Get("thresholdDays")); v != "" {
+		n, err := strconv.ParseInt(v, 10, 64)
+		if err != nil || n < 0 {
+			writeJSON(w, 400, map[string]string{"error": "thresholdDays must be a non-negative integer"})
+			return
+		}
+		thresholdDays = n
+	}
+	staleTasks, err := s.store.ListStaleTasksForWeeklyReview(r.Context(), time.Duration(thresholdDays)*24*time.Hour)
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{
+		"thresholdDays": thresholdDays,
+		"staleTasks":    staleTasks,
+		"count":         len(staleTasks),
+	})
 }
 
 func splitResourceID(path, prefix string) ([]string, int64, bool) {
