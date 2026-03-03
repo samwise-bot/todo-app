@@ -1,0 +1,25 @@
+# Node
+node_modules/
+.next/
+out/
+
+# Go
+bin/
+*.test
+coverage.out
+
+# SQLite runtime
+*.db
+*.db-shm
+*.db-wal
+
+# Env
+.env
+.env.*
+
+# Uploads/artifacts
+uploads/
+artifacts/
+
+# OS
+.DS_Store
