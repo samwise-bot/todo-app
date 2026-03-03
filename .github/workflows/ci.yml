@@ -255,11 +255,60 @@ jobs:
           else
             status="FAIL"
           fi
+          summary_json="$RUNNER_TEMP/ci-telemetry/output/summary.json"
+          snippet_file="$RUNNER_TEMP/ci-telemetry/per-job-snippet.md"
+          if [ -f "$summary_json" ]; then
+            python3 - "$summary_json" > "$snippet_file" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+jobs = summary.get("jobs", [])
+
+print("### Per-job at a glance")
+print("")
+print("| Job | Status | Duration | Regression | Cache misses |")
+print("| --- | --- | ---: | ---: | ---: |")
+for job in jobs:
+    job_id = job.get("job_id", "n/a")
+    job_status = str(job.get("status", "n/a")).upper()
+
+    duration_value = job.get("duration_seconds")
+    if isinstance(duration_value, (int, float)):
+        duration = f"{duration_value:.2f}s"
+    else:
+        duration = "n/a"
+
+    regression_value = job.get("regression_percent")
+    if isinstance(regression_value, (int, float)):
+        regression = f"{regression_value:+.1f}%"
+    else:
+        regression = "n/a"
+
+    cache_misses_value = job.get("cache_miss_count")
+    if isinstance(cache_misses_value, int):
+        cache_misses = str(cache_misses_value)
+    else:
+        cache_misses = "n/a"
+
+    print(f"| `{job_id}` | {job_status} | {duration} | {regression} | {cache_misses} |")
+PY
+          else
+            {
+              echo "### Per-job at a glance"
+              echo ""
+              echo "_summary.json not found; see telemetry artifacts for details._"
+            } > "$snippet_file"
+          fi
           artifacts_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts"
           {
             echo "## CI Telemetry Regression"
             echo ""
             echo "- Status: **${status}**"
+            echo ""
+            cat "$snippet_file"
+            echo ""
             echo "- Artifacts:"
             echo "  - \`ci-telemetry-openapi-contract\`"
             echo "  - \`ci-telemetry-backend-test\`"
