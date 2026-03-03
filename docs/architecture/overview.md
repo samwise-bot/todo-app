@@ -77,6 +77,8 @@ sequenceDiagram
 3. Use the dashboard panels to confirm weekly review request/failure rates, failure ratio, p95 latency, and board lane failure spikes by endpoint.
 
 ## Architecture Delta (2026-03-03, autonomous loop)
+- Documented canonical Go binary fallback behavior for backend contract generation (`docs/backend-testing.md`): explicit `BACKEND_TEST_GO_BIN` override, Nix-path prepend, then `go` discovery from PATH with deterministic failure hints.
+
 - Added deterministic subagent fanout planning utility: `ops/run/plan_subagent_fanout.py`.
   1. Sorts `Next` tasks by `priority`, then `dueAt`, then `id`.
   2. Selects a bounded batch (`--batch-size`, default 5) to respect worker caps/timeouts.

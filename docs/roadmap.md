@@ -31,9 +31,10 @@
 ## Current Iteration Status (2026-03-03)
 - ✅ Completed: task #39 moved `Next -> In Progress -> Done` and extended sweep reporting with `workerOutcomeSummary` (`completed`, `timedOut`, ratios) in `ops/run/validate_subagent_fanout_sweep.py`.
 - ✅ Completed: task #38 validated deterministic full-queue coverage with `.run/subagent-fanout-sweep-report.json` (`coverageRatio=1.0`, `cyclesRun=4`).
+- ✅ Completed: task #32 documented canonical Go fallback strategy for contract-test generation in `docs/backend-testing.md` (resolution order + env vars + operator guidance).
 - 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
   - Ship SPA architecture ADR baseline (task #11)
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
-  - Document canonical Go fallback strategy across all `ops/run` scripts (task #32)
+  - Continue auth/benchmark roadmap queue from prioritized `Next`

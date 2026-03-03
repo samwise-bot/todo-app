@@ -42,6 +42,25 @@ make test-backend-remote
 
 This command forces remote mode with `BACKEND_TEST_FORCE_REMOTE=1`.
 
+## Go Binary Fallback Strategy (Canonical for local + CI)
+
+`ops/run/generate-backend-contract-tests.sh` resolves the Go binary in a deterministic order so non-interactive shells behave the same as local terminals.
+
+Resolution order:
+1. `BACKEND_TEST_GO_BIN` (must be an executable file path)
+2. `go` from `PATH` (after Nix candidate bin dirs are prepended)
+3. hard fail with a clear hint when no usable binary is found
+
+Nix candidate bin dirs are read from `BACKEND_TEST_NIX_GO_BIN_CANDIDATES` (colon-delimited), defaulting to:
+- `/home/bot/.nix-profile/bin`
+- `$HOME/.nix-profile/bin`
+- `/nix/var/nix/profiles/default/bin`
+
+Operational guidance:
+- Prefer setting `BACKEND_TEST_GO_BIN` in CI when the Go toolchain path is known and fixed.
+- For developer machines, rely on `PATH` + default Nix candidate prepend behavior.
+- If generation fails with "could not find a usable Go binary", install Go, enter `nix develop`, or set `BACKEND_TEST_GO_BIN=/absolute/path/to/go`.
+
 ## Generated OpenAPI Mutation Contract Tests
 
 Critical mutation endpoint contract tests are generated from `docs/openapi/openapi.json` into:
