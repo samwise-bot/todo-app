@@ -96,3 +96,7 @@ sequenceDiagram
   1. `--emit-spawn-spec` outputs ready-to-send `sessions_spawn` payloads.
   2. Worker prompts are intentionally short and task-scoped via `_build_worker_prompt(...)`.
   3. Default worker timeout is now explicitly tuned to `180s` (`--worker-timeout-seconds`) to reduce 60s timeout churn.
+- Added full-sweep validation utility `ops/run/validate_subagent_fanout_sweep.py` to prove deterministic queue coverage:
+  1. Replays `select_subagent_fanout_batch.py` across cycles until all current `Next` task IDs are seen or `--max-cycles` is hit.
+  2. Writes machine-readable evidence to `.run/subagent-fanout-sweep-report.json` with coverage ratio and per-cycle cursor/selection details.
+  3. Keeps worker spawning out-of-band, so planning validation is deterministic and testable without runtime side-effects.

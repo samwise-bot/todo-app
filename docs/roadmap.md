@@ -33,8 +33,9 @@
 - ✅ Completed: task #36 integrated planner into runtime loop path via `ops/run/select_subagent_fanout_batch.py` (live task export + project-scoped batched selection).
 - ✅ Completed: task #37 tuned worker execution policy in `ops/run/select_subagent_fanout_batch.py` with compact prompt generation + explicit `--worker-timeout-seconds` default 180s.
 - ✅ Completed: DevEx task #30 (`ops/run/generate-backend-contract-tests.sh`) now has explicit Go binary fallback/override handling.
-- 🚧 Blocked: task #34 remains in **Blocked** pending confirmation that longer timeout + compact prompts consistently produce non-timeout fanout outputs across full `Next` queue.
-- ➕ Added explicit unblock task #38 in `Next` (priority=1): validate 180s timeout + compact prompt policy over one full deterministic sweep and capture completion metrics.
+- ✅ Completed: task #38 validation utility shipped via `ops/run/validate_subagent_fanout_sweep.py` + `.run/subagent-fanout-sweep-report.json` evidence (coverageRatio=1.0 over full `Next` set in 4 cycles).
+- 🚧 Blocked: task #34 remains in **Blocked** pending end-to-end verification that spawned workers (not just planner coverage) consistently return actionable notes within timeout budgets.
+- ➕ Added follow-up validation need: collect spawned-worker completion/timeout ratios by cycle and define unblock threshold for #34 closure.
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
