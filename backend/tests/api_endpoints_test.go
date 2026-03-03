@@ -426,6 +426,16 @@ func TestWeeklyReviewEndpointScaffold(t *testing.T) {
 		t.Fatalf("create waiting task: expected 201, got %d", status)
 	}
 
+	status, _ = h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{
+		"title":     "Ship rollout on Friday",
+		"state":     "scheduled",
+		"projectId": projectID,
+		"dueAt":     "2020-01-01T00:00:00Z",
+	})
+	if status != http.StatusCreated {
+		t.Fatalf("create scheduled task: expected 201, got %d", status)
+	}
+
 	status, weekly := h.jsonRequest(http.MethodGet, "/api/reviews/weekly?thresholdDays=0", nil)
 	if status != http.StatusOK {
 		t.Fatalf("weekly review: expected 200, got %d", status)
@@ -433,8 +443,22 @@ func TestWeeklyReviewEndpointScaffold(t *testing.T) {
 	if mustInt64(t, weekly["thresholdDays"]) != 0 {
 		t.Fatalf("expected thresholdDays=0, got %v", weekly["thresholdDays"])
 	}
+
+	sections, ok := weekly["sections"].(map[string]any)
+	if !ok {
+		t.Fatalf("expected sections object in weekly review payload, got %T", weekly["sections"])
+	}
+	waiting, ok := sections["waiting"].([]any)
+	if !ok || len(waiting) == 0 {
+		t.Fatalf("expected waiting section to contain at least one task, got %v", sections["waiting"])
+	}
+	overdueScheduled, ok := sections["overdueScheduled"].([]any)
+	if !ok || len(overdueScheduled) == 0 {
+		t.Fatalf("expected overdueScheduled section to contain at least one task, got %v", sections["overdueScheduled"])
+	}
+
 	count := mustInt64(t, weekly["count"])
-	if count < 1 {
-		t.Fatalf("expected at least one stale task, got %d", count)
+	if count < 2 {
+		t.Fatalf("expected weekly section count to include waiting + overdue scheduled tasks, got %d", count)
 	}
 }

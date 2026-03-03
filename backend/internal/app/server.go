@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -486,16 +487,83 @@ func (s *Server) handleWeeklyReview(w http.ResponseWriter, r *http.Request) {
 		}
 		thresholdDays = n
 	}
-	staleTasks, err := s.store.ListStaleTasksForWeeklyReview(r.Context(), time.Duration(thresholdDays)*24*time.Hour)
+	tasks, err := s.store.ListTasks(r.Context())
 	if err != nil {
 		writeErr(w, 500, err)
 		return
 	}
+	groups, staleTasks := buildWeeklyReviewGroups(tasks, time.Now().UTC(), thresholdDays)
+	count := len(groups.Waiting) + len(groups.Someday) + len(groups.OverdueScheduled)
 	writeJSON(w, 200, map[string]any{
 		"thresholdDays": thresholdDays,
-		"staleTasks":    staleTasks,
-		"count":         len(staleTasks),
+		"sections": map[string]any{
+			"waiting":          groups.Waiting,
+			"someday":          groups.Someday,
+			"overdueScheduled": groups.OverdueScheduled,
+		},
+		"staleTasks": staleTasks,
+		"count":      count,
 	})
+}
+
+type weeklyReviewGroups struct {
+	Waiting          []domain.Task
+	Someday          []domain.Task
+	OverdueScheduled []domain.Task
+}
+
+func buildWeeklyReviewGroups(tasks []domain.Task, now time.Time, thresholdDays int64) (weeklyReviewGroups, []domain.Task) {
+	if thresholdDays < 0 {
+		thresholdDays = 0
+	}
+	cutoff := now.UTC().Add(-time.Duration(thresholdDays) * 24 * time.Hour)
+
+	var groups weeklyReviewGroups
+	for _, task := range tasks {
+		switch task.State {
+		case domain.TaskStateWaiting:
+			if !task.UpdatedAt.After(cutoff) {
+				groups.Waiting = append(groups.Waiting, task)
+			}
+		case domain.TaskStateSomeday:
+			if !task.UpdatedAt.After(cutoff) {
+				groups.Someday = append(groups.Someday, task)
+			}
+		case domain.TaskStateScheduled:
+			if task.DueAt != nil && task.DueAt.UTC().Before(now.UTC()) {
+				groups.OverdueScheduled = append(groups.OverdueScheduled, task)
+			}
+		}
+	}
+
+	sort.Slice(groups.Waiting, func(i, j int) bool {
+		return taskUpdatedAtLess(groups.Waiting[i], groups.Waiting[j])
+	})
+	sort.Slice(groups.Someday, func(i, j int) bool {
+		return taskUpdatedAtLess(groups.Someday[i], groups.Someday[j])
+	})
+	sort.Slice(groups.OverdueScheduled, func(i, j int) bool {
+		left, right := groups.OverdueScheduled[i], groups.OverdueScheduled[j]
+		if left.DueAt != nil && right.DueAt != nil && !left.DueAt.Equal(*right.DueAt) {
+			return left.DueAt.Before(*right.DueAt)
+		}
+		return left.ID < right.ID
+	})
+
+	staleTasks := append([]domain.Task{}, groups.Waiting...)
+	staleTasks = append(staleTasks, groups.Someday...)
+	sort.Slice(staleTasks, func(i, j int) bool {
+		return taskUpdatedAtLess(staleTasks[i], staleTasks[j])
+	})
+
+	return groups, staleTasks
+}
+
+func taskUpdatedAtLess(left, right domain.Task) bool {
+	if !left.UpdatedAt.Equal(right.UpdatedAt) {
+		return left.UpdatedAt.Before(right.UpdatedAt)
+	}
+	return left.ID < right.ID
 }
 
 func splitResourceID(path, prefix string) ([]string, int64, bool) {

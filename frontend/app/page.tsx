@@ -1,5 +1,6 @@
 import { createProjectAction } from './actions';
 import { TASK_STATES } from '../lib/task-states';
+import { buildBoardLaneView } from '../lib/board-lanes';
 import {
   AssignTaskForm,
   CreateBoardForm,
@@ -14,28 +15,48 @@ import {
   UpdateColumnForm
 } from './action-forms';
 
-async function fetchJSON(path: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, { cache: 'no-store' });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return Array.isArray(data) ? data : [];
+async function fetchCollection(path: string, label: string) {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, { cache: 'no-store' });
+    if (!res.ok) {
+      return { items: [], error: `${label} data is unavailable (HTTP ${res.status}).` };
+    }
+    const data = await res.json();
+    if (!Array.isArray(data)) {
+      return { items: [], error: `${label} data is malformed.` };
+    }
+    return { items: data, error: null };
+  } catch {
+    return { items: [], error: `${label} data request failed.` };
+  }
 }
 
 export default async function HomePage() {
-  const [projects, principals, boards, columns, tasks] = await Promise.all([
-    fetchJSON('/api/projects'),
-    fetchJSON('/api/principals'),
-    fetchJSON('/api/boards'),
-    fetchJSON('/api/columns'),
-    fetchJSON('/api/tasks')
+  const [projectsResult, principalsResult, boardsResult, columnsResult, tasksResult] = await Promise.all([
+    fetchCollection('/api/projects', 'Projects'),
+    fetchCollection('/api/principals', 'Principals'),
+    fetchCollection('/api/boards', 'Boards'),
+    fetchCollection('/api/columns', 'Columns'),
+    fetchCollection('/api/tasks', 'Tasks')
   ]);
+  const projects = projectsResult.items;
+  const principals = principalsResult.items;
+  const boards = boardsResult.items;
+  const columns = columnsResult.items;
+  const tasks = tasksResult.items;
+
+  const laneView = buildBoardLaneView({
+    boards,
+    columns,
+    tasks,
+    fetchErrors: [boardsResult.error, columnsResult.error, tasksResult.error].filter((error): error is string => Boolean(error))
+  });
+
   const columnsByBoard = new Map<number, any[]>();
-  const columnsByID = new Map<number, any>();
   for (const column of columns) {
     const bucket = columnsByBoard.get(column.boardId) ?? [];
     bucket.push(column);
     columnsByBoard.set(column.boardId, bucket);
-    columnsByID.set(column.id, column);
   }
 
   const boardsByID = new Map<number, any>();
@@ -47,18 +68,6 @@ export default async function HomePage() {
     const boardName = boardsByID.get(column.boardId)?.name ?? `Board ${column.boardId}`;
     return { id: column.id, label: `${boardName} / ${column.name}` };
   });
-
-  const tasksByColumn = new Map<number, any[]>();
-  const tasksWithoutColumn: any[] = [];
-  for (const task of tasks) {
-    if (!task.boardColumnId || !columnsByID.has(task.boardColumnId)) {
-      tasksWithoutColumn.push(task);
-      continue;
-    }
-    const bucket = tasksByColumn.get(task.boardColumnId) ?? [];
-    bucket.push(task);
-    tasksByColumn.set(task.boardColumnId, bucket);
-  }
 
   return (
     <main style={{ maxWidth: 980, margin: '2rem auto', fontFamily: 'Inter, sans-serif', padding: '0 1rem' }}>
@@ -139,25 +148,47 @@ export default async function HomePage() {
 
       <section>
         <h2>Kanban lanes (by board columns)</h2>
+        {laneView.fetchErrors.length > 0 && (
+          <div style={{ marginBottom: 12, border: '1px solid #b00020', borderRadius: 8, padding: 10, background: '#fff3f5' }}>
+            <strong>Board lanes are incomplete due to data loading errors.</strong>
+            <ul style={{ marginBottom: 0 }}>
+              {laneView.fetchErrors.map((error) => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        )}
         <div style={{ marginBottom: 12, border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
           <h3>No column</h3>
-          <ul>
-            {tasksWithoutColumn.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
-          </ul>
+          {laneView.tasksWithoutColumn.length === 0 ? (
+            <p style={{ marginBottom: 0 }}>No tasks without a board column.</p>
+          ) : (
+            <ul>
+              {laneView.tasksWithoutColumn.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
+            </ul>
+          )}
         </div>
-        {boards.map((board: any) => (
+        {laneView.boards.map((board: any) => (
           <article key={board.id} style={{ marginBottom: 12 }}>
             <h3>{board.name}</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-              {(columnsByBoard.get(board.id) ?? []).map((column: any) => (
-                <div key={column.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-                  <h4 style={{ marginTop: 0 }}>{column.name}</h4>
-                  <ul>
-                    {(tasksByColumn.get(column.id) ?? []).map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
-                  </ul>
-                </div>
-              ))}
-            </div>
+            {board.columns.length === 0 ? (
+              <div style={{ border: '1px dashed #bbb', borderRadius: 8, padding: 10 }}>
+                No columns defined for this board.
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+                {board.columns.map((column: any) => (
+                  <div key={column.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+                    <h4 style={{ marginTop: 0 }}>{column.name}</h4>
+                    {column.tasks.length === 0 ? (
+                      <p style={{ marginBottom: 0 }}>No tasks in this column.</p>
+                    ) : (
+                      <ul>
+                        {column.tasks.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </article>
         ))}
         {boards.length === 0 && (

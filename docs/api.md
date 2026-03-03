@@ -184,7 +184,42 @@ Response `200`:
 ```json
 {
   "thresholdDays": 14,
-  "count": 2,
+  "count": 3,
+  "sections": {
+    "waiting": [
+      {
+        "id": 33,
+        "title": "Follow up on vendor",
+        "description": "",
+        "state": "waiting",
+        "projectId": 3,
+        "createdAt": "2026-02-01T09:00:00Z",
+        "updatedAt": "2026-02-04T10:00:00Z"
+      }
+    ],
+    "someday": [
+      {
+        "id": 41,
+        "title": "Potential idea: workflow bot",
+        "description": "",
+        "state": "someday",
+        "createdAt": "2026-02-05T11:00:00Z",
+        "updatedAt": "2026-02-10T08:00:00Z"
+      }
+    ],
+    "overdueScheduled": [
+      {
+        "id": 57,
+        "title": "Prepare launch notes",
+        "description": "",
+        "state": "scheduled",
+        "projectId": 3,
+        "dueAt": "2026-02-20T00:00:00Z",
+        "createdAt": "2026-02-10T11:00:00Z",
+        "updatedAt": "2026-02-12T08:00:00Z"
+      }
+    ]
+  },
   "staleTasks": [
     {
       "id": 33,
