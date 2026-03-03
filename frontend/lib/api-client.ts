@@ -31,6 +31,17 @@ function readItems<T>(data: unknown): T[] | null {
   if (isRecord(data) && Array.isArray(data.items)) {
     return data.items as T[];
   }
+  if (isRecord(data)) {
+    const envelopeItems = [data.data, data.results];
+    for (const envelope of envelopeItems) {
+      if (Array.isArray(envelope)) {
+        return envelope as T[];
+      }
+      if (isRecord(envelope) && Array.isArray(envelope.items)) {
+        return envelope.items as T[];
+      }
+    }
+  }
   return null;
 }
 
