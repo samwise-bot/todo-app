@@ -11,13 +11,30 @@ fi
 REMOTE_REF="${BACKEND_TEST_REMOTE_REF:-$DEFAULT_REMOTE_REF}"
 FORCE_REMOTE="${BACKEND_TEST_FORCE_REMOTE:-0}"
 
+ensure_gh_auth() {
+  if gh auth status >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+    echo "GitHub CLI is unauthenticated; attempting non-interactive auth via GITHUB_TOKEN"
+    if gh auth login --with-token >/dev/null 2>&1 <<<"$GITHUB_TOKEN"; then
+      return 0
+    fi
+    echo "warning: failed to authenticate GitHub CLI using GITHUB_TOKEN" >&2
+  fi
+
+  return 1
+}
+
 run_remote_backend_tests() {
   if ! command -v gh >/dev/null 2>&1; then
     return 1
   fi
 
-  if ! gh auth status >/dev/null 2>&1; then
+  if ! ensure_gh_auth; then
     echo "error: neither 'go' nor 'docker' is available, and GitHub CLI is not authenticated" >&2
+    echo "hint: run 'gh auth login' or export GITHUB_TOKEN for non-interactive auth" >&2
     return 1
   fi
 

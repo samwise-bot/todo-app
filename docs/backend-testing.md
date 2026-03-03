@@ -24,7 +24,7 @@ This keeps backend test execution reproducible across developer machines and CI 
 `./ops/run/test-backend.sh` automatically attempts remote execution when local backend tests cannot run (for example: no Go toolchain, no Docker, or Docker daemon not accessible).
 
 Prerequisites:
-- `gh` is installed and authenticated (`gh auth status` succeeds).
+- `gh` is installed and authenticated (`gh auth status` succeeds), or `GITHUB_TOKEN` is exported so the runner can authenticate `gh` non-interactively.
 - Your target branch is pushed to origin (remote runners execute repository refs, not unpushed local commits).
 - After dispatch, the script polls GitHub Actions with deterministic backoff for up to about 86 seconds to resolve the created run ID before failing.
 
@@ -32,6 +32,7 @@ Useful environment variables:
 - `BACKEND_TEST_REMOTE_WORKFLOW`: workflow file/name to dispatch (default: `backend-tests-remote.yml`).
 - `BACKEND_TEST_REMOTE_REF`: git ref to run remotely (default: current branch name).
 - `BACKEND_TEST_FORCE_REMOTE=1`: skip local Go/Docker checks and run the remote fallback directly.
+- `GITHUB_TOKEN`: optional token for automatic `gh auth login --with-token` when `gh` is not already authenticated.
 
 Optional explicit command:
 

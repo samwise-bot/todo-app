@@ -17,7 +17,9 @@
 - [x] Added generated backend API contract tests (from `docs/openapi/openapi.json`) for critical mutation endpoints: `POST /api/tasks`, `PATCH /api/tasks/{id}/state`, `PATCH /api/tasks/{id}/board-column`, `POST /api/boards`, and `POST /api/columns`; wired generation into backend test workflow.
 
 ## Next Iteration (Priority Order)
-- [ ] Add local backend test bootstrap fallback for non-Go/non-Docker environments in this runtime (or document/automate a remote runner) so each loop can satisfy mandatory backend test execution.
+- [x] Add local backend test bootstrap fallback for non-Go/non-Docker environments in this runtime (or document/automate a remote runner) so each loop can satisfy mandatory backend test execution.
 - [ ] Add CI runtime telemetry: persist per-job duration/cache-hit metrics and fail builds on configurable regression thresholds.
-- [ ] Make Playwright smoke install deterministic by moving from `npx playwright@...` to pinned local dev dependency + lockfile enforcement.
+- [x] Make Playwright smoke install deterministic by moving from `npx playwright@...` to pinned local dev dependency + lockfile enforcement.
 - [ ] Expand generated OpenAPI contract test coverage from critical mutations to selected read/list endpoints with pagination/filter parameter assertions.
+- [ ] Harden remote backend fallback run detection to reliably resolve dispatched GitHub Actions run IDs under queue delays (>90s) and emit terminal results deterministically.
+- [ ] Add frontend smoke preflight to avoid redundant `npm ci` when lockfile hash and `node_modules` are already in sync, while preserving deterministic install guarantees.
