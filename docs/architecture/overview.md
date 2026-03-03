@@ -75,3 +75,10 @@ sequenceDiagram
    - high weekly review p95 latency over 15m
 2. Import `ops/grafana/todo-app-observability.json` in Grafana and map `DS_PROMETHEUS` to your Prometheus datasource.
 3. Use the dashboard panels to confirm weekly review request/failure rates, failure ratio, p95 latency, and board lane failure spikes by endpoint.
+
+## Architecture Delta (2026-03-03, autonomous loop)
+- Standardized Go binary resolution in `ops/run/generate-backend-contract-tests.sh`:
+  1. Optional explicit `BACKEND_TEST_GO_BIN` (must be executable)
+  2. `go` discovered on `PATH` after Nix profile bin candidates are prepended
+  3. Hard failure with actionable hint when unresolved
+- Contract test generation now executes with resolved `GO_BIN`, reducing non-interactive shell drift and making local/CI behavior deterministic.

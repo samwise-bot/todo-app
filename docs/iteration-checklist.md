@@ -3,13 +3,14 @@
 _Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration
-- [x] Processed Inbox backlog into actionable Next items (14 tasks moved Inbox -> Next)
+- [x] Processed Inbox backlog into actionable Next items (0 tasks moved Inbox -> Next this cycle)
 - [x] DevEx: make openapi generation script honor configured GO binary in non-interactive shells (task #29) — **done**
+- [x] DevEx: apply GO binary fallback to generate-backend-contract-tests script (task #30) — **done**
 
 ## Current App Task Board (Project: TODO App)
-- [ ] DevEx: apply GO binary fallback to generate-backend-contract-tests script — **next**
-- [ ] Frontend: expose priority selector + due date in task create/edit flows — **next**
-- [ ] Auth: End-to-end auth test matrix (happy path, invalid creds, expired sessions) — **next**
+- [ ] Frontend: expose priority selector + due date in task create/edit flows (task #27, priority=2) — **next**
+- [ ] Roadmap: SPA architecture decision record (routing, state, data fetching) (task #11, priority=2) — **next**
+- [ ] DevEx: document GO binary fallback strategy for local/CI test scripts (new follow-up) — **next**
 
 ## Notes
 - Principal ensured: `samwise` (`kind=agent`)
