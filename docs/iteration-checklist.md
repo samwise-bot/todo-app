@@ -1,8 +1,14 @@
 # Todo-App Iteration Checklist
 
+## Completed This Iteration
+- [x] Added reproducible backend test runner/bootstrap via `./ops/run/test-backend.sh` + `make test-backend-repro`, with documentation in `docs/backend-testing.md`.
+- [x] Published OpenAPI-style machine-readable contract source at `docs/openapi/openapi-source.json` and generated JSON artifact at `docs/openapi/openapi.json` via `./ops/run/generate-openapi.sh`.
+- [x] Added frontend page-level rendering tests for board-lane empty/error states in `frontend/tests/board-lanes-rendering.test.tsx`.
+- [x] Added weekly-review endpoint deterministic ordering tests for `waiting`, `someday`, and `overdueScheduled`.
+- [x] Added observability counters/timers for weekly-review and board-lane fetch failures, exposed via `/metrics`, with backend coverage.
+
 ## Next Iteration (Priority Order)
-- [ ] Unblock backend test execution in this environment (Go toolchain missing): add a reproducible backend test runner (e.g., Docker/devcontainer or scripted toolchain bootstrap) and document the command path used in CI/local loops.
-- [ ] Publish an OpenAPI-style machine-readable contract (source spec + generated JSON artifact) for current backend endpoints, including new pagination/filter query params for `/api/tasks` and `/api/principals`.
-- [ ] Add frontend rendering tests for board-lane empty/error states (assert banner and fallback copy at page-level UI, not only view-model/unit tests).
-- [ ] Add weekly-review endpoint tests for deterministic multi-item ordering inside each section (`waiting`, `someday`, `overdueScheduled`).
-- [ ] Add basic observability counters/timers for weekly-review and board-lane fetch failures (and expose them via existing logging/metrics surface).
+- [ ] Validate and enforce OpenAPI contract drift in CI (fail build when generated JSON is stale).
+- [ ] Add integration test coverage for `/metrics` text format parsing compatibility with Prometheus scrape expectations.
+- [ ] Add frontend tests for non-empty board-lane rendering with mixed assigned/unassigned tasks in page markup.
+- [ ] Add dashboard panels/alerts for the new weekly-review and board-lane failure metrics.

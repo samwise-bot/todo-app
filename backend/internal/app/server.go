@@ -17,18 +17,26 @@ import (
 )
 
 type Server struct {
-	store *store.SQLiteStore
+	store   *store.SQLiteStore
+	metrics *metricsRegistry
 }
 
-func NewServer(s *store.SQLiteStore) *Server { return &Server{store: s} }
+func NewServer(s *store.SQLiteStore) *Server {
+	return &Server{
+		store:   s,
+		metrics: newMetricsRegistry(),
+	}
+}
 
 func (s *Server) Routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) { writeJSON(w, 200, map[string]string{"ok": "true"}) })
 	mux.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		n, _ := s.store.TaskEventCount(r.Context())
+		w.Header().Set("Content-Type", "text/plain; version=0.0.4")
 		_, _ = w.Write([]byte("todo_app_up 1\n"))
 		_, _ = w.Write([]byte("todo_app_task_events_total " + strconv.FormatInt(n, 10) + "\n"))
+		_, _ = w.Write([]byte(s.metrics.RenderPrometheus()))
 	})
 	mux.HandleFunc("/api/principals", s.handlePrincipals)
 	mux.HandleFunc("/api/projects", s.handleProjects)
@@ -139,11 +147,13 @@ func (s *Server) handleTasks(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		opts, err := parseListTaskOptions(r)
 		if err != nil {
+			s.metrics.IncBoardLaneFetchFailure("/api/tasks")
 			writeJSON(w, 400, map[string]string{"error": err.Error()})
 			return
 		}
 		result, err := s.store.ListTasks(r.Context(), opts)
 		if err != nil {
+			s.metrics.IncBoardLaneFetchFailure("/api/tasks")
 			writeErr(w, 500, err)
 			return
 		}
@@ -266,6 +276,7 @@ func (s *Server) handleBoards(w http.ResponseWriter, r *http.Request) {
 		if v := strings.TrimSpace(r.URL.Query().Get("projectId")); v != "" {
 			id, err := strconv.ParseInt(v, 10, 64)
 			if err != nil {
+				s.metrics.IncBoardLaneFetchFailure("/api/boards")
 				writeJSON(w, 400, map[string]string{"error": "invalid projectId"})
 				return
 			}
@@ -273,6 +284,7 @@ func (s *Server) handleBoards(w http.ResponseWriter, r *http.Request) {
 		}
 		items, err := s.store.ListBoards(r.Context(), projectID)
 		if err != nil {
+			s.metrics.IncBoardLaneFetchFailure("/api/boards")
 			writeErr(w, 500, err)
 			return
 		}
@@ -383,6 +395,7 @@ func (s *Server) handleColumns(w http.ResponseWriter, r *http.Request) {
 		if v := strings.TrimSpace(r.URL.Query().Get("boardId")); v != "" {
 			id, err := strconv.ParseInt(v, 10, 64)
 			if err != nil {
+				s.metrics.IncBoardLaneFetchFailure("/api/columns")
 				writeJSON(w, 400, map[string]string{"error": "invalid boardId"})
 				return
 			}
@@ -390,6 +403,7 @@ func (s *Server) handleColumns(w http.ResponseWriter, r *http.Request) {
 		}
 		items, err := s.store.ListColumns(r.Context(), boardID)
 		if err != nil {
+			s.metrics.IncBoardLaneFetchFailure("/api/columns")
 			writeErr(w, 500, err)
 			return
 		}
@@ -498,7 +512,14 @@ func (s *Server) handleColumnByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleWeeklyReview(w http.ResponseWriter, r *http.Request) {
+	start := time.Now()
+	defer func() {
+		s.metrics.ObserveWeeklyReviewDuration(time.Since(start))
+	}()
+	s.metrics.IncWeeklyReviewRequests()
+
 	if r.Method != http.MethodGet {
+		s.metrics.IncWeeklyReviewFailures()
 		writeJSON(w, 405, map[string]string{"error": "method not allowed"})
 		return
 	}
@@ -506,6 +527,7 @@ func (s *Server) handleWeeklyReview(w http.ResponseWriter, r *http.Request) {
 	if v := strings.TrimSpace(r.URL.Query().Get("thresholdDays")); v != "" {
 		n, err := strconv.ParseInt(v, 10, 64)
 		if err != nil || n < 0 {
+			s.metrics.IncWeeklyReviewFailures()
 			writeJSON(w, 400, map[string]string{"error": "thresholdDays must be a non-negative integer"})
 			return
 		}
@@ -516,6 +538,7 @@ func (s *Server) handleWeeklyReview(w http.ResponseWriter, r *http.Request) {
 		PageSize: 1000000,
 	})
 	if err != nil {
+		s.metrics.IncWeeklyReviewFailures()
 		writeErr(w, 500, err)
 		return
 	}

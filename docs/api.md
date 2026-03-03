@@ -2,6 +2,11 @@
 
 This document captures request/response snippets for principal, board, column, and weekly review endpoints.
 
+Machine-readable OpenAPI contract:
+- Source: `docs/openapi/openapi-source.json`
+- Generated JSON: `docs/openapi/openapi.json`
+- Regenerate with `./ops/run/generate-openapi.sh`
+
 ## Principals
 
 ### Create principal

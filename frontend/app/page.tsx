@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import React from 'react';
 
 import { createProjectAction } from './actions';
 import { TASK_STATES } from '../lib/task-states';
@@ -24,6 +25,7 @@ import {
   UpdateBoardForm,
   UpdateColumnForm
 } from './action-forms';
+import type { BoardLaneView } from '../lib/board-lanes';
 
 type ListFetchResult<T> = {
   items: T[];
@@ -79,6 +81,72 @@ async function fetchPagedCollection<T>(path: string, label: string): Promise<Pag
 function withQueryString(params: URLSearchParams): string {
   const query = params.toString();
   return query ? `/?${query}` : '/';
+}
+
+export function BoardLanesSection({ laneView, boards, columns }: { laneView: BoardLaneView; boards: any[]; columns: any[] }) {
+  return (
+    <section>
+      <h2>Kanban lanes (by board columns)</h2>
+      {laneView.fetchErrors.length > 0 && (
+        <div style={{ marginBottom: 12, border: '1px solid #b00020', borderRadius: 8, padding: 10, background: '#fff3f5' }}>
+          <strong>Board lanes are incomplete due to data loading errors.</strong>
+          <ul style={{ marginBottom: 0 }}>
+            {laneView.fetchErrors.map((error) => <li key={error}>{error}</li>)}
+          </ul>
+        </div>
+      )}
+      <div style={{ marginBottom: 12, border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+        <h3>No column</h3>
+        {laneView.tasksWithoutColumn.length === 0 ? (
+          <p style={{ marginBottom: 0 }}>No tasks without a board column.</p>
+        ) : (
+          <ul>
+            {laneView.tasksWithoutColumn.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
+          </ul>
+        )}
+      </div>
+      {laneView.boards.map((board: any) => (
+        <article key={board.id} style={{ marginBottom: 12 }}>
+          <h3>{board.name}</h3>
+          {board.columns.length === 0 ? (
+            <div style={{ border: '1px dashed #bbb', borderRadius: 8, padding: 10 }}>
+              No columns defined for this board.
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+              {board.columns.map((column: any) => (
+                <div key={column.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+                  <h4 style={{ marginTop: 0 }}>{column.name}</h4>
+                  {column.tasks.length === 0 ? (
+                    <p style={{ marginBottom: 0 }}>No tasks in this column.</p>
+                  ) : (
+                    <ul>
+                      {column.tasks.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+      {boards.length === 0 && (
+        <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+          No boards yet.
+        </div>
+      )}
+      {boards.length > 0 && columns.length === 0 && (
+        <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+          Boards exist but no columns are defined yet.
+        </div>
+      )}
+      {boards.length > 0 && (
+        <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+          Tasks appear in board lanes only when assigned to a board column.
+        </div>
+      )}
+    </section>
+  );
 }
 
 export default async function HomePage({ searchParams }: { searchParams?: SearchParamsInput }) {
@@ -325,67 +393,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         ))}
       </section>
 
-      <section>
-        <h2>Kanban lanes (by board columns)</h2>
-        {laneView.fetchErrors.length > 0 && (
-          <div style={{ marginBottom: 12, border: '1px solid #b00020', borderRadius: 8, padding: 10, background: '#fff3f5' }}>
-            <strong>Board lanes are incomplete due to data loading errors.</strong>
-            <ul style={{ marginBottom: 0 }}>
-              {laneView.fetchErrors.map((error) => <li key={error}>{error}</li>)}
-            </ul>
-          </div>
-        )}
-        <div style={{ marginBottom: 12, border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-          <h3>No column</h3>
-          {laneView.tasksWithoutColumn.length === 0 ? (
-            <p style={{ marginBottom: 0 }}>No tasks without a board column.</p>
-          ) : (
-            <ul>
-              {laneView.tasksWithoutColumn.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
-            </ul>
-          )}
-        </div>
-        {laneView.boards.map((board: any) => (
-          <article key={board.id} style={{ marginBottom: 12 }}>
-            <h3>{board.name}</h3>
-            {board.columns.length === 0 ? (
-              <div style={{ border: '1px dashed #bbb', borderRadius: 8, padding: 10 }}>
-                No columns defined for this board.
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-                {board.columns.map((column: any) => (
-                  <div key={column.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-                    <h4 style={{ marginTop: 0 }}>{column.name}</h4>
-                    {column.tasks.length === 0 ? (
-                      <p style={{ marginBottom: 0 }}>No tasks in this column.</p>
-                    ) : (
-                      <ul>
-                        {column.tasks.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </article>
-        ))}
-        {boards.length === 0 && (
-          <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-            No boards yet.
-          </div>
-        )}
-        {boards.length > 0 && columns.length === 0 && (
-          <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-            Boards exist but no columns are defined yet.
-          </div>
-        )}
-        {boards.length > 0 && (
-          <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-            Tasks appear in board lanes only when assigned to a board column.
-          </div>
-        )}
-      </section>
+      <BoardLanesSection laneView={laneView} boards={boards} columns={columns} />
 
       <section>
         <h2>Task states</h2>

@@ -39,6 +39,7 @@ Local-first GTD + Kanban task system for humans and OpenClaw agents.
 - `POST /api/tasks`
 - `PATCH /api/tasks/:id/state`
 - `PATCH /api/tasks/:id/assignee`
+- `PATCH /api/tasks/:id/board-column`
 
 ## Run locally
 
@@ -51,7 +52,11 @@ make dev-backend
 ### Tests
 ```bash
 make test-backend
+# reproducible fallback runner (uses Docker if local Go is missing)
+make test-backend-repro
 ```
+
+Detailed backend testing bootstrap docs: `docs/backend-testing.md`.
 
 ### Frontend
 ```bash
@@ -69,3 +74,11 @@ NEXT_PUBLIC_API_URL=http://localhost:8080 npm run dev
 ## Prometheus
 - Scrape backend `/metrics`
 - Starter alert rules: `ops/prometheus/alerts.yml`
+
+## OpenAPI Contract
+- Source: `docs/openapi/openapi-source.json`
+- Generated JSON artifact: `docs/openapi/openapi.json`
+- Regenerate:
+```bash
+./ops/run/generate-openapi.sh
+```
