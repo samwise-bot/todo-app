@@ -13,6 +13,7 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Current App Task Board (Project: TODO App)
 - [ ] #34 Ops blocker remains in **Blocked** (`state=waiting`, board `Blocked`) pending confirmation of reduced timeout churn over full-queue fanout cycles.
+- [ ] #38 Explicit unblock task created in **Next** (priority=1): validate 180s timeout + compact prompt success rate across full deterministic sweep.
 - [ ] #27 Frontend: expose priority selector + due date in task create/edit flows (**next**, priority=2).
 - [ ] #32 DevEx: document GO binary fallback strategy for local/CI test scripts (**next**, priority=2).
 - [ ] #11 Roadmap: SPA architecture decision record (**next**, priority=2).

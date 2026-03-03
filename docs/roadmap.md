@@ -34,6 +34,7 @@
 - ✅ Completed: task #37 tuned worker execution policy in `ops/run/select_subagent_fanout_batch.py` with compact prompt generation + explicit `--worker-timeout-seconds` default 180s.
 - ✅ Completed: DevEx task #30 (`ops/run/generate-backend-contract-tests.sh`) now has explicit Go binary fallback/override handling.
 - 🚧 Blocked: task #34 remains in **Blocked** pending confirmation that longer timeout + compact prompts consistently produce non-timeout fanout outputs across full `Next` queue.
+- ➕ Added explicit unblock task #38 in `Next` (priority=1): validate 180s timeout + compact prompt policy over one full deterministic sweep and capture completion metrics.
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
