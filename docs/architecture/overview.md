@@ -77,6 +77,7 @@ sequenceDiagram
 3. Use the dashboard panels to confirm weekly review request/failure rates, failure ratio, p95 latency, and board lane failure spikes by endpoint.
 
 ## Architecture Delta (2026-03-03, autonomous loop)
+- Added ADR `docs/adr/0002-spa-routing-state-data.md` defining the SPA baseline for route split (`/board` default, `/tasks|projects|people|settings` extraction plan), normalized client cache, stale-while-revalidate data policy, and shared deterministic Next ordering comparator.
 - Hardened mutation smoke workflow cleanup in `ops/run/check-task-mutations.sh`: after exercising state/board-column/assignee mutations, the synthetic task now transitions to `done` so recurring smoke runs do not accumulate `Next`-lane residue.
 - Documented canonical Go binary fallback behavior for backend contract generation (`docs/backend-testing.md`): explicit `BACKEND_TEST_GO_BIN` override, Nix-path prepend, then `go` discovery from PATH with deterministic failure hints.
 

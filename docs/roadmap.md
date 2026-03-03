@@ -35,8 +35,9 @@
 - ✅ Completed: task #32 documented canonical Go fallback strategy for contract-test generation in `docs/backend-testing.md` (resolution order + env vars + operator guidance).
 - ✅ Completed: task #31 moved `Next -> In Progress -> Done` by hardening mutation smoke cleanup in `ops/run/check-task-mutations.sh` (new tasks now auto-transition to `done` at script end).
 - 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
-- 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
+- ✅ Completed: task #11 moved `Next -> In Progress -> Done` by capturing the SPA architecture baseline ADR in `docs/adr/0002-spa-routing-state-data.md` (routing split, normalized state model, SWR fetching policy, deterministic Next ordering contract).
+- 🔄 In progress: roadmap decomposition tasks for SPA extraction, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
+  - Document GO fallback strategy for local/CI scripts (task #32)
   - Continue board UX/navigation queue from prioritized `Next`
-  - Continue auth/benchmark roadmap queue from prioritized `Next`
