@@ -47,6 +47,10 @@ run_remote_backend_tests() {
   gh run watch "$run_id" --exit-status
 }
 
+docker_daemon_accessible() {
+  docker info >/dev/null 2>&1
+}
+
 if [[ "$FORCE_REMOTE" != "1" ]] && command -v go >/dev/null 2>&1; then
   "$ROOT/ops/run/generate-backend-contract-tests.sh"
   (
@@ -57,18 +61,22 @@ if [[ "$FORCE_REMOTE" != "1" ]] && command -v go >/dev/null 2>&1; then
 fi
 
 if [[ "$FORCE_REMOTE" != "1" ]] && command -v docker >/dev/null 2>&1; then
-  docker run --rm \
-    -v "$ROOT:/work" \
-    -w /work/backend \
-    golang:1.24 \
-    bash -lc 'GOCACHE="${GOCACHE:-/tmp/go-build}" go run ./cmd/openapi-contract-test-gen -in /work/docs/openapi/openapi.json -out /work/backend/tests/generated_openapi_mutation_contract_test.go && go mod download && go test ./...'
-  exit 0
+  if docker_daemon_accessible; then
+    docker run --rm \
+      -v "$ROOT:/work" \
+      -w /work/backend \
+      golang:1.24 \
+      bash -lc 'GOCACHE="${GOCACHE:-/tmp/go-build}" go run ./cmd/openapi-contract-test-gen -in /work/docs/openapi/openapi.json -out /work/backend/tests/generated_openapi_mutation_contract_test.go && go mod download && go test ./...'
+    exit 0
+  fi
+
+  echo "warning: docker CLI is installed but daemon is not accessible; falling back to remote backend tests" >&2
 fi
 
 if run_remote_backend_tests; then
   exit 0
 fi
 
-echo "error: neither 'go' nor 'docker' is available to run backend tests" >&2
-echo "hint: install Go, install Docker, or authenticate GitHub CLI and push your branch for remote fallback" >&2
+echo "error: backend tests could not run locally (missing Go or unavailable Docker daemon) and remote fallback was unavailable" >&2
+echo "hint: install Go, ensure Docker daemon access, or authenticate GitHub CLI and push your branch for remote fallback" >&2
 exit 1

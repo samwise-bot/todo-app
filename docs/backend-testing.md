@@ -8,8 +8,8 @@ make test-backend-repro
 
 What it does:
 - If `go` exists locally, it generates backend OpenAPI contract tests and runs `go test ./...` in `backend/`.
-- If `go` is missing but Docker is available, it runs the same flow in `golang:1.24`.
-- If both are missing, it attempts a remote GitHub Actions fallback (`backend-tests-remote.yml`) using GitHub CLI.
+- If `go` is missing but Docker is available and daemon access works, it runs the same flow in `golang:1.24`.
+- If local execution is unavailable (for example: missing Go, missing Docker, or Docker daemon inaccessible), it attempts a remote GitHub Actions fallback (`backend-tests-remote.yml`) using GitHub CLI.
 
 Direct script entrypoint:
 
@@ -19,9 +19,9 @@ Direct script entrypoint:
 
 This keeps backend test execution reproducible across developer machines and CI agents, even when this runtime has neither Go nor Docker.
 
-## Remote Fallback (No Go + No Docker)
+## Remote Fallback (Local Execution Unavailable)
 
-`./ops/run/test-backend.sh` automatically attempts remote execution when both local toolchains are unavailable.
+`./ops/run/test-backend.sh` automatically attempts remote execution when local backend tests cannot run (for example: no Go toolchain, no Docker, or Docker daemon not accessible).
 
 Prerequisites:
 - `gh` is installed and authenticated (`gh auth status` succeeds).
