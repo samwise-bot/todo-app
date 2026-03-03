@@ -5,13 +5,13 @@ import "time"
 type TaskState string
 
 const (
-	TaskStateInbox      TaskState = "inbox"
-	TaskStateNext       TaskState = "next"
-	TaskStateWaiting    TaskState = "waiting"
-	TaskStateScheduled  TaskState = "scheduled"
-	TaskStateDone       TaskState = "done"
-	TaskStateSomeday    TaskState = "someday"
-	TaskStateReference  TaskState = "reference"
+	TaskStateInbox     TaskState = "inbox"
+	TaskStateNext      TaskState = "next"
+	TaskStateWaiting   TaskState = "waiting"
+	TaskStateScheduled TaskState = "scheduled"
+	TaskStateDone      TaskState = "done"
+	TaskStateSomeday   TaskState = "someday"
+	TaskStateReference TaskState = "reference"
 )
 
 func (s TaskState) Valid() bool {
@@ -30,11 +30,43 @@ const (
 	PrincipalAgent PrincipalType = "agent"
 )
 
+func (k PrincipalType) Valid() bool {
+	switch k {
+	case PrincipalHuman, PrincipalAgent:
+		return true
+	default:
+		return false
+	}
+}
+
+type Principal struct {
+	ID          int64         `json:"id"`
+	Kind        PrincipalType `json:"kind"`
+	Handle      string        `json:"handle"`
+	DisplayName string        `json:"displayName"`
+	CreatedAt   time.Time     `json:"createdAt"`
+}
+
 type Project struct {
 	ID          int64     `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"createdAt"`
+}
+
+type Board struct {
+	ID        int64     `json:"id"`
+	ProjectID int64     `json:"projectId"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+type Column struct {
+	ID        int64     `json:"id"`
+	BoardID   int64     `json:"boardId"`
+	Name      string    `json:"name"`
+	Position  int       `json:"position"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type Task struct {

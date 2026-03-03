@@ -12,17 +12,32 @@ Local-first GTD + Kanban task system for humans and OpenClaw agents.
 - ✅ Architecture docs + roadmap
 - ✅ Backend scaffold with migrations + core API + GTD transition checks
 - ✅ Task event audit log (append-only)
-- ✅ Minimal frontend showing live projects/tasks and derived kanban lanes
+- ✅ Principals API + task assignee mutation with audit events
+- ✅ Board/column CRUD APIs
+- ✅ Minimal frontend with project/task creation + task state transition actions
 - 🔜 Auth, richer board UX, assignment UI polish
 
 ## API endpoints (v1 slice)
 - `GET /healthz`
 - `GET /metrics`
+- `GET /api/principals`
+- `POST /api/principals`
 - `GET /api/projects`
 - `POST /api/projects`
+- `GET /api/boards`
+- `POST /api/boards`
+- `GET /api/boards/:id`
+- `PATCH /api/boards/:id`
+- `DELETE /api/boards/:id`
+- `GET /api/columns`
+- `POST /api/columns`
+- `GET /api/columns/:id`
+- `PATCH /api/columns/:id`
+- `DELETE /api/columns/:id`
 - `GET /api/tasks`
 - `POST /api/tasks`
 - `PATCH /api/tasks/:id/state`
+- `PATCH /api/tasks/:id/assignee`
 
 ## Run locally
 
