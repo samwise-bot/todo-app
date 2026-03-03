@@ -65,6 +65,7 @@ jobs:
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
           if-no-files-found: error
+          retention-days: 14
 
   backend-test:
     name: Backend Tests
@@ -111,6 +112,7 @@ jobs:
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
           if-no-files-found: error
+          retention-days: 14
 
   frontend-test:
     name: Frontend Tests
@@ -152,6 +154,7 @@ jobs:
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
           if-no-files-found: error
+          retention-days: 14
 
   browser-smoke:
     name: Browser Smoke
@@ -202,6 +205,7 @@ jobs:
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
             ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
           if-no-files-found: error
+          retention-days: 14
 
   ci-telemetry-regression:
     name: CI Telemetry Regression Gate
@@ -223,6 +227,7 @@ jobs:
           merge-multiple: true
 
       - name: Check telemetry against thresholds
+        id: telemetry-check
         run: |
           mkdir -p "$RUNNER_TEMP/ci-telemetry/output"
           python3 ./ops/run/check-ci-telemetry.py \
@@ -240,3 +245,26 @@ jobs:
             ${{ runner.temp }}/ci-telemetry/output/summary.json
             ${{ runner.temp }}/ci-telemetry/output/summary.csv
           if-no-files-found: error
+          retention-days: 14
+
+      - name: Add telemetry regression triage summary
+        if: always()
+        run: |
+          if [ "${{ steps.telemetry-check.outcome }}" = "success" ]; then
+            status="PASS"
+          else
+            status="FAIL"
+          fi
+          artifacts_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts"
+          {
+            echo "## CI Telemetry Regression"
+            echo ""
+            echo "- Status: **${status}**"
+            echo "- Artifacts:"
+            echo "  - \`ci-telemetry-openapi-contract\`"
+            echo "  - \`ci-telemetry-backend-test\`"
+            echo "  - \`ci-telemetry-frontend-test\`"
+            echo "  - \`ci-telemetry-browser-smoke\`"
+            echo "  - \`ci-telemetry-summary\`"
+            echo "- [View artifacts for this run](${artifacts_url})"
+          } >> "$GITHUB_STEP_SUMMARY"
