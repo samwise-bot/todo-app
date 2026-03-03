@@ -5,9 +5,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 BACKEND_DIR="$ROOT/backend"
 
 if command -v go >/dev/null 2>&1; then
+  "$ROOT/ops/run/generate-backend-contract-tests.sh"
   (
     cd "$BACKEND_DIR"
-    go test ./...
+    GOCACHE="${GOCACHE:-/tmp/go-build}" go test ./...
   )
   exit 0
 fi
@@ -18,7 +19,7 @@ if ! command -v docker >/dev/null 2>&1; then
 fi
 
 docker run --rm \
-  -v "$BACKEND_DIR:/src" \
-  -w /src \
+  -v "$ROOT:/work" \
+  -w /work/backend \
   golang:1.24 \
-  bash -lc 'go mod download && go test ./...'
+  bash -lc 'GOCACHE="${GOCACHE:-/tmp/go-build}" go run ./cmd/openapi-contract-test-gen -in /work/docs/openapi/openapi.json -out /work/backend/tests/generated_openapi_mutation_contract_test.go && go mod download && go test ./...'

@@ -18,3 +18,17 @@ Direct script entrypoint:
 ```
 
 This makes backend test execution reproducible across developer machines and CI agents without assuming a preinstalled Go toolchain.
+
+## Generated OpenAPI Mutation Contract Tests
+
+Critical mutation endpoint contract tests are generated from `docs/openapi/openapi.json` into:
+
+`backend/tests/generated_openapi_mutation_contract_test.go`
+
+Regenerate manually with:
+
+```bash
+./ops/run/generate-backend-contract-tests.sh
+```
+
+`./ops/run/test-backend.sh` runs this generation step before `go test ./...`, and CI fails if the generated artifact is stale.

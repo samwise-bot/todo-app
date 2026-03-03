@@ -50,8 +50,15 @@ jobs:
           go-version-file: backend/go.mod
           cache: true
           cache-dependency-path: backend/go.sum
-      - name: Go test
-        run: cd backend && go test ./...
+      - name: Repro backend tests
+        run: ./ops/run/test-backend.sh
+
+      - name: Fail when generated backend contract tests are stale
+        run: |
+          git diff --exit-code -- backend/tests/generated_openapi_mutation_contract_test.go || {
+            echo "backend/tests/generated_openapi_mutation_contract_test.go is stale. Run ./ops/run/generate-backend-contract-tests.sh and commit the updated file."
+            exit 1
+          }
 
   frontend-test:
     name: Frontend Tests
