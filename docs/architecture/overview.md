@@ -118,3 +118,6 @@ sequenceDiagram
   2. `frontend/app/board/page.tsx` serves the existing dashboard implementation via `app/_dashboard.tsx`.
   3. This keeps behavior stable while enabling future extraction of Tasks/Projects/People/Settings routes.
 - Added regression coverage for board-first default routing in `frontend/tests/home-page-routing.test.tsx`, guarding against accidental root-route regressions away from `/board`.
+- Strengthened frontend API envelope resilience tests in `frontend/tests/api-client.test.ts`:
+  1. Verified paged fetch compatibility with nested `results.items` envelopes while preserving pagination metadata.
+  2. Verified deterministic pagination derivation when APIs return bare arrays (legacy/mixed endpoint response modes).

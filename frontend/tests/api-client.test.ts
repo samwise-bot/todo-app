@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { fetchCollection } from '../lib/api-client';
+import { fetchCollection, fetchPagedCollection } from '../lib/api-client';
 
 function okJSONResponse(body: unknown): Response {
   return {
@@ -44,6 +44,46 @@ describe('fetchCollection', () => {
     await expect(fetchCollection('/api/boards', 'Boards')).resolves.toEqual({
       items: [],
       error: 'Boards data is malformed.'
+    });
+  });
+});
+
+describe('fetchPagedCollection', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('accepts nested results.items envelopes and metadata', async () => {
+    vi.spyOn(global, 'fetch').mockResolvedValue(
+      okJSONResponse({
+        results: { items: [{ id: 21 }, { id: 22 }] },
+        page: 2,
+        pageSize: 5,
+        totalItems: 12,
+        totalPages: 3
+      })
+    );
+
+    await expect(fetchPagedCollection<{ id: number }>('/api/tasks', 'Tasks')).resolves.toEqual({
+      items: [{ id: 21 }, { id: 22 }],
+      page: 2,
+      pageSize: 5,
+      totalItems: 12,
+      totalPages: 3,
+      error: null
+    });
+  });
+
+  test('falls back to derived pagination for array payloads', async () => {
+    vi.spyOn(global, 'fetch').mockResolvedValue(okJSONResponse([{ id: 1 }, { id: 2 }, { id: 3 }]));
+
+    await expect(fetchPagedCollection<{ id: number }>('/api/tasks', 'Tasks')).resolves.toEqual({
+      items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+      page: 1,
+      pageSize: 3,
+      totalItems: 3,
+      totalPages: 1,
+      error: null
     });
   });
 });

@@ -8,6 +8,7 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Mainline execution: task #33 moved `Next -> In Progress -> Done`, assigned to `samwise`.
 - [x] Hardened mutation smoke cleanup with an EXIT trap in `ops/run/check-task-mutations.sh` so interrupted runs still close synthetic tasks to `done`.
+- [x] Mainline execution: task #4 moved `Next -> In Progress -> Done`; expanded API-client regression coverage for mixed envelope fallbacks in paged task/column reads (`results.items` + array pagination fallback).
 
 ## Current App Task Board (Project: TODO App)
 - [ ] #34 Ops blocker remains in **Blocked** (`state=waiting`, board `Blocked`) pending real worker completion/timeout evidence.
