@@ -21,9 +21,8 @@ run_remote_backend_tests() {
     return 1
   fi
 
-  local dispatch_time gh_user run_id delay run_query
+  local dispatch_time run_id delay run_query
   dispatch_time="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-  gh_user="$(gh api user --jq .login 2>/dev/null || true)"
 
   echo "go/docker unavailable; running backend tests remotely via GitHub Actions workflow '$REMOTE_WORKFLOW' on ref '$REMOTE_REF'"
   gh workflow run "$REMOTE_WORKFLOW" --ref "$REMOTE_REF"
@@ -31,17 +30,13 @@ run_remote_backend_tests() {
   run_id=""
   # GitHub Actions dispatch is eventually consistent; poll with deterministic backoff
   # for about 60-90 seconds before failing.
-  if [[ -n "$gh_user" ]]; then
-    run_query="map(select(.createdAt >= \"$dispatch_time\" and .actor.login == \"$gh_user\")) | sort_by(.createdAt) | .[0].databaseId"
-  else
-    run_query="map(select(.createdAt >= \"$dispatch_time\")) | sort_by(.createdAt) | .[0].databaseId"
-  fi
+  run_query="map(select(.createdAt >= \"$dispatch_time\" and .headBranch == \"$REMOTE_REF\")) | sort_by(.createdAt) | reverse | .[0].databaseId"
 
   for delay in 0 2 3 5 8 13 21 34; do
     if [[ "$delay" -gt 0 ]]; then
       sleep "$delay"
     fi
-    run_id="$(gh run list --workflow "$REMOTE_WORKFLOW" --event workflow_dispatch --limit 50 --json databaseId,createdAt,actor --jq "$run_query" 2>/dev/null || true)"
+    run_id="$(gh run list --workflow "$REMOTE_WORKFLOW" --event workflow_dispatch --limit 50 --json databaseId,createdAt,headBranch,headSha --jq "$run_query" 2>/dev/null || true)"
     if [[ -z "$run_id" || "$run_id" == "null" ]]; then
       run_id=""
       continue
