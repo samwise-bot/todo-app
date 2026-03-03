@@ -77,6 +77,7 @@ type Task struct {
 	ProjectID     *int64     `json:"projectId,omitempty"`
 	AssigneeID    *int64     `json:"assigneeId,omitempty"`
 	BoardColumnID *int64     `json:"boardColumnId,omitempty"`
+	Priority      int        `json:"priority"`
 	DueAt         *time.Time `json:"dueAt,omitempty"`
 	CreatedAt     time.Time  `json:"createdAt"`
 	UpdatedAt     time.Time  `json:"updatedAt"`

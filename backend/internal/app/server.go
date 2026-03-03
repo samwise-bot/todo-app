@@ -175,6 +175,13 @@ func (s *Server) handleTasks(w http.ResponseWriter, r *http.Request) {
 		if t.State == "" {
 			t.State = domain.TaskStateInbox
 		}
+		if t.Priority == 0 {
+			t.Priority = 3
+		}
+		if t.Priority < 1 || t.Priority > 5 {
+			writeJSON(w, 400, map[string]string{"error": "priority must be between 1 and 5"})
+			return
+		}
 		if err := s.store.CreateTask(r.Context(), &t); err != nil {
 			writeErr(w, 400, err)
 			return

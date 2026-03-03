@@ -394,8 +394,11 @@ func (s *SQLiteStore) CreateTask(ctx context.Context, t *domain.Task) error {
 		return fmt.Errorf("projectId is required for actionable tasks")
 	}
 	now := time.Now().UTC().Format(time.RFC3339)
-	res, err := s.db.ExecContext(ctx, `INSERT INTO tasks(title, description, state, project_id, assignee_id, board_column_id, due_at, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?)`,
-		t.Title, t.Description, t.State, t.ProjectID, t.AssigneeID, t.BoardColumnID, nullableTime(t.DueAt), now, now)
+	if t.Priority <= 0 {
+		t.Priority = 3
+	}
+	res, err := s.db.ExecContext(ctx, `INSERT INTO tasks(title, description, state, project_id, assignee_id, board_column_id, priority, due_at, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)`,
+		t.Title, t.Description, t.State, t.ProjectID, t.AssigneeID, t.BoardColumnID, t.Priority, nullableTime(t.DueAt), now, now)
 	if err != nil {
 		return err
 	}
@@ -457,7 +460,11 @@ func (s *SQLiteStore) ListTasks(ctx context.Context, opts ListTasksOptions) (Pag
 		return PaginatedResult[domain.Task]{}, err
 	}
 
-	query := `SELECT id, title, description, state, project_id, assignee_id, board_column_id, due_at, created_at, updated_at FROM tasks` + where + ` ORDER BY id DESC LIMIT ? OFFSET ?`
+	orderClause := ` ORDER BY id DESC`
+	if opts.State != nil && *opts.State == domain.TaskStateNext {
+		orderClause = ` ORDER BY priority ASC, CASE WHEN due_at IS NULL THEN 1 ELSE 0 END ASC, due_at ASC, id ASC`
+	}
+	query := `SELECT id, title, description, state, project_id, assignee_id, board_column_id, priority, due_at, created_at, updated_at FROM tasks` + where + orderClause + ` LIMIT ? OFFSET ?`
 	args = append(args, pageSize, offset)
 	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -468,7 +475,7 @@ func (s *SQLiteStore) ListTasks(ctx context.Context, opts ListTasksOptions) (Pag
 	for rows.Next() {
 		var t domain.Task
 		var due, created, updated sql.NullString
-		if err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.State, &t.ProjectID, &t.AssigneeID, &t.BoardColumnID, &due, &created, &updated); err != nil {
+		if err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.State, &t.ProjectID, &t.AssigneeID, &t.BoardColumnID, &t.Priority, &due, &created, &updated); err != nil {
 			return PaginatedResult[domain.Task]{}, err
 		}
 		if due.Valid {

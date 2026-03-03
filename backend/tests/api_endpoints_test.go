@@ -701,6 +701,71 @@ func TestWeeklyReviewEndpointDeterministicOrdering(t *testing.T) {
 	assertIDs("overdueScheduled", []int64{scheduledIDs[1], scheduledIDs[0]})
 }
 
+func TestListTasksNextOrderingUsesPriorityThenDueDate(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Next Ordering"})
+	if status != http.StatusCreated {
+		t.Fatalf("create project: expected 201, got %d", status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	for _, payload := range []map[string]any{
+		{"title": "P2 due later", "state": "next", "projectId": projectID, "priority": 2, "dueAt": "2030-01-02T00:00:00Z"},
+		{"title": "P1 due later", "state": "next", "projectId": projectID, "priority": 1, "dueAt": "2030-01-03T00:00:00Z"},
+		{"title": "P1 due sooner", "state": "next", "projectId": projectID, "priority": 1, "dueAt": "2030-01-01T00:00:00Z"},
+		{"title": "P1 no due", "state": "next", "projectId": projectID, "priority": 1},
+	} {
+		status, _ := h.jsonRequest(http.MethodPost, "/api/tasks", payload)
+		if status != http.StatusCreated {
+			t.Fatalf("create next task: expected 201, got %d", status)
+		}
+	}
+
+	status, page, tasks := h.jsonRequestPaginated(http.MethodGet, "/api/tasks?state=next&pageSize=20", nil)
+	if status != http.StatusOK {
+		t.Fatalf("list next tasks: expected 200, got %d", status)
+	}
+	if mustInt64(t, page["totalItems"]) < 4 {
+		t.Fatalf("expected at least 4 tasks in next list")
+	}
+
+	gotTitles := make([]string, 0, 4)
+	for _, task := range tasks[:4] {
+		title, _ := task["title"].(string)
+		gotTitles = append(gotTitles, title)
+	}
+	wantTitles := []string{"P1 due sooner", "P1 due later", "P1 no due", "P2 due later"}
+	for i := range wantTitles {
+		if gotTitles[i] != wantTitles[i] {
+			t.Fatalf("unexpected next ordering at index %d: want %q got %q (all=%v)", i, wantTitles[i], gotTitles[i], gotTitles)
+		}
+	}
+}
+
+func TestCreateTaskRejectsInvalidPriority(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Priority Validation"})
+	if status != http.StatusCreated {
+		t.Fatalf("create project: expected 201, got %d", status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	status, body := h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{
+		"title":    "bad priority",
+		"state":    "next",
+		"projectId": projectID,
+		"priority": 9,
+	})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid priority, got %d", status)
+	}
+	if body["error"] != "priority must be between 1 and 5" {
+		t.Fatalf("unexpected error body: %+v", body)
+	}
+}
+
 func TestMetricsExposeWeeklyReviewAndBoardLaneFailureCounters(t *testing.T) {
 	h := newAPIHarness(t)
 
