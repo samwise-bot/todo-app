@@ -11,7 +11,15 @@
 
 ## Phase 2 - Frontend Core (Next.js)
 - Inbox, Next Actions, Projects, Contexts, Weekly Review, Kanban board
-- Acceptance: end-to-end create->clarify->organize->execute flow works
+- Planned migration slices:
+  1. Route shell split (`/board`, `/tasks`, `/projects`, `/people`, `/settings`) with persistent nav and stable server-action parity.
+  2. Shared client state/cache layer for tasks, projects, boards, columns, principals with deterministic selectors.
+  3. Data fetching policy: stale-while-revalidate reads + optimistic mutation rollback for lane/task operations.
+  4. Progressive extraction of monolithic dashboard sections into route-local modules while preserving GTD state constraints.
+- Acceptance:
+  - end-to-end create->clarify->organize->execute flow works on `/board`
+  - route split pages render with API-backed data (no static placeholders)
+  - deterministic `Next` ordering preserved across refresh/navigation
 
 ## Phase 3 - Assignment + Agent Ops
 - Human/agent principal directory
@@ -39,7 +47,8 @@
 - ✅ Completed: task #42 moved `Next -> In Progress -> Done` with inline board-lane task creation forms (column-local quick add in `/board`).
 - ✅ Completed: route-split extraction increment on `/projects` (real API-backed project list + coverage) aligned to task #41 scope.
 - ✅ Completed: task #47 moved `Next -> In Progress -> Done` with `/board` default focus for active work assigned to Samwise.
+- ✅ Completed: task #12 moved `Next -> In Progress -> Done` by expanding the SPA migration plan into phased deliverables with explicit acceptance criteria.
 - ▶ Next milestone:
-  - #26 Auth: End-to-end auth test matrix (happy path, invalid creds, expired sessions)
-  - #25 Auth: Security hardening checklist (password policy, CSRF, rate limits)
-  - #24 Auth: Agent principal linking to user identity + audit trail
+  - #13 Roadmap: Implement SPA shell with persistent board + inspector panels
+  - #14 Roadmap: Unified client state store for tasks/boards/columns/principals
+  - #15 Roadmap: Offline-first cache strategy for SPA (stale-while-revalidate)

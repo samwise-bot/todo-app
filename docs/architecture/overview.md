@@ -135,3 +135,6 @@ sequenceDiagram
 - Added board focus defaults on `/board` route:
   1. `frontend/app/board/page.tsx` now injects default task filters when absent (`taskAssigneeId=2` for Samwise and active-state focus) before delegating to `_dashboard`.
   2. Added coverage in `frontend/tests/board-page-defaults.test.tsx` to prevent regressions in default/explicit filter handling.
+- Expanded SPA migration roadmap contract in `docs/roadmap.md` (task #12):
+  1. Broke Phase 2 into explicit implementation slices (route shell, shared state, SWR policy, modular extraction).
+  2. Added concrete acceptance checks to keep route-split work measurable and regression-resistant.
