@@ -26,3 +26,6 @@ generate-backend-contract-tests:
 test-backend-contracts:
 	./ops/run/generate-backend-contract-tests.sh
 	git diff --exit-code
+
+smoke-task-mutations:
+	./ops/run/check-task-mutations.sh
