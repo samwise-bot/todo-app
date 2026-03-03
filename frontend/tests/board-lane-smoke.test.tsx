@@ -20,6 +20,7 @@ import {
 import { INITIAL_ACTION_STATE } from '../lib/action-state';
 import { BoardLanesSection } from '../app/ui/board-lanes-section';
 import { buildBoardLaneView } from '../lib/board-lanes';
+import { fetchCollection, fetchPagedCollection } from '../lib/api-client';
 
 type Project = { id: number; name: string; description: string };
 type Board = { id: number; projectId: number; name: string };
@@ -225,5 +226,72 @@ describe('board-lane smoke flow', () => {
     expect(html).toContain('next');
 
     expect(fetchMock).toHaveBeenCalled();
+  });
+
+  test('keeps board-lane rendering stable when boards use { data } while peers use { items }', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch').mockImplementation(async (input) => {
+      const target = typeof input === 'string' ? input : input.url;
+      const url = new URL(target);
+
+      if (url.pathname === '/api/boards') {
+        return makeJSONResponse(200, { data: [{ id: 2, projectId: 1, name: 'Execution' }] });
+      }
+      if (url.pathname === '/api/columns') {
+        return makeJSONResponse(200, { items: [{ id: 21, boardId: 2, name: 'Doing', position: 1 }] });
+      }
+      if (url.pathname === '/api/tasks') {
+        return makeJSONResponse(200, {
+          items: [{ id: 301, title: 'Ship release', description: '', state: 'next', projectId: 1, boardColumnId: 21 }],
+          page: 1,
+          pageSize: 1000,
+          totalItems: 1,
+          totalPages: 1
+        });
+      }
+
+      throw new Error(`unhandled route: ${url.pathname}${url.search}`);
+    });
+
+    const boardsResult = await fetchCollection<{ id: number; projectId: number; name: string }>('/api/boards', 'Boards');
+    const columnsResult = await fetchCollection<{ id: number; boardId: number; name: string; position: number }>(
+      '/api/columns',
+      'Columns'
+    );
+    const tasksResult = await fetchPagedCollection<{
+      id: number;
+      title: string;
+      description: string;
+      state: string;
+      projectId: number | null;
+      boardColumnId: number | null;
+    }>('/api/tasks?page=1&pageSize=1000', 'Tasks');
+
+    expect(boardsResult.error).toBeNull();
+    expect(columnsResult.error).toBeNull();
+    expect(tasksResult.error).toBeNull();
+
+    const laneView = buildBoardLaneView({
+      boards: boardsResult.items,
+      columns: columnsResult.items,
+      tasks: tasksResult.items,
+      fetchErrors: [boardsResult.error, columnsResult.error, tasksResult.error].filter(
+        (error): error is string => Boolean(error)
+      )
+    });
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={laneView}
+        boards={boardsResult.items}
+        columns={columnsResult.items}
+        principals={[]}
+        projects={[]}
+      />
+    );
+
+    expect(html).toContain('Execution');
+    expect(html).toContain('Doing');
+    expect(html).toContain('Ship release');
+    expect(html).not.toContain('Board lanes are incomplete due to data loading issues.');
+    expect(fetchMock).toHaveBeenCalledTimes(3);
   });
 });
