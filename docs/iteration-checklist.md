@@ -5,8 +5,8 @@
 - [x] Wired the preflight installer into browser smoke automation (`ops/run/test-browser-smoke.sh`) and CI jobs (`frontend-test`, `browser-smoke`) in `.github/workflows/ci.yml`.
 
 ## Next Iteration (Priority Order)
-- [ ] Unblock backend test execution in this environment: install Go toolchain and/or restore GitHub Actions remote fallback auth so `./ops/run/test-backend.sh` can complete successfully.
-- [ ] Add CI artifact retention + summary links for telemetry/regression reports to speed triage on threshold failures.
-- [ ] Split generated OpenAPI contract outputs into mutation/read files to reduce churn and improve test failure locality.
-- [ ] Add read-contract coverage for additional path-param endpoints (`/api/columns/{id}` and `/api/boards/{id}` invalid-id/shape edge cases) with stricter query invalidation fixtures.
-- [ ] Add `make test-backend-contracts` target that regenerates contract tests and verifies clean git diff in one command.
+- [x] Unblock backend test execution in this environment by bootstrapping common Nix Go profile paths before local `go`/`docker` detection in `./ops/run/test-backend.sh`.
+- [ ] Publish CI telemetry/regression artifacts with retention and PR summary links to speed threshold-failure triage.
+- [ ] Split generated OpenAPI contract test outputs into mutation/read files to reduce diff churn and improve failure locality.
+- [ ] Expand read-contract coverage for additional path-param endpoints (`/api/columns/{id}` and `/api/boards/{id}` invalid-id/shape edge cases) with stricter query invalidation fixtures.
+- [ ] Add `make test-backend-contracts` to regenerate contract tests and fail on non-clean git diff in one command.
