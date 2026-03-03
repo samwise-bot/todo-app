@@ -144,3 +144,7 @@ sequenceDiagram
 - Expanded SPA migration roadmap contract in `docs/roadmap.md` (task #12):
   1. Broke Phase 2 into explicit implementation slices (route shell, shared state, SWR policy, modular extraction).
   2. Added concrete acceptance checks to keep route-split work measurable and regression-resistant.
+- Added first unified client-store snapshot utility (`task #14` increment):
+  1. `frontend/lib/app-store.ts` now builds normalized entity maps for tasks/boards/columns/principals.
+  2. Utility exports deterministic `orderedNextTaskIds` ranked by `priority`, then `dueAt`, then `id`.
+  3. Added coverage in `frontend/tests/app-store.test.ts` to guard ordering + indexing behavior.
