@@ -67,6 +67,10 @@ func TransitionAllowed(from, to TaskState, projectID *int64) bool {
 		return true
 	}
 
+	if from == TaskStateDone {
+		return false
+	}
+
 	if to == TaskStateNext || to == TaskStateScheduled || to == TaskStateWaiting {
 		return projectID != nil
 	}
