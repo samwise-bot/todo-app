@@ -8,6 +8,7 @@ import {
   CreateTaskForm,
   DeleteBoardForm,
   DeleteColumnForm,
+  SetTaskBoardColumnForm,
   TransitionTaskStateForm,
   UpdateBoardForm,
   UpdateColumnForm
@@ -29,10 +30,34 @@ export default async function HomePage() {
     fetchJSON('/api/tasks')
   ]);
   const columnsByBoard = new Map<number, any[]>();
+  const columnsByID = new Map<number, any>();
   for (const column of columns) {
     const bucket = columnsByBoard.get(column.boardId) ?? [];
     bucket.push(column);
     columnsByBoard.set(column.boardId, bucket);
+    columnsByID.set(column.id, column);
+  }
+
+  const boardsByID = new Map<number, any>();
+  for (const board of boards) {
+    boardsByID.set(board.id, board);
+  }
+
+  const taskColumns = columns.map((column: any) => {
+    const boardName = boardsByID.get(column.boardId)?.name ?? `Board ${column.boardId}`;
+    return { id: column.id, label: `${boardName} / ${column.name}` };
+  });
+
+  const tasksByColumn = new Map<number, any[]>();
+  const tasksWithoutColumn: any[] = [];
+  for (const task of tasks) {
+    if (!task.boardColumnId || !columnsByID.has(task.boardColumnId)) {
+      tasksWithoutColumn.push(task);
+      continue;
+    }
+    const bucket = tasksByColumn.get(task.boardColumnId) ?? [];
+    bucket.push(task);
+    tasksByColumn.set(task.boardColumnId, bucket);
   }
 
   return (
@@ -50,7 +75,7 @@ export default async function HomePage() {
           </div>
         </form>
 
-        <CreateTaskForm projects={projects} />
+        <CreateTaskForm projects={projects} taskColumns={taskColumns} />
         <CreatePrincipalForm />
       </section>
 
@@ -81,6 +106,7 @@ export default async function HomePage() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
                 <TransitionTaskStateForm task={t} />
                 <AssignTaskForm task={t} principals={principals} />
+                <SetTaskBoardColumnForm task={t} taskColumns={taskColumns} />
               </div>
             </li>
           ))}
@@ -112,9 +138,49 @@ export default async function HomePage() {
       </section>
 
       <section>
-        <h2>Kanban lanes (derived)</h2>
+        <h2>Kanban lanes (by board columns)</h2>
+        <div style={{ marginBottom: 12, border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+          <h3>No column</h3>
+          <ul>
+            {tasksWithoutColumn.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
+          </ul>
+        </div>
+        {boards.map((board: any) => (
+          <article key={board.id} style={{ marginBottom: 12 }}>
+            <h3>{board.name}</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+              {(columnsByBoard.get(board.id) ?? []).map((column: any) => (
+                <div key={column.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+                  <h4 style={{ marginTop: 0 }}>{column.name}</h4>
+                  <ul>
+                    {(tasksByColumn.get(column.id) ?? []).map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+        {boards.length === 0 && (
+          <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+            No boards yet.
+          </div>
+        )}
+        {boards.length > 0 && columns.length === 0 && (
+          <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+            Boards exist but no columns are defined yet.
+          </div>
+        )}
+        {boards.length > 0 && (
+          <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
+            Tasks appear in board lanes only when assigned to a board column.
+          </div>
+        )}
+      </section>
+
+      <section>
+        <h2>Task states</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-          {['inbox', 'next', 'waiting', 'done'].map((lane) => (
+          {TASK_STATES.map((lane) => (
             <div key={lane} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
               <h3 style={{ textTransform: 'capitalize' }}>{lane}</h3>
               <ul>

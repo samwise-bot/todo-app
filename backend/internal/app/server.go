@@ -161,6 +161,8 @@ func (s *Server) handleTaskMutation(w http.ResponseWriter, r *http.Request) {
 		s.handleTaskState(w, r, id)
 	case "assignee":
 		s.handleTaskAssignee(w, r, id)
+	case "board-column":
+		s.handleTaskBoardColumn(w, r, id)
 	default:
 		writeJSON(w, 404, map[string]string{"error": "not found"})
 	}
@@ -200,6 +202,29 @@ func (s *Server) handleTaskAssignee(w http.ResponseWriter, r *http.Request, id i
 		case errors.Is(err, store.ErrNotFound):
 			writeJSON(w, 404, map[string]string{"error": "task not found"})
 		case strings.Contains(err.Error(), "assignee principal does not exist"):
+			writeJSON(w, 400, map[string]string{"error": err.Error()})
+		default:
+			writeErr(w, 400, err)
+		}
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleTaskBoardColumn(w http.ResponseWriter, r *http.Request, id int64) {
+	var body struct {
+		BoardColumnID *int64 `json:"boardColumnId"`
+		ActorID       *int64 `json:"actorId"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.store.UpdateTaskBoardColumn(r.Context(), id, body.BoardColumnID, body.ActorID); err != nil {
+		switch {
+		case errors.Is(err, store.ErrNotFound):
+			writeJSON(w, 404, map[string]string{"error": "task not found"})
+		case strings.Contains(err.Error(), "board column does not exist"):
 			writeJSON(w, 400, map[string]string{"error": err.Error()})
 		default:
 			writeErr(w, 400, err)

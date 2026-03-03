@@ -13,8 +13,10 @@ import {
   assignTaskAction,
   createBoardAction,
   createColumnAction,
+  createTaskAction,
   deleteBoardAction,
   deleteColumnAction,
+  setTaskBoardColumnAction,
   updateBoardAction,
   updateColumnAction
 } from '../app/actions';
@@ -86,6 +88,77 @@ describe('assignment + board/column action semantics', () => {
 
     expect(fetchMock).not.toHaveBeenCalled();
     expect(revalidatePathMock).not.toHaveBeenCalled();
+  });
+
+  test('setTaskBoardColumnAction sends board column payload and supports unassign', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okResponse());
+
+    const moveData = new FormData();
+    moveData.set('taskId', '18');
+    moveData.set('boardColumnId', '4');
+    const moveResult = await setTaskBoardColumnAction(INITIAL_ACTION_STATE, moveData);
+    expect(moveResult).toEqual({ status: 'success', message: 'Task moved to board column.', fieldErrors: {} });
+    let req = extractRequest(fetchMock.mock.calls[0]);
+    expect(req.url).toBe('http://localhost:8080/api/tasks/18/board-column');
+    expect(req.init.method).toBe('PATCH');
+    expect(req.init.body).toBe(JSON.stringify({ boardColumnId: 4 }));
+
+    const unassignData = new FormData();
+    unassignData.set('taskId', '18');
+    unassignData.set('boardColumnId', '');
+    const unassignResult = await setTaskBoardColumnAction(INITIAL_ACTION_STATE, unassignData);
+    expect(unassignResult).toEqual({ status: 'success', message: 'Task removed from board column.', fieldErrors: {} });
+    req = extractRequest(fetchMock.mock.calls[1]);
+    expect(req.init.body).toBe(JSON.stringify({ boardColumnId: null }));
+  });
+
+  test('setTaskBoardColumnAction validates IDs and skips API call on errors', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okResponse());
+
+    const badTaskData = new FormData();
+    badTaskData.set('taskId', 'bad');
+    badTaskData.set('boardColumnId', '2');
+    const badTaskResult = await setTaskBoardColumnAction(INITIAL_ACTION_STATE, badTaskData);
+    expect(badTaskResult.fieldErrors).toEqual({ taskId: 'Task is invalid.' });
+
+    const badColumnData = new FormData();
+    badColumnData.set('taskId', '4');
+    badColumnData.set('boardColumnId', 'nope');
+    const badColumnResult = await setTaskBoardColumnAction(INITIAL_ACTION_STATE, badColumnData);
+    expect(badColumnResult.fieldErrors).toEqual({ boardColumnId: 'Board column is invalid.' });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  test('createTaskAction includes boardColumnId and validates board column', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okResponse());
+
+    const createData = new FormData();
+    createData.set('title', 'Task with lane');
+    createData.set('description', 'desc');
+    createData.set('state', 'inbox');
+    createData.set('projectId', '6');
+    createData.set('boardColumnId', '9');
+    const createResult = await createTaskAction(INITIAL_ACTION_STATE, createData);
+    expect(createResult.status).toBe('success');
+    const req = extractRequest(fetchMock.mock.calls[0]);
+    expect(req.url).toBe('http://localhost:8080/api/tasks');
+    expect(req.init.method).toBe('POST');
+    expect(req.init.body).toBe(JSON.stringify({
+      title: 'Task with lane',
+      description: 'desc',
+      state: 'inbox',
+      projectId: 6,
+      boardColumnId: 9
+    }));
+
+    const badCreateData = new FormData();
+    badCreateData.set('title', 'Broken');
+    badCreateData.set('description', '');
+    badCreateData.set('state', 'inbox');
+    badCreateData.set('boardColumnId', 'xyz');
+    const badCreateResult = await createTaskAction(INITIAL_ACTION_STATE, badCreateData);
+    expect(badCreateResult.fieldErrors).toEqual({ boardColumnId: 'Board column is invalid.' });
   });
 
   test('board actions handle success payloads and validation failures', async () => {

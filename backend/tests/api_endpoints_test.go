@@ -188,6 +188,78 @@ func TestTaskAssigneeEndpointAndEvent(t *testing.T) {
 	}
 }
 
+func TestTaskBoardColumnEndpointAndEvent(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Work"})
+	if status != http.StatusCreated {
+		t.Fatalf("create project: expected 201, got %d", status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	status, board := h.jsonRequest(http.MethodPost, "/api/boards", map[string]any{
+		"projectId": projectID,
+		"name":      "Execution",
+	})
+	if status != http.StatusCreated {
+		t.Fatalf("create board: expected 201, got %d", status)
+	}
+	boardID := mustInt64(t, board["id"])
+
+	status, column := h.jsonRequest(http.MethodPost, "/api/columns", map[string]any{
+		"boardId":  boardID,
+		"name":     "Doing",
+		"position": 1,
+	})
+	if status != http.StatusCreated {
+		t.Fatalf("create column: expected 201, got %d", status)
+	}
+	columnID := mustInt64(t, column["id"])
+
+	status, task := h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{"title": "Ship feature"})
+	if status != http.StatusCreated {
+		t.Fatalf("create task: expected 201, got %d", status)
+	}
+	taskID := mustInt64(t, task["id"])
+
+	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d/board-column", taskID), map[string]any{"boardColumnId": 999999})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for unknown board column, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d/board-column", taskID), map[string]any{"boardColumnId": columnID})
+	if status != http.StatusOK {
+		t.Fatalf("expected 200 for setting board column, got %d", status)
+	}
+
+	status, tasks := h.jsonRequestArray(http.MethodGet, "/api/tasks", nil)
+	if status != http.StatusOK {
+		t.Fatalf("list tasks: expected 200, got %d", status)
+	}
+	if len(tasks) != 1 {
+		t.Fatalf("expected 1 task, got %d", len(tasks))
+	}
+	if got := mustInt64(t, tasks[0]["boardColumnId"]); got != columnID {
+		t.Fatalf("expected boardColumnId=%d, got %d", columnID, got)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d/board-column", taskID), map[string]any{"boardColumnId": nil})
+	if status != http.StatusOK {
+		t.Fatalf("expected 200 for clearing board column, got %d", status)
+	}
+
+	events, err := h.store.ListTaskEvents(context.Background(), taskID)
+	if err != nil {
+		t.Fatalf("list task events: %v", err)
+	}
+	if len(events) < 3 {
+		t.Fatalf("expected at least 3 task events, got %d", len(events))
+	}
+	if got := events[len(events)-1].EventType; got != "task.board_column.changed" {
+		t.Fatalf("expected last event type task.board_column.changed, got %q", got)
+	}
+}
+
 func TestBoardAndColumnCRUDEndpoints(t *testing.T) {
 	h := newAPIHarness(t)
 

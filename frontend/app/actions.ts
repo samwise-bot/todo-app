@@ -63,6 +63,7 @@ export async function createTaskAction(_: ActionState, formData: FormData): Prom
   const description = String(formData.get('description') ?? '').trim();
   const state = String(formData.get('state') ?? 'inbox').trim() || 'inbox';
   const projectIdRaw = String(formData.get('projectId') ?? '').trim();
+  const boardColumnIdRaw = String(formData.get('boardColumnId') ?? '').trim();
 
   const fieldErrors: Record<string, string> = {};
   if (!title) {
@@ -82,6 +83,16 @@ export async function createTaskAction(_: ActionState, formData: FormData): Prom
     }
   }
 
+  let boardColumnId: number | undefined;
+  if (boardColumnIdRaw) {
+    const parsedBoardColumnId = asPositiveInt(boardColumnIdRaw);
+    if (parsedBoardColumnId === null) {
+      fieldErrors.boardColumnId = 'Board column is invalid.';
+    } else {
+      boardColumnId = parsedBoardColumnId;
+    }
+  }
+
   if (Object.keys(fieldErrors).length > 0) {
     return validationErrorState(fieldErrors);
   }
@@ -94,6 +105,9 @@ export async function createTaskAction(_: ActionState, formData: FormData): Prom
     };
     if (projectId !== undefined) {
       payload.projectId = projectId;
+    }
+    if (boardColumnId !== undefined) {
+      payload.boardColumnId = boardColumnId;
     }
     await apiFetch('/api/tasks', {
       method: 'POST',
@@ -175,6 +189,32 @@ export async function assignTaskAction(_: ActionState, formData: FormData): Prom
 
   return runAction(payload.assigneeId === null ? 'Task unassigned.' : 'Task assigned.', async () => {
     await apiFetch(`/api/tasks/${taskID}/assignee`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
+  });
+}
+
+export async function setTaskBoardColumnAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  const taskIdRaw = String(formData.get('taskId') ?? '').trim();
+  const boardColumnIdRaw = String(formData.get('boardColumnId') ?? '').trim();
+
+  const taskID = asPositiveInt(taskIdRaw);
+  if (taskID === null) {
+    return validationErrorState({ taskId: 'Task is invalid.' });
+  }
+
+  const payload: { boardColumnId: number | null } = { boardColumnId: null };
+  if (boardColumnIdRaw) {
+    const boardColumnID = asPositiveInt(boardColumnIdRaw);
+    if (boardColumnID === null) {
+      return validationErrorState({ boardColumnId: 'Board column is invalid.' });
+    }
+    payload.boardColumnId = boardColumnID;
+  }
+
+  return runAction(payload.boardColumnId === null ? 'Task removed from board column.' : 'Task moved to board column.', async () => {
+    await apiFetch(`/api/tasks/${taskID}/board-column`, {
       method: 'PATCH',
       body: JSON.stringify(payload)
     });

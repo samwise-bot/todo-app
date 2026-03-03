@@ -10,6 +10,7 @@ import {
   createTaskAction,
   deleteBoardAction,
   deleteColumnAction,
+  setTaskBoardColumnAction,
   transitionTaskStateAction,
   updateBoardAction,
   updateColumnAction
@@ -31,6 +32,7 @@ type TaskOption = {
   id: number;
   state: string;
   assigneeId?: number | null;
+  boardColumnId?: number | null;
 };
 
 type BoardOption = {
@@ -42,6 +44,11 @@ type ColumnOption = {
   id: number;
   name: string;
   position: number;
+};
+
+type TaskColumnOption = {
+  id: number;
+  label: string;
 };
 
 function PendingFieldset({ children }: { children: ReactNode }) {
@@ -72,7 +79,7 @@ function FormFeedback({ state }: { state: ActionState }) {
   );
 }
 
-export function CreateTaskForm({ projects }: { projects: ProjectOption[] }) {
+export function CreateTaskForm({ projects, taskColumns }: { projects: ProjectOption[]; taskColumns: TaskColumnOption[] }) {
   const [state, formAction] = useFormState(createTaskAction, INITIAL_ACTION_STATE);
 
   return (
@@ -88,6 +95,11 @@ export function CreateTaskForm({ projects }: { projects: ProjectOption[] }) {
             {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
           <FieldError message={state.fieldErrors.projectId} />
+          <select name="boardColumnId" defaultValue="" aria-invalid={Boolean(state.fieldErrors.boardColumnId)}>
+            <option value="">No board column</option>
+            {taskColumns.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+          </select>
+          <FieldError message={state.fieldErrors.boardColumnId} />
           <select name="state" defaultValue="inbox" aria-invalid={Boolean(state.fieldErrors.state)}>
             {TASK_STATES.map((taskState) => <option key={taskState} value={taskState}>{taskState}</option>)}
           </select>
@@ -161,6 +173,27 @@ export function AssignTaskForm({ task, principals }: { task: TaskOption; princip
         </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.assigneeId || state.fieldErrors.taskId} />
+      <FormFeedback state={state} />
+    </form>
+  );
+}
+
+export function SetTaskBoardColumnForm({ task, taskColumns }: { task: TaskOption; taskColumns: TaskColumnOption[] }) {
+  const [state, formAction] = useFormState(setTaskBoardColumnAction, INITIAL_ACTION_STATE);
+
+  return (
+    <form action={formAction} style={{ display: 'inline-flex', gap: 6, flexDirection: 'column' }}>
+      <PendingFieldset>
+        <input type="hidden" name="taskId" value={task.id} />
+        <div style={{ display: 'inline-flex', gap: 6 }}>
+          <select name="boardColumnId" defaultValue={task.boardColumnId ?? ''} aria-invalid={Boolean(state.fieldErrors.boardColumnId)}>
+            <option value="">No board column</option>
+            {taskColumns.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+          </select>
+          <SubmitButton idleLabel={task.boardColumnId ? 'Move column' : 'Set column'} pendingLabel="Saving..." />
+        </div>
+      </PendingFieldset>
+      <FieldError message={state.fieldErrors.boardColumnId || state.fieldErrors.taskId} />
       <FormFeedback state={state} />
     </form>
   );

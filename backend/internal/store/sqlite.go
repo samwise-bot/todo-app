@@ -144,6 +144,15 @@ func (s *SQLiteStore) PrincipalExists(ctx context.Context, id int64) (bool, erro
 	return err == nil, err
 }
 
+func (s *SQLiteStore) ColumnExists(ctx context.Context, id int64) (bool, error) {
+	var exists int
+	err := s.db.QueryRowContext(ctx, `SELECT 1 FROM columns WHERE id=?`, id).Scan(&exists)
+	if err == sql.ErrNoRows {
+		return false, nil
+	}
+	return err == nil, err
+}
+
 func (s *SQLiteStore) ListProjects(ctx context.Context) ([]domain.Project, error) {
 	rows, err := s.db.QueryContext(ctx, `SELECT id, name, description, created_at FROM projects ORDER BY id DESC`)
 	if err != nil {
@@ -444,6 +453,33 @@ func (s *SQLiteStore) UpdateTaskAssignee(ctx context.Context, taskID int64, assi
 		return err
 	}
 	return s.appendEvent(ctx, taskID, actorID, "task.assignee.changed", map[string]any{"from": previous, "to": assigneeID})
+}
+
+func (s *SQLiteStore) UpdateTaskBoardColumn(ctx context.Context, taskID int64, boardColumnID *int64, actorID *int64) error {
+	var prev sql.NullInt64
+	if err := s.db.QueryRowContext(ctx, `SELECT board_column_id FROM tasks WHERE id=?`, taskID).Scan(&prev); err != nil {
+		if err == sql.ErrNoRows {
+			return ErrNotFound
+		}
+		return err
+	}
+	var previous *int64
+	if prev.Valid {
+		previous = &prev.Int64
+	}
+	if boardColumnID != nil {
+		ok, err := s.ColumnExists(ctx, *boardColumnID)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			return fmt.Errorf("board column does not exist")
+		}
+	}
+	if _, err := s.db.ExecContext(ctx, `UPDATE tasks SET board_column_id=?, updated_at=? WHERE id=?`, boardColumnID, time.Now().UTC().Format(time.RFC3339), taskID); err != nil {
+		return err
+	}
+	return s.appendEvent(ctx, taskID, actorID, "task.board_column.changed", map[string]any{"from": previous, "to": boardColumnID})
 }
 
 func (s *SQLiteStore) appendEvent(ctx context.Context, taskID int64, actorID *int64, event string, payload any) error {
