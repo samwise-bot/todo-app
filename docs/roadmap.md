@@ -48,7 +48,8 @@
 - ✅ Completed: route-split extraction increment on `/projects` (real API-backed project list + coverage) aligned to task #41 scope.
 - ✅ Completed: task #47 moved `Next -> In Progress -> Done` with `/board` default focus for active work assigned to Samwise.
 - ✅ Completed: task #12 moved `Next -> In Progress -> Done` by expanding the SPA migration plan into phased deliverables with explicit acceptance criteria.
+- ✅ Completed: task #13 moved `Next -> In Progress -> Done` with initial board inspector slice (`Board health` counters) and deterministic metric tests.
 - ▶ Next milestone:
-  - #13 Roadmap: Implement SPA shell with persistent board + inspector panels
   - #14 Roadmap: Unified client state store for tasks/boards/columns/principals
+  - #15 Roadmap: Offline-first cache strategy for SPA (stale-while-revalidate)
   - #15 Roadmap: Offline-first cache strategy for SPA (stale-while-revalidate)

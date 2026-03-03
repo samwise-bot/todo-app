@@ -28,13 +28,13 @@
       "id": 13,
       "title": "Roadmap: Implement SPA shell with persistent board + inspector panels",
       "description": "Seeded roadmap inbox item requested by Ian.",
-      "state": "next",
+      "state": "done",
       "projectId": 2,
       "assigneeId": 2,
-      "boardColumnId": 2,
+      "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-03T16:48:42Z"
+      "updatedAt": "2026-03-03T22:43:00Z"
     },
     {
       "id": 14,

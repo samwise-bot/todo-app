@@ -4,6 +4,7 @@ import React from 'react';
 import { createProjectAction } from './actions';
 import { TASK_STATES } from '../lib/task-states';
 import { buildBoardLaneView } from '../lib/board-lanes';
+import { buildBoardInspectorMetrics } from '../lib/board-inspector';
 import { fetchCollection, fetchPagedCollection } from '../lib/api-client';
 import {
   hiddenParamEntries,
@@ -41,6 +42,7 @@ type Task = {
   assigneeId?: number | null;
   projectId?: number | null;
   boardColumnId?: number | null;
+  dueAt?: string | null;
 };
 
 function withQueryString(params: URLSearchParams): string {
@@ -117,6 +119,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   const columns = columnsResult.items;
   const tasks = tasksAllResult.items;
   const taskList = tasksListResult.items;
+  const boardInspector = buildBoardInspectorMetrics(tasks);
 
   const laneView = buildBoardLaneView({
     boards,
@@ -198,6 +201,22 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
       </section>
 
       <BoardLanesSection laneView={laneView} boards={boards} columns={columns} principals={principals} projects={projects} />
+
+      <section className="panel" aria-label="Board inspector">
+        <div className="panel-header-row">
+          <div>
+            <p className="eyebrow">Inspector</p>
+            <h2>Board health</h2>
+          </div>
+        </div>
+        <div className="badge-row" style={{ gap: 10 }}>
+          <span className="badge">Next: {boardInspector.nextCount}</span>
+          <span className="badge">In Progress: {boardInspector.inProgressCount}</span>
+          <span className="badge">Blocked: {boardInspector.blockedCount}</span>
+          <span className="badge">Unassigned: {boardInspector.unassignedCount}</span>
+          <span className="badge">Overdue: {boardInspector.overdueCount}</span>
+        </div>
+      </section>
 
       <section className="panel">
         <div className="panel-header-row">
