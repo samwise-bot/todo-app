@@ -130,7 +130,7 @@ describe('assignment + board/column action semantics', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  test('createTaskAction includes boardColumnId and validates board column', async () => {
+  test('createTaskAction includes boardColumnId + scheduling metadata and validates inputs', async () => {
     const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okResponse());
 
     const createData = new FormData();
@@ -139,6 +139,8 @@ describe('assignment + board/column action semantics', () => {
     createData.set('state', 'inbox');
     createData.set('projectId', '6');
     createData.set('boardColumnId', '9');
+    createData.set('priority', '2');
+    createData.set('dueAt', '2026-03-06T09:30');
     const createResult = await createTaskAction(INITIAL_ACTION_STATE, createData);
     expect(createResult.status).toBe('success');
     const req = extractRequest(fetchMock.mock.calls[0]);
@@ -149,7 +151,9 @@ describe('assignment + board/column action semantics', () => {
       description: 'desc',
       state: 'inbox',
       projectId: 6,
-      boardColumnId: 9
+      boardColumnId: 9,
+      priority: 2,
+      dueAt: '2026-03-06T17:30:00.000Z'
     }));
 
     const badCreateData = new FormData();
@@ -159,6 +163,20 @@ describe('assignment + board/column action semantics', () => {
     badCreateData.set('boardColumnId', 'xyz');
     const badCreateResult = await createTaskAction(INITIAL_ACTION_STATE, badCreateData);
     expect(badCreateResult.fieldErrors).toEqual({ boardColumnId: 'Board column is invalid.' });
+
+    const badPriorityData = new FormData();
+    badPriorityData.set('title', 'Broken priority');
+    badPriorityData.set('state', 'next');
+    badPriorityData.set('priority', '9');
+    const badPriorityResult = await createTaskAction(INITIAL_ACTION_STATE, badPriorityData);
+    expect(badPriorityResult.fieldErrors).toEqual({ priority: 'Priority must be between 1 and 5.' });
+
+    const badDueDateData = new FormData();
+    badDueDateData.set('title', 'Broken due date');
+    badDueDateData.set('state', 'next');
+    badDueDateData.set('dueAt', 'not-a-date');
+    const badDueDateResult = await createTaskAction(INITIAL_ACTION_STATE, badDueDateData);
+    expect(badDueDateResult.fieldErrors).toEqual({ dueAt: 'Due date is invalid.' });
   });
 
   test('board actions handle success payloads and validation failures', async () => {

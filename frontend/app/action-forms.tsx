@@ -105,6 +105,16 @@ export function CreateTaskForm({ projects, taskColumns }: { projects: ProjectOpt
             {TASK_STATES.map((taskState) => <option key={taskState} value={taskState}>{taskState}</option>)}
           </select>
           <FieldError message={state.fieldErrors.state} />
+          <select name="priority" defaultValue="3" aria-invalid={Boolean(state.fieldErrors.priority)}>
+            <option value="1">Priority 1 (highest)</option>
+            <option value="2">Priority 2</option>
+            <option value="3">Priority 3</option>
+            <option value="4">Priority 4</option>
+            <option value="5">Priority 5 (lowest)</option>
+          </select>
+          <FieldError message={state.fieldErrors.priority} />
+          <input name="dueAt" type="datetime-local" aria-invalid={Boolean(state.fieldErrors.dueAt)} />
+          <FieldError message={state.fieldErrors.dueAt} />
           <SubmitButton idleLabel="Create task" pendingLabel="Creating..." />
         </div>
       </PendingFieldset>

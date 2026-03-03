@@ -64,6 +64,8 @@ export async function createTaskAction(_: ActionState, formData: FormData): Prom
   const state = String(formData.get('state') ?? 'inbox').trim() || 'inbox';
   const projectIdRaw = String(formData.get('projectId') ?? '').trim();
   const boardColumnIdRaw = String(formData.get('boardColumnId') ?? '').trim();
+  const priorityRaw = String(formData.get('priority') ?? '').trim();
+  const dueAtRaw = String(formData.get('dueAt') ?? '').trim();
 
   const fieldErrors: Record<string, string> = {};
   if (!title) {
@@ -93,6 +95,26 @@ export async function createTaskAction(_: ActionState, formData: FormData): Prom
     }
   }
 
+  let priority: number | undefined;
+  if (priorityRaw) {
+    const parsedPriority = Number(priorityRaw);
+    if (!Number.isInteger(parsedPriority) || parsedPriority < 1 || parsedPriority > 5) {
+      fieldErrors.priority = 'Priority must be between 1 and 5.';
+    } else {
+      priority = parsedPriority;
+    }
+  }
+
+  let dueAt: string | undefined;
+  if (dueAtRaw) {
+    const parsed = new Date(dueAtRaw);
+    if (Number.isNaN(parsed.getTime())) {
+      fieldErrors.dueAt = 'Due date is invalid.';
+    } else {
+      dueAt = parsed.toISOString();
+    }
+  }
+
   if (Object.keys(fieldErrors).length > 0) {
     return validationErrorState(fieldErrors);
   }
@@ -108,6 +130,12 @@ export async function createTaskAction(_: ActionState, formData: FormData): Prom
     }
     if (boardColumnId !== undefined) {
       payload.boardColumnId = boardColumnId;
+    }
+    if (priority !== undefined) {
+      payload.priority = priority;
+    }
+    if (dueAt !== undefined) {
+      payload.dueAt = dueAt;
     }
     await apiFetch('/api/tasks', {
       method: 'POST',
