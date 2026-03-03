@@ -100,3 +100,7 @@ sequenceDiagram
   1. Replays `select_subagent_fanout_batch.py` across cycles until all current `Next` task IDs are seen or `--max-cycles` is hit.
   2. Writes machine-readable evidence to `.run/subagent-fanout-sweep-report.json` with coverage ratio and per-cycle cursor/selection details.
   3. Keeps worker spawning out-of-band, so planning validation is deterministic and testable without runtime side-effects.
+- Added worker-outcome summary ingestion to the sweep validator:
+  1. Reads `.run/subagent-worker-results.json` (or `--worker-results-json` override) when present.
+  2. Emits `workerOutcomeSummary` with completion/timeout counts plus ratios.
+  3. Provides unblock evidence for task #34 without coupling selection logic to spawn execution.

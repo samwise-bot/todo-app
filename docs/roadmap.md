@@ -29,15 +29,11 @@
 - docs/handoff/v1.md, known limitations, ops runbook
 
 ## Current Iteration Status (2026-03-03)
-- ✅ Completed: task #35 shipped (batched subagent orchestration planner) with deterministic cursor-based batching in `ops/run/plan_subagent_fanout.py` + unit tests.
-- ✅ Completed: task #36 integrated planner into runtime loop path via `ops/run/select_subagent_fanout_batch.py` (live task export + project-scoped batched selection).
-- ✅ Completed: task #37 tuned worker execution policy in `ops/run/select_subagent_fanout_batch.py` with compact prompt generation + explicit `--worker-timeout-seconds` default 180s.
-- ✅ Completed: DevEx task #30 (`ops/run/generate-backend-contract-tests.sh`) now has explicit Go binary fallback/override handling.
-- ✅ Completed: task #38 validation utility shipped via `ops/run/validate_subagent_fanout_sweep.py` + `.run/subagent-fanout-sweep-report.json` evidence (coverageRatio=1.0 over full `Next` set in 4 cycles).
-- 🚧 Blocked: task #34 remains in **Blocked** pending end-to-end verification that spawned workers (not just planner coverage) consistently return actionable notes within timeout budgets.
-- ➕ Added follow-up validation need: collect spawned-worker completion/timeout ratios by cycle and define unblock threshold for #34 closure.
+- ✅ Completed: task #39 moved `Next -> In Progress -> Done` and extended sweep reporting with `workerOutcomeSummary` (`completed`, `timedOut`, ratios) in `ops/run/validate_subagent_fanout_sweep.py`.
+- ✅ Completed: task #38 validated deterministic full-queue coverage with `.run/subagent-fanout-sweep-report.json` (`coverageRatio=1.0`, `cyclesRun=4`).
+- 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
+  - Ship SPA architecture ADR baseline (task #11)
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
   - Document canonical Go fallback strategy across all `ops/run` scripts (task #32)
-  - Ship SPA architecture ADR baseline (task #11)

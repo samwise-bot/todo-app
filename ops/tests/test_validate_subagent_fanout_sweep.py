@@ -24,6 +24,33 @@ class ValidateSubagentFanoutSweepTest(unittest.TestCase):
             ]}))
             self.assertEqual(module._next_ids_from_tasks_json(path), [1, 3])
 
+    def test_next_ids_from_tasks_json_accepts_data_envelope_and_deduplicates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "tasks.json"
+            path.write_text(json.dumps({"data": [
+                {"id": 4, "state": "next"},
+                {"id": "4", "state": "next"},
+                {"id": 5, "state": "inbox"},
+                {"state": "next"},
+                "noise",
+            ]}))
+            self.assertEqual(module._next_ids_from_tasks_json(path), [4])
+
+    def test_worker_outcome_summary_counts_completion_and_timeouts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "worker-results.json"
+            path.write_text(json.dumps({"items": [
+                {"taskId": 1, "status": "completed"},
+                {"taskId": 2, "status": "timeout"},
+                {"taskId": 3, "status": "done"},
+                {"taskId": 4, "status": "timed_out"},
+            ]}))
+            summary = module._worker_outcome_summary(path)
+            self.assertTrue(summary["found"])
+            self.assertEqual(summary["total"], 4)
+            self.assertEqual(summary["completed"], 2)
+            self.assertEqual(summary["timedOut"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

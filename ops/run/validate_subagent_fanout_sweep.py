@@ -19,6 +19,7 @@ DEFAULT_PROJECT_ID = 2
 DEFAULT_BATCH_SIZE = 5
 DEFAULT_MAX_CYCLES = 20
 DEFAULT_REPORT_PATH = Path('.run/subagent-fanout-sweep-report.json')
+DEFAULT_WORKER_RESULTS_PATH = Path('.run/subagent-worker-results.json')
 
 
 def _run_select(api_base: str, project_id: int, batch_size: int) -> dict:
@@ -39,8 +40,60 @@ def _run_select(api_base: str, project_id: int, batch_size: int) -> dict:
 
 def _next_ids_from_tasks_json(path: Path) -> list[int]:
     payload = json.loads(path.read_text())
-    items = payload.get('items', []) if isinstance(payload, dict) else payload
-    return sorted(int(t['id']) for t in items if t.get('state') == 'next')
+    if isinstance(payload, dict):
+        items = payload.get('items') or payload.get('data') or []
+    else:
+        items = payload
+
+    next_ids: set[int] = set()
+    for task in items:
+        if not isinstance(task, dict):
+            continue
+        if task.get('state') != 'next':
+            continue
+        task_id = task.get('id')
+        if task_id is None:
+            continue
+        next_ids.add(int(task_id))
+
+    return sorted(next_ids)
+
+
+def _worker_outcome_summary(path: Path) -> dict:
+    if not path.exists():
+        return {
+            'path': str(path),
+            'found': False,
+            'total': 0,
+            'completed': 0,
+            'timedOut': 0,
+            'completionRatio': 0.0,
+            'timeoutRatio': 0.0,
+        }
+
+    payload = json.loads(path.read_text())
+    rows = payload.get('items', []) if isinstance(payload, dict) else payload
+    completed = 0
+    timed_out = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        status = str(row.get('status', '')).lower()
+        if status in {'completed', 'done', 'success'}:
+            completed += 1
+        if status in {'timed_out', 'timeout', 'timedout'}:
+            timed_out += 1
+
+    total = len([r for r in rows if isinstance(r, dict)])
+    return {
+        'path': str(path),
+        'found': True,
+        'total': total,
+        'completed': completed,
+        'timedOut': timed_out,
+        'completionRatio': (completed / total) if total else 0.0,
+        'timeoutRatio': (timed_out / total) if total else 0.0,
+    }
 
 
 def main() -> int:
@@ -50,6 +103,7 @@ def main() -> int:
     parser.add_argument('--batch-size', type=int, default=DEFAULT_BATCH_SIZE)
     parser.add_argument('--max-cycles', type=int, default=DEFAULT_MAX_CYCLES)
     parser.add_argument('--tasks-json', type=Path, default=Path('.run/tasks.json'))
+    parser.add_argument('--worker-results-json', type=Path, default=DEFAULT_WORKER_RESULTS_PATH)
     parser.add_argument('--report-path', type=Path, default=DEFAULT_REPORT_PATH)
     args = parser.parse_args()
 
@@ -90,6 +144,7 @@ def main() -> int:
         'seenIds': sorted(seen),
         'coverageRatio': (len(set(final_expected) & seen) / len(final_expected)) if final_expected else 1.0,
         'completedFullSweep': completed,
+        'workerOutcomeSummary': _worker_outcome_summary(args.worker_results_json),
         'cycleSummaries': cycle_summaries,
     }
 
