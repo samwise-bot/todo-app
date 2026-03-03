@@ -1,6 +1,14 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import {
+  actionErrorMessage,
+  failureActionState,
+  successActionState,
+  validationErrorState,
+  type ActionState
+} from '../lib/action-state';
+import { TASK_STATES } from '../lib/task-states';
 
 const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080';
 
@@ -13,9 +21,28 @@ async function apiFetch(path: string, init: RequestInit) {
     },
     cache: 'no-store'
   });
+
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API ${res.status}: ${text}`);
+    const text = (await res.text()).trim();
+    throw new Error(text || `API request failed with status ${res.status}`);
+  }
+}
+
+function asPositiveInt(value: string) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return null;
+  }
+  return parsed;
+}
+
+async function runAction(successMessage: string, fn: () => Promise<void>): Promise<ActionState> {
+  try {
+    await fn();
+    revalidatePath('/');
+    return successActionState(successMessage);
+  } catch (error) {
+    return failureActionState(actionErrorMessage(error));
   }
 }
 
@@ -31,159 +58,272 @@ export async function createProjectAction(formData: FormData) {
   revalidatePath('/');
 }
 
-export async function createTaskAction(formData: FormData) {
+export async function createTaskAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const title = String(formData.get('title') ?? '').trim();
   const description = String(formData.get('description') ?? '').trim();
   const state = String(formData.get('state') ?? 'inbox').trim() || 'inbox';
   const projectIdRaw = String(formData.get('projectId') ?? '').trim();
-  if (!title) return;
 
-  const payload: Record<string, unknown> = {
-    title,
-    description,
-    state
-  };
-  if (projectIdRaw) {
-    payload.projectId = Number(projectIdRaw);
+  const fieldErrors: Record<string, string> = {};
+  if (!title) {
+    fieldErrors.title = 'Title is required.';
+  }
+  if (!TASK_STATES.includes(state as (typeof TASK_STATES)[number])) {
+    fieldErrors.state = 'State is invalid.';
   }
 
-  await apiFetch('/api/tasks', {
-    method: 'POST',
-    body: JSON.stringify(payload)
+  let projectId: number | undefined;
+  if (projectIdRaw) {
+    const parsedProjectId = asPositiveInt(projectIdRaw);
+    if (parsedProjectId === null) {
+      fieldErrors.projectId = 'Project is invalid.';
+    } else {
+      projectId = parsedProjectId;
+    }
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Task created.', async () => {
+    const payload: Record<string, unknown> = {
+      title,
+      description,
+      state
+    };
+    if (projectId !== undefined) {
+      payload.projectId = projectId;
+    }
+    await apiFetch('/api/tasks', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
   });
-  revalidatePath('/');
 }
 
-export async function transitionTaskStateAction(formData: FormData) {
+export async function transitionTaskStateAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const taskIdRaw = String(formData.get('taskId') ?? '').trim();
   const state = String(formData.get('state') ?? '').trim();
-  if (!taskIdRaw || !state) return;
 
-  await apiFetch(`/api/tasks/${taskIdRaw}/state`, {
-    method: 'PATCH',
-    body: JSON.stringify({ state })
+  const fieldErrors: Record<string, string> = {};
+  const taskId = asPositiveInt(taskIdRaw);
+  if (taskId === null) {
+    fieldErrors.taskId = 'Task is invalid.';
+  }
+  if (!TASK_STATES.includes(state as (typeof TASK_STATES)[number])) {
+    fieldErrors.state = 'State is invalid.';
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Task updated.', async () => {
+    await apiFetch(`/api/tasks/${taskId}/state`, {
+      method: 'PATCH',
+      body: JSON.stringify({ state })
+    });
   });
-  revalidatePath('/');
 }
 
-export async function createPrincipalAction(formData: FormData) {
+export async function createPrincipalAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const kind = String(formData.get('kind') ?? '').trim();
   const handle = String(formData.get('handle') ?? '').trim();
   const displayName = String(formData.get('displayName') ?? '').trim();
-  if (!kind || !handle || !displayName) return;
 
-  await apiFetch('/api/principals', {
-    method: 'POST',
-    body: JSON.stringify({ kind, handle, displayName })
+  const fieldErrors: Record<string, string> = {};
+  if (!kind) {
+    fieldErrors.kind = 'Kind is required.';
+  }
+  if (!handle) {
+    fieldErrors.handle = 'Handle is required.';
+  }
+  if (!displayName) {
+    fieldErrors.displayName = 'Display name is required.';
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Principal created.', async () => {
+    await apiFetch('/api/principals', {
+      method: 'POST',
+      body: JSON.stringify({ kind, handle, displayName })
+    });
   });
-  revalidatePath('/');
 }
 
-export async function assignTaskAction(formData: FormData) {
+export async function assignTaskAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const taskIdRaw = String(formData.get('taskId') ?? '').trim();
   const assigneeIdRaw = String(formData.get('assigneeId') ?? '').trim();
-  if (!taskIdRaw) return;
-  const taskID = Number(taskIdRaw);
-  if (!Number.isInteger(taskID) || taskID <= 0) return;
+
+  const taskID = asPositiveInt(taskIdRaw);
+  if (taskID === null) {
+    return validationErrorState({ taskId: 'Task is invalid.' });
+  }
 
   const payload: { assigneeId: number | null } = { assigneeId: null };
   if (assigneeIdRaw) {
-    const assigneeID = Number(assigneeIdRaw);
-    if (!Number.isInteger(assigneeID) || assigneeID <= 0) return;
+    const assigneeID = asPositiveInt(assigneeIdRaw);
+    if (assigneeID === null) {
+      return validationErrorState({ assigneeId: 'Assignee is invalid.' });
+    }
     payload.assigneeId = assigneeID;
   }
 
-  await apiFetch(`/api/tasks/${taskID}/assignee`, {
-    method: 'PATCH',
-    body: JSON.stringify(payload)
+  return runAction(payload.assigneeId === null ? 'Task unassigned.' : 'Task assigned.', async () => {
+    await apiFetch(`/api/tasks/${taskID}/assignee`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
   });
-  revalidatePath('/');
 }
 
-export async function createBoardAction(formData: FormData) {
+export async function createBoardAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const name = String(formData.get('name') ?? '').trim();
   const projectIdRaw = String(formData.get('projectId') ?? '').trim();
-  if (!name || !projectIdRaw) return;
-  const projectID = Number(projectIdRaw);
-  if (!Number.isInteger(projectID) || projectID <= 0) return;
 
-  await apiFetch('/api/boards', {
-    method: 'POST',
-    body: JSON.stringify({ name, projectId: projectID })
+  const fieldErrors: Record<string, string> = {};
+  if (!name) {
+    fieldErrors.name = 'Board name is required.';
+  }
+  const projectID = asPositiveInt(projectIdRaw);
+  if (projectID === null) {
+    fieldErrors.projectId = 'Project is required.';
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Board created.', async () => {
+    await apiFetch('/api/boards', {
+      method: 'POST',
+      body: JSON.stringify({ name, projectId: projectID })
+    });
   });
-  revalidatePath('/');
 }
 
-export async function updateBoardAction(formData: FormData) {
+export async function updateBoardAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const boardIdRaw = String(formData.get('boardId') ?? '').trim();
   const name = String(formData.get('name') ?? '').trim();
-  if (!boardIdRaw || !name) return;
-  const boardID = Number(boardIdRaw);
-  if (!Number.isInteger(boardID) || boardID <= 0) return;
 
-  await apiFetch(`/api/boards/${boardID}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ name })
+  const fieldErrors: Record<string, string> = {};
+  const boardID = asPositiveInt(boardIdRaw);
+  if (boardID === null) {
+    fieldErrors.boardId = 'Board is invalid.';
+  }
+  if (!name) {
+    fieldErrors.name = 'Board name is required.';
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Board updated.', async () => {
+    await apiFetch(`/api/boards/${boardID}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name })
+    });
   });
-  revalidatePath('/');
 }
 
-export async function deleteBoardAction(formData: FormData) {
+export async function deleteBoardAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const boardIdRaw = String(formData.get('boardId') ?? '').trim();
-  if (!boardIdRaw) return;
-  const boardID = Number(boardIdRaw);
-  if (!Number.isInteger(boardID) || boardID <= 0) return;
+  const boardID = asPositiveInt(boardIdRaw);
+  if (boardID === null) {
+    return validationErrorState({ boardId: 'Board is invalid.' });
+  }
 
-  await apiFetch(`/api/boards/${boardID}`, {
-    method: 'DELETE',
-    body: JSON.stringify({})
+  return runAction('Board deleted.', async () => {
+    await apiFetch(`/api/boards/${boardID}`, {
+      method: 'DELETE',
+      body: JSON.stringify({})
+    });
   });
-  revalidatePath('/');
 }
 
-export async function createColumnAction(formData: FormData) {
+export async function createColumnAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const name = String(formData.get('name') ?? '').trim();
   const boardIdRaw = String(formData.get('boardId') ?? '').trim();
   const positionRaw = String(formData.get('position') ?? '').trim();
-  if (!name || !boardIdRaw) return;
-  const boardID = Number(boardIdRaw);
-  const position = positionRaw ? Number(positionRaw) : 0;
-  if (!Number.isInteger(boardID) || boardID <= 0) return;
-  if (!Number.isInteger(position)) return;
 
-  await apiFetch('/api/columns', {
-    method: 'POST',
-    body: JSON.stringify({ name, boardId: boardID, position })
+  const fieldErrors: Record<string, string> = {};
+  if (!name) {
+    fieldErrors.name = 'Column name is required.';
+  }
+  const boardID = asPositiveInt(boardIdRaw);
+  if (boardID === null) {
+    fieldErrors.boardId = 'Board is invalid.';
+  }
+
+  let position = 0;
+  if (positionRaw) {
+    const parsed = Number(positionRaw);
+    if (!Number.isInteger(parsed)) {
+      fieldErrors.position = 'Position must be an integer.';
+    } else {
+      position = parsed;
+    }
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Column created.', async () => {
+    await apiFetch('/api/columns', {
+      method: 'POST',
+      body: JSON.stringify({ name, boardId: boardID, position })
+    });
   });
-  revalidatePath('/');
 }
 
-export async function updateColumnAction(formData: FormData) {
+export async function updateColumnAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const columnIdRaw = String(formData.get('columnId') ?? '').trim();
   const name = String(formData.get('name') ?? '').trim();
   const positionRaw = String(formData.get('position') ?? '').trim();
-  if (!columnIdRaw || !name || !positionRaw) return;
-  const columnID = Number(columnIdRaw);
+
+  const fieldErrors: Record<string, string> = {};
+  const columnID = asPositiveInt(columnIdRaw);
+  if (columnID === null) {
+    fieldErrors.columnId = 'Column is invalid.';
+  }
+  if (!name) {
+    fieldErrors.name = 'Column name is required.';
+  }
+
   const position = Number(positionRaw);
-  if (!Number.isInteger(columnID) || columnID <= 0) return;
-  if (!Number.isInteger(position)) return;
+  if (!Number.isInteger(position)) {
+    fieldErrors.position = 'Position must be an integer.';
+  }
 
-  await apiFetch(`/api/columns/${columnID}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ name, position })
+  if (Object.keys(fieldErrors).length > 0) {
+    return validationErrorState(fieldErrors);
+  }
+
+  return runAction('Column updated.', async () => {
+    await apiFetch(`/api/columns/${columnID}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name, position })
+    });
   });
-  revalidatePath('/');
 }
 
-export async function deleteColumnAction(formData: FormData) {
+export async function deleteColumnAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const columnIdRaw = String(formData.get('columnId') ?? '').trim();
-  if (!columnIdRaw) return;
-  const columnID = Number(columnIdRaw);
-  if (!Number.isInteger(columnID) || columnID <= 0) return;
+  const columnID = asPositiveInt(columnIdRaw);
+  if (columnID === null) {
+    return validationErrorState({ columnId: 'Column is invalid.' });
+  }
 
-  await apiFetch(`/api/columns/${columnID}`, {
-    method: 'DELETE',
-    body: JSON.stringify({})
+  return runAction('Column deleted.', async () => {
+    await apiFetch(`/api/columns/${columnID}`, {
+      method: 'DELETE',
+      body: JSON.stringify({})
+    });
   });
-  revalidatePath('/');
 }

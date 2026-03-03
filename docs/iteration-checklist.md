@@ -9,9 +9,9 @@
 - [x] Add API docs examples for principals/boards/columns/reviews routes.
 
 ## Prioritized Next Iteration
-- [ ] Add optimistic/error UI feedback for all server actions (inline validation and API error surfacing).
-- [ ] Add pagination/filtering for tasks and principals to avoid loading full datasets on each render.
-- [ ] Attach tasks to board columns from UI (set `boardColumnId`) and render board lanes from real column/task relationships.
-- [ ] Expand weekly review output with grouped sections (waiting, someday, overdue scheduled) and unit tests for threshold boundaries.
+- [x] Add optimistic/error UI feedback for all server actions (inline validation and API error surfacing).
 - [ ] Add frontend integration tests for assignment and board/column forms (happy-path and validation failures).
+- [ ] Attach tasks to board columns from UI (set `boardColumnId`) and render board lanes from real column/task relationships.
+- [ ] Add pagination/filtering for tasks and principals to avoid loading full datasets on each render.
+- [ ] Expand weekly review output with grouped sections (waiting, someday, overdue scheduled) and unit tests for threshold boundaries.
 - [ ] Add OpenAPI-style machine-readable contract for current API surface.
