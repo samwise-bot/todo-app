@@ -6,23 +6,39 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  openapi-drift:
-    name: OpenAPI Drift
+  openapi-contract:
+    name: OpenAPI Contract
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-go@v5
         with:
           go-version-file: backend/go.mod
+          cache: true
+          cache-dependency-path: backend/go.sum
+
       - name: Regenerate OpenAPI artifact
         run: ./ops/run/generate-openapi.sh
+
       - name: Fail when docs/openapi/openapi.json is stale
         run: |
           git diff --exit-code -- docs/openapi/openapi.json || {
             echo "docs/openapi/openapi.json is stale. Run ./ops/run/generate-openapi.sh and commit the updated file."
             exit 1
           }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate OpenAPI schema (OpenAPI 3.0)
+        run: ./ops/run/validate-openapi.sh docs/openapi/openapi.json
 
   backend-test:
     name: Backend Tests
@@ -32,6 +48,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: backend/go.mod
+          cache: true
+          cache-dependency-path: backend/go.sum
       - name: Go test
         run: cd backend && go test ./...
 

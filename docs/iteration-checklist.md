@@ -10,8 +10,11 @@
 - [x] Added backend integration test coverage for `/metrics` Prometheus text exposition format (HELP/TYPE/sample/label checks).
 - [x] Added frontend page-level rendering coverage for non-empty board lanes with mixed assigned/unassigned tasks.
 - [x] Added Prometheus alert rules and Grafana dashboard panels for weekly-review and board-lane failure observability metrics.
+- [x] Added OpenAPI schema validation in CI for `docs/openapi/openapi.json` via deterministic pinned tooling (`swagger-cli@4.0.4`) with explicit OpenAPI `3.0.x` version enforcement.
+- [x] Added CI caching + workflow concurrency controls to reduce duplicate runs and runtime (`actions/setup-go` module/build cache, npm cache, `cancel-in-progress` concurrency group).
+- [x] Added end-to-end board-lane smoke coverage for create board/column/task + lane assignment with API/UI parity assertions in `frontend/tests/board-lane-smoke.test.tsx`.
 
 ## Next Iteration (Priority Order)
-- [ ] Add OpenAPI schema validation in CI (lint/validate `docs/openapi/openapi.json` against OpenAPI 3.0 rules).
-- [ ] Add CI caching/concurrency controls to reduce workflow runtime and duplicate runs.
-- [ ] Add end-to-end smoke coverage for a full board-lane flow (create board/column/task, assign lane, verify UI/API parity).
+- [ ] Add a real browser-driven CI smoke test (backend + frontend process boot) to validate interactive board-lane actions beyond mocked fetch flows.
+- [ ] Introduce backend API contract tests generated directly from `docs/openapi/openapi.json` for critical board/task mutation endpoints.
+- [ ] Add CI runtime telemetry (per-job timing trend + cache hit visibility) and enforce regression thresholds.
