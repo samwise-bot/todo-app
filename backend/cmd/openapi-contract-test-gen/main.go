@@ -14,15 +14,32 @@ import (
 )
 
 type openAPISpec struct {
-	Paths      map[string]map[string]json.RawMessage `json:"paths"`
+	Paths      map[string]pathItem `json:"paths"`
 	Components struct {
 		Schemas map[string]schema `json:"schemas"`
 	} `json:"components"`
 }
 
+type pathItem struct {
+	Parameters []parameter     `json:"parameters"`
+	Get        json.RawMessage `json:"get"`
+	Post       json.RawMessage `json:"post"`
+	Patch      json.RawMessage `json:"patch"`
+	Delete     json.RawMessage `json:"delete"`
+	Put        json.RawMessage `json:"put"`
+}
+
 type operation struct {
+	Parameters  []parameter         `json:"parameters"`
 	RequestBody *requestBody        `json:"requestBody"`
 	Responses   map[string]response `json:"responses"`
+}
+
+type parameter struct {
+	In       string  `json:"in"`
+	Name     string  `json:"name"`
+	Required bool    `json:"required"`
+	Schema   *schema `json:"schema"`
 }
 
 type requestBody struct {
@@ -45,6 +62,15 @@ type schema struct {
 	Required   []string           `json:"required"`
 	Properties map[string]*schema `json:"properties"`
 	Items      *schema            `json:"items"`
+	Enum       []string           `json:"enum"`
+	Minimum    *float64           `json:"minimum"`
+	Maximum    *float64           `json:"maximum"`
+}
+
+type target struct {
+	name   string
+	method string
+	path   string
 }
 
 type generatedCase struct {
@@ -57,6 +83,14 @@ type generatedCase struct {
 	RequestBodyRequired   bool
 	RequestRequiredFields []string
 	RequestPropertyTypes  []generatedPropertyType
+	QueryParams           []generatedQueryParam
+}
+
+type generatedQueryParam struct {
+	Name       string
+	Type       string
+	Required   bool
+	EnumValues []string
 }
 
 type generatedSchema struct {
@@ -94,11 +128,7 @@ func main() {
 		log.Fatalf("parse openapi json: %v", err)
 	}
 
-	targets := []struct {
-		name   string
-		method string
-		path   string
-	}{
+	mutationTargets := []target{
 		{name: "create_task", method: "post", path: "/api/tasks"},
 		{name: "patch_task_state", method: "patch", path: "/api/tasks/{id}/state"},
 		{name: "patch_task_board_column", method: "patch", path: "/api/tasks/{id}/board-column"},
@@ -106,20 +136,61 @@ func main() {
 		{name: "create_column", method: "post", path: "/api/columns"},
 	}
 
+	readTargets := []target{
+		{name: "list_tasks", method: "get", path: "/api/tasks"},
+		{name: "list_projects", method: "get", path: "/api/projects"},
+		{name: "list_boards", method: "get", path: "/api/boards"},
+		{name: "list_columns", method: "get", path: "/api/columns"},
+		{name: "get_board", method: "get", path: "/api/boards/{id}"},
+	}
+
+	mutationCases := makeGeneratedCases(spec, mutationTargets)
+	readCases := makeGeneratedCases(spec, readTargets)
+
+	out := renderGeneratedTest(mutationCases, readCases)
+	if err := os.WriteFile(*outFile, out, 0o644); err != nil {
+		log.Fatalf("write generated test: %v", err)
+	}
+}
+
+func makeGeneratedCases(spec openAPISpec, targets []target) []generatedCase {
 	cases := make([]generatedCase, 0, len(targets))
 	for _, target := range targets {
-		methods, ok := spec.Paths[target.path]
+		item, ok := spec.Paths[target.path]
 		if !ok {
 			log.Fatalf("path not found in spec: %s", target.path)
 		}
-		opRaw, ok := methods[target.method]
-		if !ok {
+
+		opRaw := methodOperation(item, target.method)
+		if len(opRaw) == 0 {
 			log.Fatalf("method %s missing for path %s", strings.ToUpper(target.method), target.path)
 		}
+
 		var op operation
 		if err := json.Unmarshal(opRaw, &op); err != nil {
 			log.Fatalf("parse %s %s operation: %v", strings.ToUpper(target.method), target.path, err)
 		}
+
+		mergedParameters := mergeParameters(item.Parameters, op.Parameters)
+		queryParams := make([]generatedQueryParam, 0)
+		for _, p := range mergedParameters {
+			if p.In != "query" {
+				continue
+			}
+			paramType := ""
+			enumValues := []string{}
+			if p.Schema != nil {
+				paramType = p.Schema.Type
+				enumValues = append(enumValues, p.Schema.Enum...)
+			}
+			queryParams = append(queryParams, generatedQueryParam{
+				Name:       p.Name,
+				Type:       paramType,
+				Required:   p.Required,
+				EnumValues: enumValues,
+			})
+		}
+		sort.Slice(queryParams, func(i, j int) bool { return queryParams[i].Name < queryParams[j].Name })
 
 		successStatus, successResp := pickSuccessResponse(op.Responses)
 		successSchema := schema{}
@@ -153,6 +224,9 @@ func main() {
 
 		propTypes := make([]generatedPropertyType, 0, len(requestSchema.Properties))
 		for name, prop := range requestSchema.Properties {
+			if prop == nil {
+				continue
+			}
 			resolved := resolveSchema(*prop, spec.Components.Schemas)
 			propTypes = append(propTypes, generatedPropertyType{Name: name, Type: resolved.Type})
 		}
@@ -168,13 +242,54 @@ func main() {
 			RequestBodyRequired:   requestBodyRequired,
 			RequestRequiredFields: requiredFields,
 			RequestPropertyTypes:  propTypes,
+			QueryParams:           queryParams,
 		})
 	}
+	return cases
+}
 
-	out := renderGeneratedTest(cases)
-	if err := os.WriteFile(*outFile, out, 0o644); err != nil {
-		log.Fatalf("write generated test: %v", err)
+func methodOperation(item pathItem, method string) json.RawMessage {
+	switch strings.ToLower(method) {
+	case "get":
+		return item.Get
+	case "post":
+		return item.Post
+	case "patch":
+		return item.Patch
+	case "delete":
+		return item.Delete
+	case "put":
+		return item.Put
+	default:
+		log.Fatalf("unsupported method: %s", method)
+		return nil
 	}
+}
+
+func mergeParameters(pathParams, opParams []parameter) []parameter {
+	merged := make(map[string]parameter, len(pathParams)+len(opParams))
+	order := make([]string, 0, len(pathParams)+len(opParams))
+
+	for _, p := range pathParams {
+		key := p.In + ":" + p.Name
+		if _, exists := merged[key]; !exists {
+			order = append(order, key)
+		}
+		merged[key] = p
+	}
+	for _, p := range opParams {
+		key := p.In + ":" + p.Name
+		if _, exists := merged[key]; !exists {
+			order = append(order, key)
+		}
+		merged[key] = p
+	}
+
+	out := make([]parameter, 0, len(order))
+	for _, key := range order {
+		out = append(out, merged[key])
+	}
+	return out
 }
 
 func pickSuccessResponse(responses map[string]response) (int, response) {
@@ -264,15 +379,19 @@ func toGeneratedSchema(s schema) generatedSchema {
 	return out
 }
 
-func renderGeneratedTest(cases []generatedCase) []byte {
+func renderGeneratedTest(mutationCases, readCases []generatedCase) []byte {
 	var b bytes.Buffer
 	b.WriteString("// Code generated by openapi-contract-test-gen; DO NOT EDIT.\n")
 	b.WriteString("\n")
 	b.WriteString("package tests\n")
 	b.WriteString("\n")
 	b.WriteString("import (\n")
+	b.WriteString("\t\"bytes\"\n")
+	b.WriteString("\t\"encoding/json\"\n")
 	b.WriteString("\t\"fmt\"\n")
 	b.WriteString("\t\"net/http\"\n")
+	b.WriteString("\t\"net/http/httptest\"\n")
+	b.WriteString("\t\"net/url\"\n")
 	b.WriteString("\t\"sort\"\n")
 	b.WriteString("\t\"strings\"\n")
 	b.WriteString("\t\"testing\"\n")
@@ -288,6 +407,14 @@ func renderGeneratedTest(cases []generatedCase) []byte {
 	b.WriteString("\tRequestBodyRequired   bool\n")
 	b.WriteString("\tRequestRequiredFields []string\n")
 	b.WriteString("\tRequestPropertyTypes  []generatedContractPropertyType\n")
+	b.WriteString("\tQueryParams           []generatedContractQueryParam\n")
+	b.WriteString("}\n\n")
+
+	b.WriteString("type generatedContractQueryParam struct {\n")
+	b.WriteString("\tName       string\n")
+	b.WriteString("\tType       string\n")
+	b.WriteString("\tRequired   bool\n")
+	b.WriteString("\tEnumValues []string\n")
 	b.WriteString("}\n\n")
 
 	b.WriteString("type generatedContractSchema struct {\n")
@@ -316,34 +443,55 @@ func renderGeneratedTest(cases []generatedCase) []byte {
 	b.WriteString("}\n\n")
 
 	b.WriteString("var generatedMutationContractCases = []generatedContractCase{\n")
-	for _, c := range cases {
-		b.WriteString("\t{\n")
-		b.WriteString(fmt.Sprintf("\t\tName: %q,\n", c.Name))
-		b.WriteString(fmt.Sprintf("\t\tMethod: %q,\n", c.Method))
-		b.WriteString(fmt.Sprintf("\t\tPath: %q,\n", c.Path))
-		b.WriteString(fmt.Sprintf("\t\tSuccessStatus: %d,\n", c.SuccessStatus))
-		b.WriteString("\t\tSuccessSchema: ")
-		b.WriteString(renderSchemaLiteral(c.SuccessSchema, "\t\t"))
-		b.WriteString(",\n")
-		b.WriteString(fmt.Sprintf("\t\tErrorStatuses: %s,\n", renderIntSliceLiteral(c.ErrorStatuses)))
-		b.WriteString(fmt.Sprintf("\t\tRequestBodyRequired: %t,\n", c.RequestBodyRequired))
-		b.WriteString(fmt.Sprintf("\t\tRequestRequiredFields: %s,\n", renderStringSliceLiteral(c.RequestRequiredFields)))
-		b.WriteString("\t\tRequestPropertyTypes: []generatedContractPropertyType{")
-		if len(c.RequestPropertyTypes) > 0 {
-			b.WriteByte('\n')
-			for _, prop := range c.RequestPropertyTypes {
-				b.WriteString(fmt.Sprintf("\t\t\t{Name: %q, Type: %q},\n", prop.Name, prop.Type))
-			}
-			b.WriteString("\t\t},\n")
-		} else {
-			b.WriteString("},\n")
-		}
-		b.WriteString("\t},\n")
+	for _, c := range mutationCases {
+		renderCaseLiteral(&b, c)
+	}
+	b.WriteString("}\n\n")
+
+	b.WriteString("var generatedReadContractCases = []generatedContractCase{\n")
+	for _, c := range readCases {
+		renderCaseLiteral(&b, c)
 	}
 	b.WriteString("}\n\n")
 
 	b.WriteString(testFunctionsSource)
 	return b.Bytes()
+}
+
+func renderCaseLiteral(b *bytes.Buffer, c generatedCase) {
+	b.WriteString("\t{\n")
+	b.WriteString(fmt.Sprintf("\t\tName: %q,\n", c.Name))
+	b.WriteString(fmt.Sprintf("\t\tMethod: %q,\n", c.Method))
+	b.WriteString(fmt.Sprintf("\t\tPath: %q,\n", c.Path))
+	b.WriteString(fmt.Sprintf("\t\tSuccessStatus: %d,\n", c.SuccessStatus))
+	b.WriteString("\t\tSuccessSchema: ")
+	b.WriteString(renderSchemaLiteral(c.SuccessSchema, "\t\t"))
+	b.WriteString(",\n")
+	b.WriteString(fmt.Sprintf("\t\tErrorStatuses: %s,\n", renderIntSliceLiteral(c.ErrorStatuses)))
+	b.WriteString(fmt.Sprintf("\t\tRequestBodyRequired: %t,\n", c.RequestBodyRequired))
+	b.WriteString(fmt.Sprintf("\t\tRequestRequiredFields: %s,\n", renderStringSliceLiteral(c.RequestRequiredFields)))
+	b.WriteString("\t\tRequestPropertyTypes: []generatedContractPropertyType{")
+	if len(c.RequestPropertyTypes) > 0 {
+		b.WriteByte('\n')
+		for _, prop := range c.RequestPropertyTypes {
+			b.WriteString(fmt.Sprintf("\t\t\t{Name: %q, Type: %q},\n", prop.Name, prop.Type))
+		}
+		b.WriteString("\t\t},\n")
+	} else {
+		b.WriteString("},\n")
+	}
+
+	b.WriteString("\t\tQueryParams: []generatedContractQueryParam{")
+	if len(c.QueryParams) > 0 {
+		b.WriteByte('\n')
+		for _, p := range c.QueryParams {
+			b.WriteString(fmt.Sprintf("\t\t\t{Name: %q, Type: %q, Required: %t, EnumValues: %s},\n", p.Name, p.Type, p.Required, renderStringSliceLiteral(p.EnumValues)))
+		}
+		b.WriteString("\t\t},\n")
+	} else {
+		b.WriteString("},\n")
+	}
+	b.WriteString("\t},\n")
 }
 
 func renderSchemaLiteral(s generatedSchema, indent string) string {
@@ -438,6 +586,45 @@ func TestGeneratedOpenAPIMutationContracts(t *testing.T) {
 	}
 }
 
+func TestGeneratedOpenAPIReadContracts(t *testing.T) {
+	h := newAPIHarness(t)
+
+	for _, tc := range generatedReadContractCases {
+		tc := tc
+		t.Run(tc.Name, func(t *testing.T) {
+			setup := generatedPrepareReadSetup(t, h, tc.Name)
+			path := generatedReadPathWithSetup(tc.Path, setup)
+			validPath := generatedPathWithQuery(path, generatedValidQueryValues(tc, setup))
+
+			status, response := generatedJSONRequestAny(h, tc.Method, validPath, nil)
+			if status != tc.SuccessStatus {
+				t.Fatalf("%s %s: expected success status %d, got %d", tc.Method, tc.Path, tc.SuccessStatus, status)
+			}
+			generatedAssertSchemaMatch(t, tc.Method+" "+tc.Path+" success", response, tc.SuccessSchema)
+
+			if generatedContainsStatus(tc.ErrorStatuses, http.StatusBadRequest) {
+				invalidQuery, ok := generatedInvalidQueryValues(tc)
+				if !ok {
+					t.Fatalf("%s %s: missing invalid query fixture", tc.Method, tc.Path)
+				}
+				invalidPath := generatedPathWithQuery(path, invalidQuery)
+				status, _ = generatedJSONRequestAny(h, tc.Method, invalidPath, nil)
+				if status != http.StatusBadRequest {
+					t.Fatalf("%s %s: expected 400 for invalid query, got %d", tc.Method, tc.Path, status)
+				}
+			}
+
+			if generatedContainsStatus(tc.ErrorStatuses, http.StatusNotFound) && strings.Contains(tc.Path, "{id}") {
+				notFoundPath := strings.Replace(tc.Path, "{id}", "9999999", 1)
+				status, _ = generatedJSONRequestAny(h, tc.Method, notFoundPath, nil)
+				if status != http.StatusNotFound {
+					t.Fatalf("%s %s: expected 404 for missing resource, got %d", tc.Method, tc.Path, status)
+				}
+			}
+		})
+	}
+}
+
 func generatedPrepareMutationSetup(t *testing.T, h *apiHarness, caseName string) generatedMutationSetup {
 	t.Helper()
 
@@ -497,6 +684,35 @@ func generatedPrepareMutationSetup(t *testing.T, h *apiHarness, caseName string)
 	}
 }
 
+func generatedPrepareReadSetup(t *testing.T, h *apiHarness, caseName string) generatedMutationSetup {
+	t.Helper()
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Read Contract Project"})
+	if status != http.StatusCreated {
+		t.Fatalf("setup project for %s: expected 201, got %d", caseName, status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	status, board := h.jsonRequest(http.MethodPost, "/api/boards", map[string]any{"projectId": projectID, "name": "Read Contract Board"})
+	if status != http.StatusCreated {
+		t.Fatalf("setup board for %s: expected 201, got %d", caseName, status)
+	}
+	boardID := mustInt64(t, board["id"])
+
+	status, column := h.jsonRequest(http.MethodPost, "/api/columns", map[string]any{"boardId": boardID, "name": "Read Contract Column", "position": 1})
+	if status != http.StatusCreated {
+		t.Fatalf("setup column for %s: expected 201, got %d", caseName, status)
+	}
+	columnID := mustInt64(t, column["id"])
+
+	status, _ = h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{"title": "Read Contract Task", "projectId": projectID, "boardColumnId": columnID, "state": "inbox"})
+	if status != http.StatusCreated {
+		t.Fatalf("setup task for %s: expected 201, got %d", caseName, status)
+	}
+
+	return generatedMutationSetup{ProjectID: projectID, BoardID: boardID, ColumnID: columnID}
+}
+
 func generatedPathWithSetup(path string, setup generatedMutationSetup) string {
 	if strings.Contains(path, "{id}") {
 		id := setup.TaskID
@@ -506,6 +722,28 @@ func generatedPathWithSetup(path string, setup generatedMutationSetup) string {
 		return strings.Replace(path, "{id}", fmt.Sprintf("%d", id), 1)
 	}
 	return path
+}
+
+func generatedReadPathWithSetup(path string, setup generatedMutationSetup) string {
+	if !strings.Contains(path, "{id}") {
+		return path
+	}
+	id := int64(1)
+	switch {
+	case strings.Contains(path, "/api/boards/{id}"):
+		if setup.BoardID > 0 {
+			id = setup.BoardID
+		}
+	case strings.Contains(path, "/api/columns/{id}"):
+		if setup.ColumnID > 0 {
+			id = setup.ColumnID
+		}
+	default:
+		if setup.TaskID > 0 {
+			id = setup.TaskID
+		}
+	}
+	return strings.Replace(path, "{id}", fmt.Sprintf("%d", id), 1)
 }
 
 func generatedSuccessBody(caseName string, setup generatedMutationSetup) map[string]any {
@@ -523,6 +761,99 @@ func generatedSuccessBody(caseName string, setup generatedMutationSetup) map[str
 	default:
 		return map[string]any{}
 	}
+}
+
+func generatedValidQueryValues(tc generatedContractCase, setup generatedMutationSetup) map[string]string {
+	query := map[string]string{}
+	for _, param := range tc.QueryParams {
+		switch param.Name {
+		case "page":
+			query[param.Name] = "1"
+		case "pageSize":
+			query[param.Name] = "20"
+		case "state":
+			if len(param.EnumValues) > 0 {
+				query[param.Name] = param.EnumValues[0]
+			} else {
+				query[param.Name] = "inbox"
+			}
+		case "projectId":
+			if setup.ProjectID > 0 {
+				query[param.Name] = fmt.Sprintf("%d", setup.ProjectID)
+			} else {
+				query[param.Name] = "1"
+			}
+		case "boardId":
+			if setup.BoardID > 0 {
+				query[param.Name] = fmt.Sprintf("%d", setup.BoardID)
+			} else {
+				query[param.Name] = "1"
+			}
+		case "boardColumnId":
+			if setup.ColumnID > 0 {
+				query[param.Name] = fmt.Sprintf("%d", setup.ColumnID)
+			} else {
+				query[param.Name] = "1"
+			}
+		case "q", "assigneeId":
+		default:
+			switch param.Type {
+			case "integer", "number":
+				query[param.Name] = "1"
+			case "boolean":
+				query[param.Name] = "true"
+			case "string":
+				if len(param.EnumValues) > 0 {
+					query[param.Name] = param.EnumValues[0]
+				} else {
+					query[param.Name] = "value"
+				}
+			}
+		}
+	}
+	return query
+}
+
+func generatedInvalidQueryValues(tc generatedContractCase) (map[string]string, bool) {
+	params := append([]generatedContractQueryParam(nil), tc.QueryParams...)
+	sort.Slice(params, func(i, j int) bool { return params[i].Name < params[j].Name })
+
+	for _, param := range params {
+		switch param.Type {
+		case "integer", "number", "boolean":
+			return map[string]string{param.Name: "invalid"}, true
+		case "string":
+			if len(param.EnumValues) > 0 {
+				return map[string]string{param.Name: "invalid"}, true
+			}
+		}
+	}
+
+	return nil, false
+}
+
+func generatedPathWithQuery(path string, query map[string]string) string {
+	if len(query) == 0 {
+		return path
+	}
+	keys := make([]string, 0, len(query))
+	for key := range query {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	values := url.Values{}
+	for _, key := range keys {
+		values.Set(key, query[key])
+	}
+	encoded := values.Encode()
+	if encoded == "" {
+		return path
+	}
+	if strings.Contains(path, "?") {
+		return path + "&" + encoded
+	}
+	return path + "?" + encoded
 }
 
 func generatedInvalidBody(tc generatedContractCase) (map[string]any, bool) {
@@ -556,6 +887,33 @@ func generatedContainsStatus(statuses []int, target int) bool {
 		}
 	}
 	return false
+}
+
+func generatedJSONRequestAny(h *apiHarness, method, path string, body any) (int, any) {
+	h.t.Helper()
+
+	var reader *bytes.Reader
+	if body == nil {
+		reader = bytes.NewReader(nil)
+	} else {
+		payload, err := json.Marshal(body)
+		if err != nil {
+			h.t.Fatalf("marshal request body: %v", err)
+		}
+		reader = bytes.NewReader(payload)
+	}
+
+	req := httptest.NewRequest(method, path, reader)
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+	h.h.ServeHTTP(rr, req)
+
+	var out any
+	_ = json.NewDecoder(rr.Body).Decode(&out)
+	if out == nil {
+		out = map[string]any{}
+	}
+	return rr.Code, out
 }
 
 func generatedAssertSchemaMatch(t *testing.T, context string, value any, schema generatedContractSchema) {

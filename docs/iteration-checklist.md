@@ -1,25 +1,11 @@
 # Todo-App Iteration Checklist
 
 ## Completed This Iteration
-- [x] Added reproducible backend test runner/bootstrap via `./ops/run/test-backend.sh` + `make test-backend-repro`, with documentation in `docs/backend-testing.md`.
-- [x] Published OpenAPI-style machine-readable contract source at `docs/openapi/openapi-source.json` and generated JSON artifact at `docs/openapi/openapi.json` via `./ops/run/generate-openapi.sh`.
-- [x] Added frontend page-level rendering tests for board-lane empty/error states in `frontend/tests/board-lanes-rendering.test.tsx`.
-- [x] Added weekly-review endpoint deterministic ordering tests for `waiting`, `someday`, and `overdueScheduled`.
-- [x] Added observability counters/timers for weekly-review and board-lane fetch failures, exposed via `/metrics`, with backend coverage.
-- [x] Enforced OpenAPI drift in CI via `.github/workflows/ci.yml` by regenerating and diff-checking `docs/openapi/openapi.json`.
-- [x] Added backend integration test coverage for `/metrics` Prometheus text exposition format (HELP/TYPE/sample/label checks).
-- [x] Added frontend page-level rendering coverage for non-empty board lanes with mixed assigned/unassigned tasks.
-- [x] Added Prometheus alert rules and Grafana dashboard panels for weekly-review and board-lane failure observability metrics.
-- [x] Added OpenAPI schema validation in CI for `docs/openapi/openapi.json` via deterministic pinned tooling (`swagger-cli@4.0.4`) with explicit OpenAPI `3.0.x` version enforcement.
-- [x] Added CI caching + workflow concurrency controls to reduce duplicate runs and runtime (`actions/setup-go` module/build cache, npm cache, `cancel-in-progress` concurrency group).
-- [x] Added end-to-end board-lane smoke coverage for create board/column/task + lane assignment with API/UI parity assertions in `frontend/tests/board-lane-smoke.test.tsx`.
-- [x] Added real browser-driven CI smoke coverage via Playwright with backend + frontend bootstrapping and live board-lane interactions in `frontend/tests/board-lane-smoke.e2e.spec.ts`, wired through `.github/workflows/ci.yml`.
-- [x] Added generated backend API contract tests (from `docs/openapi/openapi.json`) for critical mutation endpoints: `POST /api/tasks`, `PATCH /api/tasks/{id}/state`, `PATCH /api/tasks/{id}/board-column`, `POST /api/boards`, and `POST /api/columns`; wired generation into backend test workflow.
+- [x] Expanded generated OpenAPI contract test coverage from critical mutations to selected read/list endpoints (`/api/tasks`, `/api/projects`, `/api/boards`, `/api/columns`, `/api/boards/{id}`), including merged path/operation query-parameter metadata and generated valid/invalid query assertion coverage.
 
 ## Next Iteration (Priority Order)
-- [x] Add local backend test bootstrap fallback for non-Go/non-Docker environments in this runtime (or document/automate a remote runner) so each loop can satisfy mandatory backend test execution.
-- [ ] Add CI runtime telemetry: persist per-job duration/cache-hit metrics and fail builds on configurable regression thresholds.
-- [x] Make Playwright smoke install deterministic by moving from `npx playwright@...` to pinned local dev dependency + lockfile enforcement.
-- [ ] Expand generated OpenAPI contract test coverage from critical mutations to selected read/list endpoints with pagination/filter parameter assertions.
-- [ ] Harden remote backend fallback run detection to reliably resolve dispatched GitHub Actions run IDs under queue delays (>90s) and emit terminal results deterministically.
-- [ ] Add frontend smoke preflight to avoid redundant `npm ci` when lockfile hash and `node_modules` are already in sync, while preserving deterministic install guarantees.
+- [ ] Add frontend smoke preflight to skip redundant `npm ci` when lockfile hash + `node_modules` are already in sync while preserving deterministic install guarantees.
+- [ ] Add CI artifact retention + summary links for telemetry/regression reports to speed triage on threshold failures.
+- [ ] Split generated OpenAPI contract outputs into mutation/read files to reduce churn and improve test failure locality.
+- [ ] Add read-contract coverage for additional path-param endpoints (`/api/columns/{id}` and `/api/boards/{id}` invalid-id/shape edge cases) with stricter query invalidation fixtures.
+- [ ] Add `make test-backend-contracts` target that regenerates contract tests and verifies clean git diff in one command.

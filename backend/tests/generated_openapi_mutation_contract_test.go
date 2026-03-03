@@ -3,8 +3,12 @@
 package tests
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"sort"
 	"strings"
 	"testing"
@@ -20,6 +24,14 @@ type generatedContractCase struct {
 	RequestBodyRequired   bool
 	RequestRequiredFields []string
 	RequestPropertyTypes  []generatedContractPropertyType
+	QueryParams           []generatedContractQueryParam
+}
+
+type generatedContractQueryParam struct {
+	Name       string
+	Type       string
+	Required   bool
+	EnumValues []string
 }
 
 type generatedContractSchema struct {
@@ -77,6 +89,7 @@ var generatedMutationContractCases = []generatedContractCase{
 			{Name: "state", Type: "string"},
 			{Name: "title", Type: "string"},
 		},
+		QueryParams: []generatedContractQueryParam{},
 	},
 	{
 		Name: "patch_task_state",
@@ -93,6 +106,7 @@ var generatedMutationContractCases = []generatedContractCase{
 			{Name: "actorId", Type: "integer"},
 			{Name: "state", Type: "string"},
 		},
+		QueryParams: []generatedContractQueryParam{},
 	},
 	{
 		Name: "patch_task_board_column",
@@ -109,6 +123,7 @@ var generatedMutationContractCases = []generatedContractCase{
 			{Name: "actorId", Type: "integer"},
 			{Name: "boardColumnId", Type: "integer"},
 		},
+		QueryParams: []generatedContractQueryParam{},
 	},
 	{
 		Name: "create_board",
@@ -128,6 +143,7 @@ var generatedMutationContractCases = []generatedContractCase{
 			{Name: "name", Type: "string"},
 			{Name: "projectId", Type: "integer"},
 		},
+		QueryParams: []generatedContractQueryParam{},
 	},
 	{
 		Name: "create_column",
@@ -149,6 +165,120 @@ var generatedMutationContractCases = []generatedContractCase{
 			{Name: "name", Type: "string"},
 			{Name: "position", Type: "integer"},
 		},
+		QueryParams: []generatedContractQueryParam{},
+	},
+}
+
+var generatedReadContractCases = []generatedContractCase{
+	{
+		Name: "list_tasks",
+		Method: "GET",
+		Path: "/api/tasks",
+		SuccessStatus: 200,
+		SuccessSchema: generatedContractSchema{Type: "object", Nullable: false, Required: []string{"items", "page", "pageSize", "totalItems", "totalPages"}, Properties: []generatedContractProperty{
+			{Name: "items", Schema: generatedContractSchema{Type: "array", Nullable: false, Required: []string{}, Items: &generatedContractSchema{Type: "object", Nullable: false, Required: []string{"createdAt", "description", "id", "state", "title", "updatedAt"}, Properties: []generatedContractProperty{
+					{Name: "assigneeId", Schema: generatedContractSchema{Type: "integer", Nullable: true, Required: []string{}}},
+					{Name: "boardColumnId", Schema: generatedContractSchema{Type: "integer", Nullable: true, Required: []string{}}},
+					{Name: "createdAt", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+					{Name: "description", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+					{Name: "dueAt", Schema: generatedContractSchema{Type: "string", Nullable: true, Required: []string{}}},
+					{Name: "id", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+					{Name: "projectId", Schema: generatedContractSchema{Type: "integer", Nullable: true, Required: []string{}}},
+					{Name: "state", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+					{Name: "title", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+					{Name: "updatedAt", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				}}}},
+			{Name: "page", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+			{Name: "pageSize", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+			{Name: "totalItems", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+			{Name: "totalPages", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+		}},
+		ErrorStatuses: []int{400},
+		RequestBodyRequired: false,
+		RequestRequiredFields: []string{},
+		RequestPropertyTypes: []generatedContractPropertyType{},
+		QueryParams: []generatedContractQueryParam{
+			{Name: "assigneeId", Type: "integer", Required: false, EnumValues: []string{}},
+			{Name: "boardColumnId", Type: "integer", Required: false, EnumValues: []string{}},
+			{Name: "page", Type: "integer", Required: false, EnumValues: []string{}},
+			{Name: "pageSize", Type: "integer", Required: false, EnumValues: []string{}},
+			{Name: "projectId", Type: "integer", Required: false, EnumValues: []string{}},
+			{Name: "q", Type: "string", Required: false, EnumValues: []string{}},
+			{Name: "state", Type: "string", Required: false, EnumValues: []string{"inbox", "next", "waiting", "scheduled", "done", "someday", "reference"}},
+		},
+	},
+	{
+		Name: "list_projects",
+		Method: "GET",
+		Path: "/api/projects",
+		SuccessStatus: 200,
+		SuccessSchema: generatedContractSchema{Type: "array", Nullable: false, Required: []string{}, Items: &generatedContractSchema{Type: "object", Nullable: false, Required: []string{"createdAt", "description", "id", "name"}, Properties: []generatedContractProperty{
+				{Name: "createdAt", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				{Name: "description", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				{Name: "id", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+				{Name: "name", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+			}}},
+		ErrorStatuses: []int{},
+		RequestBodyRequired: false,
+		RequestRequiredFields: []string{},
+		RequestPropertyTypes: []generatedContractPropertyType{},
+		QueryParams: []generatedContractQueryParam{},
+	},
+	{
+		Name: "list_boards",
+		Method: "GET",
+		Path: "/api/boards",
+		SuccessStatus: 200,
+		SuccessSchema: generatedContractSchema{Type: "array", Nullable: false, Required: []string{}, Items: &generatedContractSchema{Type: "object", Nullable: false, Required: []string{"createdAt", "id", "name", "projectId"}, Properties: []generatedContractProperty{
+				{Name: "createdAt", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				{Name: "id", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+				{Name: "name", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				{Name: "projectId", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+			}}},
+		ErrorStatuses: []int{400},
+		RequestBodyRequired: false,
+		RequestRequiredFields: []string{},
+		RequestPropertyTypes: []generatedContractPropertyType{},
+		QueryParams: []generatedContractQueryParam{
+			{Name: "projectId", Type: "integer", Required: false, EnumValues: []string{}},
+		},
+	},
+	{
+		Name: "list_columns",
+		Method: "GET",
+		Path: "/api/columns",
+		SuccessStatus: 200,
+		SuccessSchema: generatedContractSchema{Type: "array", Nullable: false, Required: []string{}, Items: &generatedContractSchema{Type: "object", Nullable: false, Required: []string{"boardId", "createdAt", "id", "name", "position"}, Properties: []generatedContractProperty{
+				{Name: "boardId", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+				{Name: "createdAt", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				{Name: "id", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+				{Name: "name", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+				{Name: "position", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+			}}},
+		ErrorStatuses: []int{400},
+		RequestBodyRequired: false,
+		RequestRequiredFields: []string{},
+		RequestPropertyTypes: []generatedContractPropertyType{},
+		QueryParams: []generatedContractQueryParam{
+			{Name: "boardId", Type: "integer", Required: false, EnumValues: []string{}},
+		},
+	},
+	{
+		Name: "get_board",
+		Method: "GET",
+		Path: "/api/boards/{id}",
+		SuccessStatus: 200,
+		SuccessSchema: generatedContractSchema{Type: "object", Nullable: false, Required: []string{"createdAt", "id", "name", "projectId"}, Properties: []generatedContractProperty{
+			{Name: "createdAt", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+			{Name: "id", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+			{Name: "name", Schema: generatedContractSchema{Type: "string", Nullable: false, Required: []string{}}},
+			{Name: "projectId", Schema: generatedContractSchema{Type: "integer", Nullable: false, Required: []string{}}},
+		}},
+		ErrorStatuses: []int{404},
+		RequestBodyRequired: false,
+		RequestRequiredFields: []string{},
+		RequestPropertyTypes: []generatedContractPropertyType{},
+		QueryParams: []generatedContractQueryParam{},
 	},
 }
 
@@ -183,6 +313,45 @@ func TestGeneratedOpenAPIMutationContracts(t *testing.T) {
 			if generatedContainsStatus(tc.ErrorStatuses, http.StatusNotFound) {
 				notFoundPath := strings.Replace(tc.Path, "{id}", "9999999", 1)
 				status, _ = h.jsonRequest(tc.Method, notFoundPath, successBody)
+				if status != http.StatusNotFound {
+					t.Fatalf("%s %s: expected 404 for missing resource, got %d", tc.Method, tc.Path, status)
+				}
+			}
+		})
+	}
+}
+
+func TestGeneratedOpenAPIReadContracts(t *testing.T) {
+	h := newAPIHarness(t)
+
+	for _, tc := range generatedReadContractCases {
+		tc := tc
+		t.Run(tc.Name, func(t *testing.T) {
+			setup := generatedPrepareReadSetup(t, h, tc.Name)
+			path := generatedReadPathWithSetup(tc.Path, setup)
+			validPath := generatedPathWithQuery(path, generatedValidQueryValues(tc, setup))
+
+			status, response := generatedJSONRequestAny(h, tc.Method, validPath, nil)
+			if status != tc.SuccessStatus {
+				t.Fatalf("%s %s: expected success status %d, got %d", tc.Method, tc.Path, tc.SuccessStatus, status)
+			}
+			generatedAssertSchemaMatch(t, tc.Method+" "+tc.Path+" success", response, tc.SuccessSchema)
+
+			if generatedContainsStatus(tc.ErrorStatuses, http.StatusBadRequest) {
+				invalidQuery, ok := generatedInvalidQueryValues(tc)
+				if !ok {
+					t.Fatalf("%s %s: missing invalid query fixture", tc.Method, tc.Path)
+				}
+				invalidPath := generatedPathWithQuery(path, invalidQuery)
+				status, _ = generatedJSONRequestAny(h, tc.Method, invalidPath, nil)
+				if status != http.StatusBadRequest {
+					t.Fatalf("%s %s: expected 400 for invalid query, got %d", tc.Method, tc.Path, status)
+				}
+			}
+
+			if generatedContainsStatus(tc.ErrorStatuses, http.StatusNotFound) && strings.Contains(tc.Path, "{id}") {
+				notFoundPath := strings.Replace(tc.Path, "{id}", "9999999", 1)
+				status, _ = generatedJSONRequestAny(h, tc.Method, notFoundPath, nil)
 				if status != http.StatusNotFound {
 					t.Fatalf("%s %s: expected 404 for missing resource, got %d", tc.Method, tc.Path, status)
 				}
@@ -250,6 +419,35 @@ func generatedPrepareMutationSetup(t *testing.T, h *apiHarness, caseName string)
 	}
 }
 
+func generatedPrepareReadSetup(t *testing.T, h *apiHarness, caseName string) generatedMutationSetup {
+	t.Helper()
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Read Contract Project"})
+	if status != http.StatusCreated {
+		t.Fatalf("setup project for %s: expected 201, got %d", caseName, status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	status, board := h.jsonRequest(http.MethodPost, "/api/boards", map[string]any{"projectId": projectID, "name": "Read Contract Board"})
+	if status != http.StatusCreated {
+		t.Fatalf("setup board for %s: expected 201, got %d", caseName, status)
+	}
+	boardID := mustInt64(t, board["id"])
+
+	status, column := h.jsonRequest(http.MethodPost, "/api/columns", map[string]any{"boardId": boardID, "name": "Read Contract Column", "position": 1})
+	if status != http.StatusCreated {
+		t.Fatalf("setup column for %s: expected 201, got %d", caseName, status)
+	}
+	columnID := mustInt64(t, column["id"])
+
+	status, _ = h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{"title": "Read Contract Task", "projectId": projectID, "boardColumnId": columnID, "state": "inbox"})
+	if status != http.StatusCreated {
+		t.Fatalf("setup task for %s: expected 201, got %d", caseName, status)
+	}
+
+	return generatedMutationSetup{ProjectID: projectID, BoardID: boardID, ColumnID: columnID}
+}
+
 func generatedPathWithSetup(path string, setup generatedMutationSetup) string {
 	if strings.Contains(path, "{id}") {
 		id := setup.TaskID
@@ -259,6 +457,28 @@ func generatedPathWithSetup(path string, setup generatedMutationSetup) string {
 		return strings.Replace(path, "{id}", fmt.Sprintf("%d", id), 1)
 	}
 	return path
+}
+
+func generatedReadPathWithSetup(path string, setup generatedMutationSetup) string {
+	if !strings.Contains(path, "{id}") {
+		return path
+	}
+	id := int64(1)
+	switch {
+	case strings.Contains(path, "/api/boards/{id}"):
+		if setup.BoardID > 0 {
+			id = setup.BoardID
+		}
+	case strings.Contains(path, "/api/columns/{id}"):
+		if setup.ColumnID > 0 {
+			id = setup.ColumnID
+		}
+	default:
+		if setup.TaskID > 0 {
+			id = setup.TaskID
+		}
+	}
+	return strings.Replace(path, "{id}", fmt.Sprintf("%d", id), 1)
 }
 
 func generatedSuccessBody(caseName string, setup generatedMutationSetup) map[string]any {
@@ -276,6 +496,99 @@ func generatedSuccessBody(caseName string, setup generatedMutationSetup) map[str
 	default:
 		return map[string]any{}
 	}
+}
+
+func generatedValidQueryValues(tc generatedContractCase, setup generatedMutationSetup) map[string]string {
+	query := map[string]string{}
+	for _, param := range tc.QueryParams {
+		switch param.Name {
+		case "page":
+			query[param.Name] = "1"
+		case "pageSize":
+			query[param.Name] = "20"
+		case "state":
+			if len(param.EnumValues) > 0 {
+				query[param.Name] = param.EnumValues[0]
+			} else {
+				query[param.Name] = "inbox"
+			}
+		case "projectId":
+			if setup.ProjectID > 0 {
+				query[param.Name] = fmt.Sprintf("%d", setup.ProjectID)
+			} else {
+				query[param.Name] = "1"
+			}
+		case "boardId":
+			if setup.BoardID > 0 {
+				query[param.Name] = fmt.Sprintf("%d", setup.BoardID)
+			} else {
+				query[param.Name] = "1"
+			}
+		case "boardColumnId":
+			if setup.ColumnID > 0 {
+				query[param.Name] = fmt.Sprintf("%d", setup.ColumnID)
+			} else {
+				query[param.Name] = "1"
+			}
+		case "q", "assigneeId":
+		default:
+			switch param.Type {
+			case "integer", "number":
+				query[param.Name] = "1"
+			case "boolean":
+				query[param.Name] = "true"
+			case "string":
+				if len(param.EnumValues) > 0 {
+					query[param.Name] = param.EnumValues[0]
+				} else {
+					query[param.Name] = "value"
+				}
+			}
+		}
+	}
+	return query
+}
+
+func generatedInvalidQueryValues(tc generatedContractCase) (map[string]string, bool) {
+	params := append([]generatedContractQueryParam(nil), tc.QueryParams...)
+	sort.Slice(params, func(i, j int) bool { return params[i].Name < params[j].Name })
+
+	for _, param := range params {
+		switch param.Type {
+		case "integer", "number", "boolean":
+			return map[string]string{param.Name: "invalid"}, true
+		case "string":
+			if len(param.EnumValues) > 0 {
+				return map[string]string{param.Name: "invalid"}, true
+			}
+		}
+	}
+
+	return nil, false
+}
+
+func generatedPathWithQuery(path string, query map[string]string) string {
+	if len(query) == 0 {
+		return path
+	}
+	keys := make([]string, 0, len(query))
+	for key := range query {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	values := url.Values{}
+	for _, key := range keys {
+		values.Set(key, query[key])
+	}
+	encoded := values.Encode()
+	if encoded == "" {
+		return path
+	}
+	if strings.Contains(path, "?") {
+		return path + "&" + encoded
+	}
+	return path + "?" + encoded
 }
 
 func generatedInvalidBody(tc generatedContractCase) (map[string]any, bool) {
@@ -309,6 +622,33 @@ func generatedContainsStatus(statuses []int, target int) bool {
 		}
 	}
 	return false
+}
+
+func generatedJSONRequestAny(h *apiHarness, method, path string, body any) (int, any) {
+	h.t.Helper()
+
+	var reader *bytes.Reader
+	if body == nil {
+		reader = bytes.NewReader(nil)
+	} else {
+		payload, err := json.Marshal(body)
+		if err != nil {
+			h.t.Fatalf("marshal request body: %v", err)
+		}
+		reader = bytes.NewReader(payload)
+	}
+
+	req := httptest.NewRequest(method, path, reader)
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+	h.h.ServeHTTP(rr, req)
+
+	var out any
+	_ = json.NewDecoder(rr.Body).Decode(&out)
+	if out == nil {
+		out = map[string]any{}
+	}
+	return rr.Code, out
 }
 
 func generatedAssertSchemaMatch(t *testing.T, context string, value any, schema generatedContractSchema) {
