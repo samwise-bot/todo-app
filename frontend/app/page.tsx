@@ -4,6 +4,7 @@ import React from 'react';
 import { createProjectAction } from './actions';
 import { TASK_STATES } from '../lib/task-states';
 import { buildBoardLaneView } from '../lib/board-lanes';
+import { fetchCollection, fetchPagedCollection } from '../lib/api-client';
 import {
   hiddenParamEntries,
   readPositiveIntParam,
@@ -25,128 +26,31 @@ import {
   UpdateBoardForm,
   UpdateColumnForm
 } from './action-forms';
-import type { BoardLaneView } from '../lib/board-lanes';
+import { BoardLanesSection } from './ui/board-lanes-section';
+import { GTDStateSection } from './ui/gtd-state-section';
 
-type ListFetchResult<T> = {
-  items: T[];
-  error: string | null;
+type Project = { id: number; name: string; description?: string };
+type Principal = { id: number; displayName: string; kind: string; handle: string };
+type Board = { id: number; projectId: number; name: string };
+type Column = { id: number; boardId: number; name: string; position: number };
+type Task = {
+  id: number;
+  title: string;
+  description?: string;
+  state: string;
+  assigneeId?: number | null;
+  projectId?: number | null;
+  boardColumnId?: number | null;
 };
-
-type PagedListFetchResult<T> = ListFetchResult<T> & {
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-};
-
-async function fetchCollection<T>(path: string, label: string): Promise<ListFetchResult<T>> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, { cache: 'no-store' });
-    if (!res.ok) {
-      return { items: [], error: `${label} data is unavailable (HTTP ${res.status}).` };
-    }
-    const data = await res.json();
-    if (!Array.isArray(data)) {
-      return { items: [], error: `${label} data is malformed.` };
-    }
-    return { items: data, error: null };
-  } catch {
-    return { items: [], error: `${label} data request failed.` };
-  }
-}
-
-async function fetchPagedCollection<T>(path: string, label: string): Promise<PagedListFetchResult<T>> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, { cache: 'no-store' });
-    if (!res.ok) {
-      return { items: [], page: 1, pageSize: 20, totalItems: 0, totalPages: 0, error: `${label} data is unavailable (HTTP ${res.status}).` };
-    }
-    const data = await res.json();
-    if (!data || typeof data !== 'object' || !Array.isArray(data.items)) {
-      return { items: [], page: 1, pageSize: 20, totalItems: 0, totalPages: 0, error: `${label} data is malformed.` };
-    }
-    return {
-      items: data.items,
-      page: Number(data.page) || 1,
-      pageSize: Number(data.pageSize) || 20,
-      totalItems: Number(data.totalItems) || 0,
-      totalPages: Number(data.totalPages) || 0,
-      error: null
-    };
-  } catch {
-    return { items: [], page: 1, pageSize: 20, totalItems: 0, totalPages: 0, error: `${label} data request failed.` };
-  }
-}
 
 function withQueryString(params: URLSearchParams): string {
   const query = params.toString();
   return query ? `/?${query}` : '/';
 }
 
-export function BoardLanesSection({ laneView, boards, columns }: { laneView: BoardLaneView; boards: any[]; columns: any[] }) {
-  return (
-    <section>
-      <h2>Kanban lanes (by board columns)</h2>
-      {laneView.fetchErrors.length > 0 && (
-        <div style={{ marginBottom: 12, border: '1px solid #b00020', borderRadius: 8, padding: 10, background: '#fff3f5' }}>
-          <strong>Board lanes are incomplete due to data loading errors.</strong>
-          <ul style={{ marginBottom: 0 }}>
-            {laneView.fetchErrors.map((error) => <li key={error}>{error}</li>)}
-          </ul>
-        </div>
-      )}
-      <div style={{ marginBottom: 12, border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-        <h3>No column</h3>
-        {laneView.tasksWithoutColumn.length === 0 ? (
-          <p style={{ marginBottom: 0 }}>No tasks without a board column.</p>
-        ) : (
-          <ul>
-            {laneView.tasksWithoutColumn.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
-          </ul>
-        )}
-      </div>
-      {laneView.boards.map((board: any) => (
-        <article key={board.id} style={{ marginBottom: 12 }}>
-          <h3>{board.name}</h3>
-          {board.columns.length === 0 ? (
-            <div style={{ border: '1px dashed #bbb', borderRadius: 8, padding: 10 }}>
-              No columns defined for this board.
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-              {board.columns.map((column: any) => (
-                <div key={column.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-                  <h4 style={{ marginTop: 0 }}>{column.name}</h4>
-                  {column.tasks.length === 0 ? (
-                    <p style={{ marginBottom: 0 }}>No tasks in this column.</p>
-                  ) : (
-                    <ul>
-                      {column.tasks.map((task: any) => <li key={task.id}>{task.title} ({task.state})</li>)}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </article>
-      ))}
-      {boards.length === 0 && (
-        <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-          No boards yet.
-        </div>
-      )}
-      {boards.length > 0 && columns.length === 0 && (
-        <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-          Boards exist but no columns are defined yet.
-        </div>
-      )}
-      {boards.length > 0 && (
-        <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-          Tasks appear in board lanes only when assigned to a board column.
-        </div>
-      )}
-    </section>
-  );
+function SectionError({ error }: { error: string | null }) {
+  if (!error) return null;
+  return <div className="inline-alert" role="alert">{error}</div>;
 }
 
 export default async function HomePage({ searchParams }: { searchParams?: SearchParamsInput }) {
@@ -197,13 +101,13 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   }
 
   const [projectsResult, principalsAllResult, principalsListResult, boardsResult, columnsResult, tasksAllResult, tasksListResult] = await Promise.all([
-    fetchCollection<any>('/api/projects', 'Projects'),
-    fetchPagedCollection<any>('/api/principals?page=1&pageSize=1000', 'Principals'),
-    fetchPagedCollection<any>(`/api/principals?${principalAPIQuery.toString()}`, 'Principals'),
-    fetchCollection<any>('/api/boards', 'Boards'),
-    fetchCollection<any>('/api/columns', 'Columns'),
-    fetchPagedCollection<any>('/api/tasks?page=1&pageSize=1000', 'Tasks'),
-    fetchPagedCollection<any>(`/api/tasks?${taskAPIQuery.toString()}`, 'Tasks')
+    fetchCollection<Project>('/api/projects', 'Projects'),
+    fetchPagedCollection<Principal>('/api/principals?page=1&pageSize=1000', 'Principals'),
+    fetchPagedCollection<Principal>(`/api/principals?${principalAPIQuery.toString()}`, 'Principals'),
+    fetchCollection<Board>('/api/boards', 'Boards'),
+    fetchCollection<Column>('/api/columns', 'Columns'),
+    fetchPagedCollection<Task>('/api/tasks?page=1&pageSize=1000', 'Tasks'),
+    fetchPagedCollection<Task>(`/api/tasks?${taskAPIQuery.toString()}`, 'Tasks')
   ]);
 
   const projects = projectsResult.items;
@@ -221,22 +125,32 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
     fetchErrors: [boardsResult.error, columnsResult.error, tasksAllResult.error].filter((error): error is string => Boolean(error))
   });
 
-  const columnsByBoard = new Map<number, any[]>();
+  const columnsByBoard = new Map<number, Column[]>();
   for (const column of columns) {
     const bucket = columnsByBoard.get(column.boardId) ?? [];
     bucket.push(column);
     columnsByBoard.set(column.boardId, bucket);
   }
 
-  const boardsByID = new Map<number, any>();
+  const boardsByID = new Map<number, Board>();
   for (const board of boards) {
     boardsByID.set(board.id, board);
   }
 
-  const taskColumns = columns.map((column: any) => {
+  const taskColumns = columns.map((column) => {
     const boardName = boardsByID.get(column.boardId)?.name ?? `Board ${column.boardId}`;
     return { id: column.id, label: `${boardName} / ${column.name}` };
   });
+
+  const projectByID = new Map<number, Project>();
+  for (const project of projects) {
+    projectByID.set(project.id, project);
+  }
+
+  const principalByID = new Map<number, Principal>();
+  for (const principal of principals) {
+    principalByID.set(principal.id, principal);
+  }
 
   const principalHidden = hiddenParamEntries(currentParams, ['principalKind', 'principalQ', 'principalPage', 'principalPageSize']);
   const taskHidden = hiddenParamEntries(currentParams, ['taskState', 'taskQ', 'taskProjectId', 'taskAssigneeId', 'taskBoardColumnId', 'taskPage', 'taskPageSize']);
@@ -263,14 +177,16 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   }));
 
   return (
-    <main style={{ maxWidth: 980, margin: '2rem auto', fontFamily: 'Inter, sans-serif', padding: '0 1rem' }}>
-      <h1>GTD + Kanban TODO App</h1>
-      <p>Bootstrap UI showing live data from Go API.</p>
+    <main className="app-shell">
+      <header className="page-header">
+        <h1>GTD + Kanban TODO</h1>
+        <p>Plan by project, operate in board columns, and keep GTD states visible in the same workflow.</p>
+      </header>
 
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 20 }}>
-        <form action={createProjectAction} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12 }}>
+      <section className="dashboard-grid">
+        <form action={createProjectAction} className="form-card">
           <h2>Create project</h2>
-          <div style={{ display: 'grid', gap: 8 }}>
+          <div className="form-stack">
             <input name="name" placeholder="Project name" required />
             <input name="description" placeholder="Description" />
             <button type="submit">Create project</button>
@@ -281,53 +197,18 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         <CreatePrincipalForm />
       </section>
 
-      <section>
-        <h2>Projects</h2>
-        <ul>
-          {projects.map((p: any) => <li key={p.id}>{p.name}</li>)}
-        </ul>
-      </section>
+      <BoardLanesSection laneView={laneView} boards={boards} columns={columns} principals={principals} projects={projects} />
 
-      <section>
-        <h2>Principals</h2>
-        <form method="GET" style={{ display: 'grid', gap: 8, gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', marginBottom: 10 }}>
-          {principalHidden.map(([key, value]) => <input key={`${key}-${value}`} type="hidden" name={key} value={value} />)}
-          <input type="hidden" name="principalPage" value="1" />
-          <input name="principalQ" defaultValue={principalQ} placeholder="Search handle/display name" />
-          <select name="principalKind" defaultValue={principalKind}>
-            <option value="">All kinds</option>
-            <option value="human">human</option>
-            <option value="agent">agent</option>
-          </select>
-          <select name="principalPageSize" defaultValue={String(principalPageSize)}>
-            <option value="10">10 / page</option>
-            <option value="20">20 / page</option>
-            <option value="50">50 / page</option>
-          </select>
-          <button type="submit">Apply</button>
-          <Link href={principalResetLink}>Reset</Link>
-        </form>
-
-        <p style={{ marginTop: 0 }}>
-          Showing {principalList.length} of {principalsListResult.totalItems} principals.
-        </p>
-        <ul>
-          {principalList.map((p: any) => (
-            <li key={p.id}>
-              {p.displayName} ({p.kind}) - @{p.handle}
-            </li>
-          ))}
-        </ul>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          {principalPage > 1 ? <Link href={principalPrevLink}>Previous</Link> : <span>Previous</span>}
-          <span>Page {principalsListResult.page} / {Math.max(principalsListResult.totalPages, 1)}</span>
-          {principalsListResult.page < principalsListResult.totalPages ? <Link href={principalNextLink}>Next</Link> : <span>Next</span>}
+      <section className="panel">
+        <div className="panel-header-row">
+          <div>
+            <p className="eyebrow">Tasks</p>
+            <h2>Task explorer</h2>
+          </div>
         </div>
-      </section>
+        <SectionError error={tasksListResult.error} />
 
-      <section>
-        <h2>Tasks</h2>
-        <form method="GET" style={{ display: 'grid', gap: 8, gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', marginBottom: 10 }}>
+        <form method="GET" className="filters-grid">
           {taskHidden.map(([key, value]) => <input key={`${key}-${value}`} type="hidden" name={key} value={value} />)}
           <input type="hidden" name="taskPage" value="1" />
           <input name="taskQ" defaultValue={taskQ} placeholder="Search title/description" />
@@ -344,70 +225,150 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
             <option value="50">50 / page</option>
           </select>
           <button type="submit">Apply</button>
-          <Link href={taskResetLink}>Reset</Link>
+          <Link className="btn btn-secondary" href={taskResetLink}>Reset</Link>
         </form>
 
-        <p style={{ marginTop: 0 }}>
+        <p className="muted" style={{ marginTop: 10 }}>
           Showing {taskList.length} of {tasksListResult.totalItems} tasks.
         </p>
-        <ul>
-          {taskList.map((t: any) => (
-            <li key={t.id} style={{ marginBottom: 12 }}>
-              <strong>{t.title}</strong> - {t.state}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
-                <TransitionTaskStateForm task={t} />
-                <AssignTaskForm task={t} principals={principals} />
-                <SetTaskBoardColumnForm task={t} taskColumns={taskColumns} />
-              </div>
-            </li>
-          ))}
-        </ul>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          {taskPage > 1 ? <Link href={taskPrevLink}>Previous</Link> : <span>Previous</span>}
+
+        {taskList.length === 0 ? (
+          <div className="empty-state">No tasks matched the current filter.</div>
+        ) : (
+          <ul className="task-list">
+            {taskList.map((task) => (
+              <li key={task.id} className="task-item">
+                <strong>{task.title}</strong>
+                <div className="badge-row" style={{ marginTop: 6, marginBottom: 10 }}>
+                  <span className="badge badge-state">{task.state}</span>
+                  <span className="badge">{task.assigneeId ? principalByID.get(task.assigneeId)?.displayName ?? `Principal ${task.assigneeId}` : 'Unassigned'}</span>
+                  <span className="badge">{task.projectId ? projectByID.get(task.projectId)?.name ?? `Project ${task.projectId}` : 'No project'}</span>
+                </div>
+                <div className="form-row">
+                  <TransitionTaskStateForm task={task} />
+                  <AssignTaskForm task={task} principals={principals} />
+                  <SetTaskBoardColumnForm task={task} taskColumns={taskColumns} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="pagination-row">
+          {taskPage > 1 ? <Link className="btn btn-secondary" href={taskPrevLink}>Previous</Link> : <span className="muted">Previous</span>}
           <span>Page {tasksListResult.page} / {Math.max(tasksListResult.totalPages, 1)}</span>
-          {tasksListResult.page < tasksListResult.totalPages ? <Link href={taskNextLink}>Next</Link> : <span>Next</span>}
+          {tasksListResult.page < tasksListResult.totalPages ? <Link className="btn btn-secondary" href={taskNextLink}>Next</Link> : <span className="muted">Next</span>}
         </div>
       </section>
 
-      <section style={{ marginTop: 24 }}>
-        <h2>Board management</h2>
+      <section className="panel">
+        <div className="panel-header-row">
+          <div>
+            <p className="eyebrow">Boards</p>
+            <h2>Board management</h2>
+          </div>
+        </div>
+        <SectionError error={boardsResult.error || columnsResult.error} />
         <CreateBoardForm projects={projects} />
 
-        {boards.map((board: any) => (
-          <article key={board.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12, marginBottom: 12 }}>
-            <h3>{board.name}</h3>
-            <UpdateBoardForm board={board} />
-            <DeleteBoardForm boardId={board.id} />
-
-            <CreateColumnForm boardId={board.id} />
-
-            <ul style={{ marginTop: 10 }}>
-              {(columnsByBoard.get(board.id) ?? []).map((column: any) => (
-                <li key={column.id} style={{ marginBottom: 8 }}>
-                  <UpdateColumnForm column={column} />
-                  <DeleteColumnForm columnId={column.id} />
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
+        {boards.length === 0 ? (
+          <div className="empty-state">No boards yet. Create one to start your Kanban workflow.</div>
+        ) : (
+          <div className="board-admin-grid">
+            {boards.map((board) => (
+              <article key={board.id} className="board-admin-card">
+                <div className="board-title-row">
+                  <h3>{board.name}</h3>
+                  <span className="count-pill">{(columnsByBoard.get(board.id) ?? []).length} columns</span>
+                </div>
+                <div className="form-row">
+                  <UpdateBoardForm board={board} />
+                  <DeleteBoardForm boardId={board.id} />
+                </div>
+                <div style={{ marginTop: 10 }}>
+                  <CreateColumnForm boardId={board.id} />
+                </div>
+                <div style={{ marginTop: 10 }}>
+                  {(columnsByBoard.get(board.id) ?? []).length === 0 ? (
+                    <p className="muted">No columns for this board.</p>
+                  ) : (
+                    (columnsByBoard.get(board.id) ?? []).map((column) => (
+                      <div key={column.id} className="form-row" style={{ marginBottom: 8 }}>
+                        <UpdateColumnForm column={column} />
+                        <DeleteColumnForm columnId={column.id} />
+                      </div>
+                    ))
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
-      <BoardLanesSection laneView={laneView} boards={boards} columns={columns} />
+      <section className="panel">
+        <div className="panel-header-row">
+          <div>
+            <p className="eyebrow">People</p>
+            <h2>Principals</h2>
+          </div>
+        </div>
+        <SectionError error={principalsListResult.error} />
 
-      <section>
-        <h2>Task states</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-          {TASK_STATES.map((lane) => (
-            <div key={lane} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 10 }}>
-              <h3 style={{ textTransform: 'capitalize' }}>{lane}</h3>
-              <ul>
-                {tasks.filter((t: any) => t.state === lane).map((t: any) => <li key={t.id}>{t.title}</li>)}
-              </ul>
-            </div>
-          ))}
+        <form method="GET" className="filters-grid">
+          {principalHidden.map(([key, value]) => <input key={`${key}-${value}`} type="hidden" name={key} value={value} />)}
+          <input type="hidden" name="principalPage" value="1" />
+          <input name="principalQ" defaultValue={principalQ} placeholder="Search handle/display name" />
+          <select name="principalKind" defaultValue={principalKind}>
+            <option value="">All kinds</option>
+            <option value="human">human</option>
+            <option value="agent">agent</option>
+          </select>
+          <select name="principalPageSize" defaultValue={String(principalPageSize)}>
+            <option value="10">10 / page</option>
+            <option value="20">20 / page</option>
+            <option value="50">50 / page</option>
+          </select>
+          <button type="submit">Apply</button>
+          <Link className="btn btn-secondary" href={principalResetLink}>Reset</Link>
+        </form>
+
+        <p className="muted" style={{ marginTop: 10 }}>Showing {principalList.length} of {principalsListResult.totalItems} principals.</p>
+        {principalList.length === 0 ? (
+          <div className="empty-state">No principals matched the current filter.</div>
+        ) : (
+          <ul className="compact-list">
+            {principalList.map((principal) => (
+              <li key={principal.id}>{principal.displayName} ({principal.kind}) - @{principal.handle}</li>
+            ))}
+          </ul>
+        )}
+
+        <div className="pagination-row">
+          {principalPage > 1 ? <Link className="btn btn-secondary" href={principalPrevLink}>Previous</Link> : <span className="muted">Previous</span>}
+          <span>Page {principalsListResult.page} / {Math.max(principalsListResult.totalPages, 1)}</span>
+          {principalsListResult.page < principalsListResult.totalPages ? <Link className="btn btn-secondary" href={principalNextLink}>Next</Link> : <span className="muted">Next</span>}
         </div>
       </section>
+
+      <section className="panel">
+        <div className="panel-header-row">
+          <div>
+            <p className="eyebrow">Projects</p>
+            <h2>Project list</h2>
+          </div>
+        </div>
+        <SectionError error={projectsResult.error} />
+        {projects.length === 0 ? (
+          <div className="empty-state">No projects yet.</div>
+        ) : (
+          <ul className="compact-list">
+            {projects.map((project) => <li key={project.id}>{project.name}</li>)}
+          </ul>
+        )}
+      </section>
+
+      <GTDStateSection tasks={tasks} />
     </main>
   );
 }

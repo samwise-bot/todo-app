@@ -60,33 +60,34 @@ function PendingFieldset({ children }: { children: ReactNode }) {
   );
 }
 
-function SubmitButton({ idleLabel, pendingLabel }: { idleLabel: string; pendingLabel?: string }) {
+function SubmitButton({ idleLabel, pendingLabel, tone = 'primary' }: { idleLabel: string; pendingLabel?: string; tone?: 'primary' | 'secondary' | 'danger' }) {
   const { pending } = useFormStatus();
-  return <button type="submit">{pending ? (pendingLabel ?? 'Saving...') : idleLabel}</button>;
+  const className = tone === 'danger' ? 'btn-danger' : tone === 'secondary' ? 'btn-secondary' : '';
+  return (
+    <button className={className} type="submit">
+      {pending ? (pendingLabel ?? 'Saving...') : idleLabel}
+    </button>
+  );
 }
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <div style={{ color: '#b00020', fontSize: 13 }}>{message}</div>;
+  return <div className="form-feedback-error">{message}</div>;
 }
 
 function FormFeedback({ state }: { state: ActionState }) {
   if (state.status === 'idle' || !state.message) return null;
-  return (
-    <p style={{ color: state.status === 'error' ? '#b00020' : '#0a7a34', margin: '8px 0 0' }} role={state.status === 'error' ? 'alert' : 'status'}>
-      {state.message}
-    </p>
-  );
+  return <p className={state.status === 'error' ? 'form-feedback-error' : 'form-feedback-success'} role={state.status === 'error' ? 'alert' : 'status'}>{state.message}</p>;
 }
 
 export function CreateTaskForm({ projects, taskColumns }: { projects: ProjectOption[]; taskColumns: TaskColumnOption[] }) {
   const [state, formAction] = useFormState(createTaskAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12 }}>
+    <form action={formAction} className="form-card">
       <h2>Create task</h2>
       <PendingFieldset>
-        <div style={{ display: 'grid', gap: 8 }}>
+        <div className="form-stack">
           <input name="title" placeholder="Task title" required aria-invalid={Boolean(state.fieldErrors.title)} />
           <FieldError message={state.fieldErrors.title} />
           <input name="description" placeholder="Description" />
@@ -116,10 +117,10 @@ export function CreatePrincipalForm() {
   const [state, formAction] = useFormState(createPrincipalAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12 }}>
+    <form action={formAction} className="form-card">
       <h2>Create principal</h2>
       <PendingFieldset>
-        <div style={{ display: 'grid', gap: 8 }}>
+        <div className="form-stack">
           <select name="kind" defaultValue="human" aria-invalid={Boolean(state.fieldErrors.kind)}>
             <option value="human">human</option>
             <option value="agent">agent</option>
@@ -141,14 +142,14 @@ export function TransitionTaskStateForm({ task }: { task: TaskOption }) {
   const [state, formAction] = useFormState(transitionTaskStateAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', gap: 6, flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="taskId" value={task.id} />
-        <div style={{ display: 'inline-flex', gap: 6 }}>
+        <div className="form-row">
           <select name="state" defaultValue={task.state} aria-invalid={Boolean(state.fieldErrors.state)}>
             {TASK_STATES.map((taskState) => <option key={taskState} value={taskState}>{taskState}</option>)}
           </select>
-          <SubmitButton idleLabel="Move" pendingLabel="Moving..." />
+          <SubmitButton idleLabel="Move" pendingLabel="Moving..." tone="secondary" />
         </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.state || state.fieldErrors.taskId} />
@@ -161,15 +162,15 @@ export function AssignTaskForm({ task, principals }: { task: TaskOption; princip
   const [state, formAction] = useFormState(assignTaskAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', gap: 6, flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="taskId" value={task.id} />
-        <div style={{ display: 'inline-flex', gap: 6 }}>
+        <div className="form-row">
           <select name="assigneeId" defaultValue={task.assigneeId ?? ''} aria-invalid={Boolean(state.fieldErrors.assigneeId)}>
             <option value="">Unassigned</option>
             {principals.map((p) => <option key={p.id} value={p.id}>{p.displayName}</option>)}
           </select>
-          <SubmitButton idleLabel={task.assigneeId ? 'Reassign' : 'Assign'} pendingLabel="Saving..." />
+          <SubmitButton idleLabel={task.assigneeId ? 'Reassign' : 'Assign'} pendingLabel="Saving..." tone="secondary" />
         </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.assigneeId || state.fieldErrors.taskId} />
@@ -182,15 +183,15 @@ export function SetTaskBoardColumnForm({ task, taskColumns }: { task: TaskOption
   const [state, formAction] = useFormState(setTaskBoardColumnAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', gap: 6, flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="taskId" value={task.id} />
-        <div style={{ display: 'inline-flex', gap: 6 }}>
+        <div className="form-row">
           <select name="boardColumnId" defaultValue={task.boardColumnId ?? ''} aria-invalid={Boolean(state.fieldErrors.boardColumnId)}>
             <option value="">No board column</option>
             {taskColumns.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
           </select>
-          <SubmitButton idleLabel={task.boardColumnId ? 'Move column' : 'Set column'} pendingLabel="Saving..." />
+          <SubmitButton idleLabel={task.boardColumnId ? 'Move column' : 'Set column'} pendingLabel="Saving..." tone="secondary" />
         </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.boardColumnId || state.fieldErrors.taskId} />
@@ -203,10 +204,10 @@ export function CreateBoardForm({ projects }: { projects: ProjectOption[] }) {
   const [state, formAction] = useFormState(createBoardAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 12, marginBottom: 12 }}>
+    <form action={formAction} className="form-card">
       <h3>Create board</h3>
       <PendingFieldset>
-        <div style={{ display: 'grid', gap: 8, gridTemplateColumns: '2fr 2fr auto' }}>
+        <div className="form-row">
           <input name="name" placeholder="Board name" required aria-invalid={Boolean(state.fieldErrors.name)} />
           <select name="projectId" defaultValue="" aria-invalid={Boolean(state.fieldErrors.projectId)}>
             <option value="" disabled>Select project</option>
@@ -225,12 +226,12 @@ export function UpdateBoardForm({ board }: { board: BoardOption }) {
   const [state, formAction] = useFormState(updateBoardAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', gap: 6, marginRight: 8, flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="boardId" value={board.id} />
-        <div style={{ display: 'inline-flex', gap: 6 }}>
+        <div className="form-row">
           <input name="name" defaultValue={board.name} required aria-invalid={Boolean(state.fieldErrors.name)} />
-          <SubmitButton idleLabel="Rename" pendingLabel="Renaming..." />
+          <SubmitButton idleLabel="Rename" pendingLabel="Renaming..." tone="secondary" />
         </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.name || state.fieldErrors.boardId} />
@@ -243,10 +244,10 @@ export function DeleteBoardForm({ boardId }: { boardId: number }) {
   const [state, formAction] = useFormState(deleteBoardAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="boardId" value={boardId} />
-        <SubmitButton idleLabel="Delete board" pendingLabel="Deleting..." />
+        <SubmitButton idleLabel="Delete board" pendingLabel="Deleting..." tone="danger" />
       </PendingFieldset>
       <FieldError message={state.fieldErrors.boardId} />
       <FormFeedback state={state} />
@@ -258,12 +259,14 @@ export function CreateColumnForm({ boardId }: { boardId: number }) {
   const [state, formAction] = useFormState(createColumnAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'grid', gap: 8, gridTemplateColumns: '2fr 1fr auto', marginTop: 10 }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="boardId" value={boardId} />
-        <input name="name" placeholder="New column name" required aria-invalid={Boolean(state.fieldErrors.name)} />
-        <input name="position" type="number" defaultValue={0} aria-invalid={Boolean(state.fieldErrors.position)} />
-        <SubmitButton idleLabel="Add column" pendingLabel="Adding..." />
+        <div className="form-row">
+          <input name="name" placeholder="New column name" required aria-invalid={Boolean(state.fieldErrors.name)} />
+          <input name="position" type="number" defaultValue={0} aria-invalid={Boolean(state.fieldErrors.position)} />
+          <SubmitButton idleLabel="Add column" pendingLabel="Adding..." />
+        </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.name || state.fieldErrors.position || state.fieldErrors.boardId} />
       <FormFeedback state={state} />
@@ -275,13 +278,13 @@ export function UpdateColumnForm({ column }: { column: ColumnOption }) {
   const [state, formAction] = useFormState(updateColumnAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', gap: 6, marginRight: 8, flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="columnId" value={column.id} />
-        <div style={{ display: 'inline-flex', gap: 6 }}>
+        <div className="form-row">
           <input name="name" defaultValue={column.name} required aria-invalid={Boolean(state.fieldErrors.name)} />
           <input name="position" type="number" defaultValue={column.position} required aria-invalid={Boolean(state.fieldErrors.position)} />
-          <SubmitButton idleLabel="Update column" pendingLabel="Updating..." />
+          <SubmitButton idleLabel="Update" pendingLabel="Updating..." tone="secondary" />
         </div>
       </PendingFieldset>
       <FieldError message={state.fieldErrors.name || state.fieldErrors.position || state.fieldErrors.columnId} />
@@ -294,10 +297,10 @@ export function DeleteColumnForm({ columnId }: { columnId: number }) {
   const [state, formAction] = useFormState(deleteColumnAction, INITIAL_ACTION_STATE);
 
   return (
-    <form action={formAction} style={{ display: 'inline-flex', flexDirection: 'column' }}>
+    <form action={formAction}>
       <PendingFieldset>
         <input type="hidden" name="columnId" value={columnId} />
-        <SubmitButton idleLabel="Delete" pendingLabel="Deleting..." />
+        <SubmitButton idleLabel="Delete" pendingLabel="Deleting..." tone="danger" />
       </PendingFieldset>
       <FieldError message={state.fieldErrors.columnId} />
       <FormFeedback state={state} />

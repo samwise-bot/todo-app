@@ -13,6 +13,8 @@ type Task = {
   id: number;
   title: string;
   state: string;
+  assigneeId?: number | null;
+  projectId?: number | null;
   boardColumnId?: number | null;
 };
 
@@ -85,4 +87,3 @@ export function buildBoardLaneView({
     fetchErrors
   };
 }
-

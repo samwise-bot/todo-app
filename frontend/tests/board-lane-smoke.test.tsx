@@ -18,7 +18,7 @@ import {
   setTaskBoardColumnAction
 } from '../app/actions';
 import { INITIAL_ACTION_STATE } from '../lib/action-state';
-import { BoardLanesSection } from '../app/page';
+import { BoardLanesSection } from '../app/ui/board-lanes-section';
 import { buildBoardLaneView } from '../lib/board-lanes';
 
 type Project = { id: number; name: string; description: string };
@@ -216,12 +216,13 @@ describe('board-lane smoke flow', () => {
     expect(laneView.boards[0].columns[0].tasks[0].id).toBe(tasks[0].id);
 
     const html = renderToStaticMarkup(
-      <BoardLanesSection laneView={laneView} boards={boards} columns={columns} />
+      <BoardLanesSection laneView={laneView} boards={boards} columns={columns} principals={[]} projects={[]} />
     );
 
-    expect(html).toContain('<h3>Execution</h3>');
-    expect(html).toContain('<h4 style="margin-top:0">Doing</h4>');
-    expect(html).toContain('Ship release (next)');
+    expect(html).toContain('Execution');
+    expect(html).toContain('Doing');
+    expect(html).toContain('Ship release');
+    expect(html).toContain('next');
 
     expect(fetchMock).toHaveBeenCalled();
   });

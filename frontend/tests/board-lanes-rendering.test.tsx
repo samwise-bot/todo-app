@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
 
-import { BoardLanesSection } from '../app/page';
+import { BoardLanesSection } from '../app/ui/board-lanes-section';
 
 describe('BoardLanesSection', () => {
   test('renders board-lane error banner and global empty fallbacks', () => {
@@ -15,13 +15,15 @@ describe('BoardLanesSection', () => {
         }}
         boards={[]}
         columns={[]}
+        principals={[]}
+        projects={[]}
       />
     );
 
-    expect(html).toContain('Board lanes are incomplete due to data loading errors.');
+    expect(html).toContain('Board lanes are incomplete due to data loading issues.');
     expect(html).toContain('Boards data is unavailable (HTTP 503).');
-    expect(html).toContain('No tasks without a board column.');
-    expect(html).toContain('No boards yet.');
+    expect(html).toContain('Every task is currently assigned to a board column.');
+    expect(html).toContain('No boards yet. Create your first board to start planning.');
   });
 
   test('renders board-level and column-level empty states', () => {
@@ -44,12 +46,13 @@ describe('BoardLanesSection', () => {
           { id: 2, name: 'Delivery' }
         ]}
         columns={[{ id: 21, boardId: 2, name: 'Doing' }]}
+        principals={[]}
+        projects={[]}
       />
     );
 
-    expect(html).toContain('No columns defined for this board.');
+    expect(html).toContain('No columns defined for this board yet.');
     expect(html).toContain('No tasks in this column.');
-    expect(html).toContain('Tasks appear in board lanes only when assigned to a board column.');
   });
 
   test('renders mixed assigned and unassigned tasks in their respective lanes', () => {
@@ -64,17 +67,17 @@ describe('BoardLanesSection', () => {
                 {
                   id: 21,
                   name: 'Doing',
-                  tasks: [{ id: 201, title: 'Prepare release notes', state: 'next' }]
+                  tasks: [{ id: 201, title: 'Prepare release notes', state: 'next', assigneeId: null, projectId: null }]
                 },
                 {
                   id: 22,
                   name: 'Done',
-                  tasks: [{ id: 202, title: 'Ship patch', state: 'done' }]
+                  tasks: [{ id: 202, title: 'Ship patch', state: 'done', assigneeId: null, projectId: null }]
                 }
               ]
             }
           ],
-          tasksWithoutColumn: [{ id: 101, title: 'Inbox triage', state: 'inbox' }],
+          tasksWithoutColumn: [{ id: 101, title: 'Inbox triage', state: 'inbox', assigneeId: null, projectId: null }],
           fetchErrors: []
         }}
         boards={[{ id: 2, name: 'Delivery' }]}
@@ -82,17 +85,18 @@ describe('BoardLanesSection', () => {
           { id: 21, boardId: 2, name: 'Doing' },
           { id: 22, boardId: 2, name: 'Done' }
         ]}
+        principals={[]}
+        projects={[]}
       />
     );
 
-    expect(html).toContain('<h3>No column</h3>');
-    expect(html).toContain('Inbox triage (inbox)');
-    expect(html).toContain('<h3>Delivery</h3>');
-    expect(html).toContain('<h4 style="margin-top:0">Doing</h4>');
-    expect(html).toContain('<h4 style="margin-top:0">Done</h4>');
-    expect(html).toContain('Prepare release notes (next)');
-    expect(html).toContain('Ship patch (done)');
-    expect(html).not.toContain('No tasks without a board column.');
+    expect(html).toContain('Inbox without column');
+    expect(html).toContain('Inbox triage');
+    expect(html).toContain('Delivery');
+    expect(html).toContain('Doing');
+    expect(html).toContain('Done');
+    expect(html).toContain('Prepare release notes');
+    expect(html).toContain('Ship patch');
     expect(html).not.toContain('No tasks in this column.');
     expect(html).not.toContain('No boards yet.');
   });
