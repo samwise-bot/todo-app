@@ -7,9 +7,9 @@ make test-backend-repro
 ```
 
 What it does:
-- If `go` exists locally, it runs `go test ./...` in `backend/`.
-- If `go` is missing but Docker is available, it runs tests in `golang:1.24`.
-- If both are missing, it exits with a clear error.
+- If `go` exists locally, it generates backend OpenAPI contract tests and runs `go test ./...` in `backend/`.
+- If `go` is missing but Docker is available, it runs the same flow in `golang:1.24`.
+- If both are missing, it attempts a remote GitHub Actions fallback (`backend-tests-remote.yml`) using GitHub CLI.
 
 Direct script entrypoint:
 
@@ -17,7 +17,28 @@ Direct script entrypoint:
 ./ops/run/test-backend.sh
 ```
 
-This makes backend test execution reproducible across developer machines and CI agents without assuming a preinstalled Go toolchain.
+This keeps backend test execution reproducible across developer machines and CI agents, even when this runtime has neither Go nor Docker.
+
+## Remote Fallback (No Go + No Docker)
+
+`./ops/run/test-backend.sh` automatically attempts remote execution when both local toolchains are unavailable.
+
+Prerequisites:
+- `gh` is installed and authenticated (`gh auth status` succeeds).
+- Your target branch is pushed to origin (remote runners execute repository refs, not unpushed local commits).
+
+Useful environment variables:
+- `BACKEND_TEST_REMOTE_WORKFLOW`: workflow file/name to dispatch (default: `backend-tests-remote.yml`).
+- `BACKEND_TEST_REMOTE_REF`: git ref to run remotely (default: current branch name).
+- `BACKEND_TEST_FORCE_REMOTE=1`: skip local Go/Docker checks and run the remote fallback directly.
+
+Optional explicit command:
+
+```bash
+make test-backend-remote
+```
+
+This command forces remote mode with `BACKEND_TEST_FORCE_REMOTE=1`.
 
 ## Generated OpenAPI Mutation Contract Tests
 

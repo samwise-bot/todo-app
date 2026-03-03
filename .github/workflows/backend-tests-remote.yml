@@ -1,0 +1,23 @@
+name: Backend Tests Remote
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref_note:
+        description: Optional note for the triggered ref
+        required: false
+        default: ""
+
+jobs:
+  backend-test-remote:
+    name: Backend Tests Remote
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache: true
+          cache-dependency-path: backend/go.sum
+      - name: Repro backend tests
+        run: ./ops/run/test-backend.sh

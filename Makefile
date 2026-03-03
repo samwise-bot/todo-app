@@ -1,4 +1,4 @@
-.PHONY: dev-backend test-backend test-backend-repro test-browser-smoke generate-backend-contract-tests
+.PHONY: dev-backend test-backend test-backend-repro test-backend-remote test-browser-smoke generate-backend-contract-tests
 
 dev-backend:
 	cd backend && go run ./cmd/api
@@ -8,6 +8,9 @@ test-backend:
 
 test-backend-repro:
 	./ops/run/test-backend.sh
+
+test-backend-remote:
+	BACKEND_TEST_FORCE_REMOTE=1 ./ops/run/test-backend.sh
 
 test-browser-smoke:
 	./ops/run/test-browser-smoke.sh
