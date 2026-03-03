@@ -3,14 +3,53 @@
 Local-first GTD + Kanban task system for humans and OpenClaw agents.
 
 ## Stack
-- Backend: Go
-- Frontend: Next.js
+- Backend: Go (`net/http`) + SQLite (`modernc.org/sqlite`)
+- Frontend: Next.js (App Router)
 - Database: SQLite
-- Metrics: Prometheus
+- Metrics: Prometheus scrape endpoint (`/metrics`)
 
-## Status
-Bootstrap + architecture phase committed. Implementation in progress.
+## Current status
+- ✅ Architecture docs + roadmap
+- ✅ Backend scaffold with migrations + core API + GTD transition checks
+- ✅ Task event audit log (append-only)
+- ✅ Minimal frontend showing live projects/tasks and derived kanban lanes
+- 🔜 Auth, richer board UX, assignment UI polish
 
-## Run (planned)
-- `make dev`
-- `make test`
+## API endpoints (v1 slice)
+- `GET /healthz`
+- `GET /metrics`
+- `GET /api/projects`
+- `POST /api/projects`
+- `GET /api/tasks`
+- `POST /api/tasks`
+- `PATCH /api/tasks/:id/state`
+
+## Run locally
+
+### Backend
+```bash
+make dev-backend
+# API on :8080
+```
+
+### Tests
+```bash
+make test-backend
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+NEXT_PUBLIC_API_URL=http://localhost:8080 npm run dev
+# UI on :3000
+```
+
+## GTD rules currently enforced
+- `inbox` capture allows no `project_id`
+- actionable states (`next`, `scheduled`, `waiting`) require `project_id`
+- every task state change writes a `task_events` record
+
+## Prometheus
+- Scrape backend `/metrics`
+- Starter alert rules: `ops/prometheus/alerts.yml`
