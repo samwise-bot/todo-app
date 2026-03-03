@@ -77,6 +77,11 @@ sequenceDiagram
 3. Use the dashboard panels to confirm weekly review request/failure rates, failure ratio, p95 latency, and board lane failure spikes by endpoint.
 
 ## Architecture Delta (2026-03-03, autonomous loop)
+- Added deterministic subagent fanout planning utility: `ops/run/plan_subagent_fanout.py`.
+  1. Sorts `Next` tasks by `priority`, then `dueAt`, then `id`.
+  2. Selects a bounded batch (`--batch-size`, default 5) to respect worker caps/timeouts.
+  3. Persists resume cursor in `.run/subagent-fanout-cursor.json` so multiple cycles eventually cover all `Next` tasks.
+- Added unit coverage for ordering/cursor behavior in `ops/tests/test_subagent_fanout_planner.py`.
 - Standardized Go binary resolution in `ops/run/generate-backend-contract-tests.sh`:
   1. Optional explicit `BACKEND_TEST_GO_BIN` (must be executable)
   2. `go` discovered on `PATH` after Nix profile bin candidates are prepended
