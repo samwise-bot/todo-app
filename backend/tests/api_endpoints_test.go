@@ -82,6 +82,40 @@ func (h *apiHarness) jsonRequestArray(method, path string, body any) (int, []map
 	return rr.Code, out
 }
 
+func (h *apiHarness) jsonRequestPaginated(method, path string, body any) (int, map[string]any, []map[string]any) {
+	h.t.Helper()
+	var reader *bytes.Reader
+	if body == nil {
+		reader = bytes.NewReader(nil)
+	} else {
+		payload, err := json.Marshal(body)
+		if err != nil {
+			h.t.Fatalf("marshal request body: %v", err)
+		}
+		reader = bytes.NewReader(payload)
+	}
+	req := httptest.NewRequest(method, path, reader)
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+	h.h.ServeHTTP(rr, req)
+
+	var out map[string]any
+	_ = json.NewDecoder(rr.Body).Decode(&out)
+	itemsRaw, ok := out["items"].([]any)
+	if !ok {
+		return rr.Code, out, nil
+	}
+	items := make([]map[string]any, 0, len(itemsRaw))
+	for _, raw := range itemsRaw {
+		item, ok := raw.(map[string]any)
+		if !ok {
+			h.t.Fatalf("expected paginated item object, got %T", raw)
+		}
+		items = append(items, item)
+	}
+	return rr.Code, out, items
+}
+
 func mustInt64(t *testing.T, raw any) int64 {
 	t.Helper()
 	v, ok := raw.(float64)
@@ -124,9 +158,12 @@ func TestPrincipalsEndpoints(t *testing.T) {
 		t.Fatalf("expected 409 for duplicate handle, got %d", status)
 	}
 
-	status, list := h.jsonRequestArray(http.MethodGet, "/api/principals", nil)
+	status, page, list := h.jsonRequestPaginated(http.MethodGet, "/api/principals", nil)
 	if status != http.StatusOK {
 		t.Fatalf("expected 200 for list principals, got %d", status)
+	}
+	if mustInt64(t, page["totalItems"]) != 1 {
+		t.Fatalf("expected totalItems=1, got %v", page["totalItems"])
 	}
 	if len(list) != 1 {
 		t.Fatalf("expected 1 principal, got %d", len(list))
@@ -165,7 +202,7 @@ func TestTaskAssigneeEndpointAndEvent(t *testing.T) {
 		t.Fatalf("expected 200 for assign, got %d", status)
 	}
 
-	status, tasks := h.jsonRequestArray(http.MethodGet, "/api/tasks", nil)
+	status, _, tasks := h.jsonRequestPaginated(http.MethodGet, "/api/tasks", nil)
 	if status != http.StatusOK {
 		t.Fatalf("list tasks: expected 200, got %d", status)
 	}
@@ -232,7 +269,7 @@ func TestTaskBoardColumnEndpointAndEvent(t *testing.T) {
 		t.Fatalf("expected 200 for setting board column, got %d", status)
 	}
 
-	status, tasks := h.jsonRequestArray(http.MethodGet, "/api/tasks", nil)
+	status, _, tasks := h.jsonRequestPaginated(http.MethodGet, "/api/tasks", nil)
 	if status != http.StatusOK {
 		t.Fatalf("list tasks: expected 200, got %d", status)
 	}
@@ -364,6 +401,21 @@ func TestPrincipalsBoardsColumnsValidationErrors(t *testing.T) {
 		t.Fatalf("expected 400 for missing displayName, got %d", status)
 	}
 
+	status, _ = h.jsonRequest(http.MethodGet, "/api/principals?kind=robot", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid principals kind filter, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/principals?page=0", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid principals page, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/principals?pageSize=999", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid principals pageSize, got %d", status)
+	}
+
 	status, _ = h.jsonRequest(http.MethodGet, "/api/boards?projectId=abc", nil)
 	if status != http.StatusBadRequest {
 		t.Fatalf("expected 400 for invalid boards projectId filter, got %d", status)
@@ -400,6 +452,95 @@ func TestPrincipalsBoardsColumnsValidationErrors(t *testing.T) {
 	})
 	if status != http.StatusNotFound {
 		t.Fatalf("expected 404 for unknown column id, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/tasks?state=not-real", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid task state filter, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/tasks?projectId=abc", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid projectId filter, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodGet, "/api/tasks?page=-1", nil)
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for invalid tasks page, got %d", status)
+	}
+}
+
+func TestPaginatedFilteringForPrincipalsAndTasks(t *testing.T) {
+	h := newAPIHarness(t)
+
+	for _, principal := range []map[string]any{
+		{"kind": "human", "handle": "alice", "displayName": "Alice Nguyen"},
+		{"kind": "agent", "handle": "bot.alpha", "displayName": "Bot Alpha"},
+		{"kind": "human", "handle": "bob", "displayName": "Bob Stone"},
+	} {
+		status, _ := h.jsonRequest(http.MethodPost, "/api/principals", principal)
+		if status != http.StatusCreated {
+			t.Fatalf("create principal: expected 201, got %d", status)
+		}
+	}
+
+	status, principalPage, principals := h.jsonRequestPaginated(http.MethodGet, "/api/principals?kind=human&q=ali&page=1&pageSize=1", nil)
+	if status != http.StatusOK {
+		t.Fatalf("list principals: expected 200, got %d", status)
+	}
+	if mustInt64(t, principalPage["totalItems"]) != 1 {
+		t.Fatalf("expected totalItems=1 for filtered principals, got %v", principalPage["totalItems"])
+	}
+	if mustInt64(t, principalPage["totalPages"]) != 1 {
+		t.Fatalf("expected totalPages=1 for filtered principals, got %v", principalPage["totalPages"])
+	}
+	if len(principals) != 1 || principals[0]["handle"] != "alice" {
+		t.Fatalf("expected filtered principal alice, got %+v", principals)
+	}
+
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Work"})
+	if status != http.StatusCreated {
+		t.Fatalf("create project: expected 201, got %d", status)
+	}
+	projectID := mustInt64(t, project["id"])
+
+	status, principal := h.jsonRequest(http.MethodPost, "/api/principals", map[string]any{
+		"kind":        "human",
+		"handle":      "owner",
+		"displayName": "Owner",
+	})
+	if status != http.StatusCreated {
+		t.Fatalf("create owner principal: expected 201, got %d", status)
+	}
+	assigneeID := mustInt64(t, principal["id"])
+
+	for _, taskBody := range []map[string]any{
+		{"title": "Prepare docs", "description": "docs", "state": "next", "projectId": projectID},
+		{"title": "Prepare release notes", "description": "release", "state": "next", "projectId": projectID},
+		{"title": "Inbox item", "description": "misc", "state": "inbox"},
+	} {
+		status, task := h.jsonRequest(http.MethodPost, "/api/tasks", taskBody)
+		if status != http.StatusCreated {
+			t.Fatalf("create task: expected 201, got %d", status)
+		}
+		taskID := mustInt64(t, task["id"])
+		if taskBody["title"] == "Prepare docs" {
+			status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d/assignee", taskID), map[string]any{"assigneeId": assigneeID})
+			if status != http.StatusOK {
+				t.Fatalf("assign task: expected 200, got %d", status)
+			}
+		}
+	}
+
+	status, taskPage, tasks := h.jsonRequestPaginated(http.MethodGet, fmt.Sprintf("/api/tasks?state=next&projectId=%d&assigneeId=%d&q=prepare&page=1&pageSize=1", projectID, assigneeID), nil)
+	if status != http.StatusOK {
+		t.Fatalf("list tasks: expected 200, got %d", status)
+	}
+	if mustInt64(t, taskPage["totalItems"]) != 1 {
+		t.Fatalf("expected totalItems=1 for filtered tasks, got %v", taskPage["totalItems"])
+	}
+	if len(tasks) != 1 || tasks[0]["title"] != "Prepare docs" {
+		t.Fatalf("expected filtered task Prepare docs, got %+v", tasks)
 	}
 }
 

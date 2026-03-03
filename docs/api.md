@@ -33,20 +33,73 @@ Response `201`:
 
 Request:
 ```http
-GET /api/principals
+GET /api/principals?page=1&pageSize=20&kind=human&q=alice
 ```
+
+Query params:
+- `page` (optional): positive integer, default `1`
+- `pageSize` (optional): integer `1..100`, default `20`
+- `kind` (optional): `human` or `agent`
+- `q` (optional): case-insensitive match on `handle` or `displayName`
 
 Response `200`:
 ```json
-[
-  {
-    "id": 1,
-    "kind": "human",
-    "handle": "alice",
-    "displayName": "Alice Nguyen",
-    "createdAt": "2026-03-03T00:00:00Z"
-  }
-]
+{
+  "items": [
+    {
+      "id": 1,
+      "kind": "human",
+      "handle": "alice",
+      "displayName": "Alice Nguyen",
+      "createdAt": "2026-03-03T00:00:00Z"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 1,
+  "totalPages": 1
+}
+```
+
+## Tasks
+
+### List tasks
+
+Request:
+```http
+GET /api/tasks?page=1&pageSize=20&state=next&projectId=3&assigneeId=1&boardColumnId=12&q=release
+```
+
+Query params:
+- `page` (optional): positive integer, default `1`
+- `pageSize` (optional): integer `1..100`, default `20`
+- `state` (optional): one valid task state (`inbox`, `next`, `waiting`, `scheduled`, `done`, `someday`, `reference`)
+- `projectId` (optional): positive integer
+- `assigneeId` (optional): positive integer
+- `boardColumnId` (optional): positive integer
+- `q` (optional): case-insensitive match on `title` or `description`
+
+Response `200`:
+```json
+{
+  "items": [
+    {
+      "id": 33,
+      "title": "Prepare launch notes",
+      "description": "",
+      "state": "next",
+      "projectId": 3,
+      "assigneeId": 1,
+      "boardColumnId": 12,
+      "createdAt": "2026-03-03T00:00:00Z",
+      "updatedAt": "2026-03-03T00:00:00Z"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 1,
+  "totalPages": 1
+}
 ```
 
 ## Boards

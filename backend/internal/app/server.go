@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -43,15 +44,33 @@ func (s *Server) Routes() http.Handler {
 
 var principalHandlePattern = regexp.MustCompile(`^[a-zA-Z0-9._-]+$`)
 
+const (
+	defaultPageSize = 20
+	maxPageSize     = 100
+)
+
+type paginatedResponse[T any] struct {
+	Items      []T   `json:"items"`
+	Page       int   `json:"page"`
+	PageSize   int   `json:"pageSize"`
+	TotalItems int64 `json:"totalItems"`
+	TotalPages int   `json:"totalPages"`
+}
+
 func (s *Server) handlePrincipals(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		items, err := s.store.ListPrincipals(r.Context())
+		opts, err := parseListPrincipalsOptions(r)
+		if err != nil {
+			writeJSON(w, 400, map[string]string{"error": err.Error()})
+			return
+		}
+		result, err := s.store.ListPrincipals(r.Context(), opts)
 		if err != nil {
 			writeErr(w, 500, err)
 			return
 		}
-		writeJSON(w, 200, items)
+		writeJSON(w, 200, newPaginatedResponse(result.Items, result.Total, opts.Page, opts.PageSize))
 	case http.MethodPost:
 		var p domain.Principal
 		if err := json.NewDecoder(r.Body).Decode(&p); err != nil {
@@ -118,12 +137,17 @@ func (s *Server) handleProjects(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleTasks(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		items, err := s.store.ListTasks(r.Context())
+		opts, err := parseListTaskOptions(r)
+		if err != nil {
+			writeJSON(w, 400, map[string]string{"error": err.Error()})
+			return
+		}
+		result, err := s.store.ListTasks(r.Context(), opts)
 		if err != nil {
 			writeErr(w, 500, err)
 			return
 		}
-		writeJSON(w, 200, items)
+		writeJSON(w, 200, newPaginatedResponse(result.Items, result.Total, opts.Page, opts.PageSize))
 	case http.MethodPost:
 		var t domain.Task
 		if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
@@ -487,12 +511,15 @@ func (s *Server) handleWeeklyReview(w http.ResponseWriter, r *http.Request) {
 		}
 		thresholdDays = n
 	}
-	tasks, err := s.store.ListTasks(r.Context())
+	result, err := s.store.ListTasks(r.Context(), store.ListTasksOptions{
+		Page:     1,
+		PageSize: 1000000,
+	})
 	if err != nil {
 		writeErr(w, 500, err)
 		return
 	}
-	groups, staleTasks := buildWeeklyReviewGroups(tasks, time.Now().UTC(), thresholdDays)
+	groups, staleTasks := buildWeeklyReviewGroups(result.Items, time.Now().UTC(), thresholdDays)
 	count := len(groups.Waiting) + len(groups.Someday) + len(groups.OverdueScheduled)
 	writeJSON(w, 200, map[string]any{
 		"thresholdDays": thresholdDays,
@@ -577,6 +604,106 @@ func splitResourceID(path, prefix string) ([]string, int64, bool) {
 		return nil, 0, false
 	}
 	return parts, id, true
+}
+
+func parseListPrincipalsOptions(r *http.Request) (store.ListPrincipalsOptions, error) {
+	page, pageSize, err := parsePagination(r)
+	if err != nil {
+		return store.ListPrincipalsOptions{}, err
+	}
+	opts := store.ListPrincipalsOptions{
+		Page:     page,
+		PageSize: pageSize,
+		Query:    strings.TrimSpace(r.URL.Query().Get("q")),
+	}
+	if rawKind := strings.TrimSpace(r.URL.Query().Get("kind")); rawKind != "" {
+		kind := domain.PrincipalType(rawKind)
+		if !kind.Valid() {
+			return store.ListPrincipalsOptions{}, errors.New("kind must be one of: human, agent")
+		}
+		opts.Kind = &kind
+	}
+	return opts, nil
+}
+
+func parseListTaskOptions(r *http.Request) (store.ListTasksOptions, error) {
+	page, pageSize, err := parsePagination(r)
+	if err != nil {
+		return store.ListTasksOptions{}, err
+	}
+	opts := store.ListTasksOptions{
+		Page:     page,
+		PageSize: pageSize,
+		Query:    strings.TrimSpace(r.URL.Query().Get("q")),
+	}
+	if rawState := strings.TrimSpace(r.URL.Query().Get("state")); rawState != "" {
+		state := domain.TaskState(rawState)
+		if !state.Valid() {
+			return store.ListTasksOptions{}, errors.New("state is invalid")
+		}
+		opts.State = &state
+	}
+	if rawProjectID := strings.TrimSpace(r.URL.Query().Get("projectId")); rawProjectID != "" {
+		id, err := parsePositiveInt64(rawProjectID, "projectId")
+		if err != nil {
+			return store.ListTasksOptions{}, err
+		}
+		opts.ProjectID = &id
+	}
+	if rawAssigneeID := strings.TrimSpace(r.URL.Query().Get("assigneeId")); rawAssigneeID != "" {
+		id, err := parsePositiveInt64(rawAssigneeID, "assigneeId")
+		if err != nil {
+			return store.ListTasksOptions{}, err
+		}
+		opts.AssigneeID = &id
+	}
+	if rawBoardColumnID := strings.TrimSpace(r.URL.Query().Get("boardColumnId")); rawBoardColumnID != "" {
+		id, err := parsePositiveInt64(rawBoardColumnID, "boardColumnId")
+		if err != nil {
+			return store.ListTasksOptions{}, err
+		}
+		opts.BoardColumnID = &id
+	}
+	return opts, nil
+}
+
+func parsePagination(r *http.Request) (int, int, error) {
+	page := 1
+	if rawPage := strings.TrimSpace(r.URL.Query().Get("page")); rawPage != "" {
+		n, err := strconv.Atoi(rawPage)
+		if err != nil || n <= 0 {
+			return 0, 0, errors.New("page must be a positive integer")
+		}
+		page = n
+	}
+	pageSize := defaultPageSize
+	if rawPageSize := strings.TrimSpace(r.URL.Query().Get("pageSize")); rawPageSize != "" {
+		n, err := strconv.Atoi(rawPageSize)
+		if err != nil || n <= 0 || n > maxPageSize {
+			return 0, 0, errors.New("pageSize must be between 1 and 100")
+		}
+		pageSize = n
+	}
+	return page, pageSize, nil
+}
+
+func parsePositiveInt64(raw string, field string) (int64, error) {
+	n, err := strconv.ParseInt(raw, 10, 64)
+	if err != nil || n <= 0 {
+		return 0, fmt.Errorf("%s must be a positive integer", field)
+	}
+	return n, nil
+}
+
+func newPaginatedResponse[T any](items []T, total int64, page int, pageSize int) paginatedResponse[T] {
+	totalPages := int((total + int64(pageSize) - 1) / int64(pageSize))
+	return paginatedResponse[T]{
+		Items:      items,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalItems: total,
+		TotalPages: totalPages,
+	}
 }
 
 func isUniqueViolation(err error) bool {

@@ -1,8 +1,8 @@
 # Todo-App Iteration Checklist
 
 ## Next Iteration (Priority Order)
-- [ ] Add pagination + server-side filtering for `/api/tasks` and `/api/principals`, then wire query-state controls in the frontend list views.
-- [ ] Publish an OpenAPI-style machine-readable contract (source file + generated JSON) for current backend endpoints.
-- [ ] Add frontend rendering tests for board-lane empty/error states (assert banner and fallback copy in page-level UI, not just view-model unit tests).
-- [ ] Add weekly-review endpoint tests for multi-item ordering within each section to lock deterministic response ordering.
-- [ ] Add basic observability counters/timers for weekly-review and board-lane fetch failures.
+- [ ] Unblock backend test execution in this environment (Go toolchain missing): add a reproducible backend test runner (e.g., Docker/devcontainer or scripted toolchain bootstrap) and document the command path used in CI/local loops.
+- [ ] Publish an OpenAPI-style machine-readable contract (source spec + generated JSON artifact) for current backend endpoints, including new pagination/filter query params for `/api/tasks` and `/api/principals`.
+- [ ] Add frontend rendering tests for board-lane empty/error states (assert banner and fallback copy at page-level UI, not only view-model/unit tests).
+- [ ] Add weekly-review endpoint tests for deterministic multi-item ordering inside each section (`waiting`, `someday`, `overdueScheduled`).
+- [ ] Add basic observability counters/timers for weekly-review and board-lane fetch failures (and expose them via existing logging/metrics surface).

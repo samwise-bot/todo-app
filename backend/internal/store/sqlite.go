@@ -20,6 +20,28 @@ type SQLiteStore struct {
 	db *sql.DB
 }
 
+type ListPrincipalsOptions struct {
+	Kind     *domain.PrincipalType
+	Query    string
+	Page     int
+	PageSize int
+}
+
+type ListTasksOptions struct {
+	State         *domain.TaskState
+	ProjectID     *int64
+	AssigneeID    *int64
+	BoardColumnID *int64
+	Query         string
+	Page          int
+	PageSize      int
+}
+
+type PaginatedResult[T any] struct {
+	Items []T
+	Total int64
+}
+
 var ErrNotFound = errors.New("not found")
 
 func NewSQLiteStore(dsn string) (*SQLiteStore, error) {
@@ -116,10 +138,45 @@ func (s *SQLiteStore) CreatePrincipal(ctx context.Context, p *domain.Principal) 
 	return nil
 }
 
-func (s *SQLiteStore) ListPrincipals(ctx context.Context) ([]domain.Principal, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id, kind, handle, display_name, created_at FROM principals ORDER BY id DESC`)
+func (s *SQLiteStore) ListPrincipals(ctx context.Context, opts ListPrincipalsOptions) (PaginatedResult[domain.Principal], error) {
+	page := opts.Page
+	if page <= 0 {
+		page = 1
+	}
+	pageSize := opts.PageSize
+	if pageSize <= 0 {
+		pageSize = 20
+	}
+	offset := (page - 1) * pageSize
+
+	clauses := make([]string, 0, 2)
+	args := make([]any, 0, 8)
+	if opts.Kind != nil {
+		clauses = append(clauses, "kind = ?")
+		args = append(args, *opts.Kind)
+	}
+	if strings.TrimSpace(opts.Query) != "" {
+		clauses = append(clauses, "(LOWER(handle) LIKE ? OR LOWER(display_name) LIKE ?)")
+		q := "%" + strings.ToLower(strings.TrimSpace(opts.Query)) + "%"
+		args = append(args, q, q)
+	}
+
+	where := ""
+	if len(clauses) > 0 {
+		where = " WHERE " + strings.Join(clauses, " AND ")
+	}
+
+	var total int64
+	countArgs := append([]any{}, args...)
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(1) FROM principals`+where, countArgs...).Scan(&total); err != nil {
+		return PaginatedResult[domain.Principal]{}, err
+	}
+
+	query := `SELECT id, kind, handle, display_name, created_at FROM principals` + where + ` ORDER BY id DESC LIMIT ? OFFSET ?`
+	args = append(args, pageSize, offset)
+	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return PaginatedResult[domain.Principal]{}, err
 	}
 	defer rows.Close()
 	var out []domain.Principal
@@ -127,12 +184,18 @@ func (s *SQLiteStore) ListPrincipals(ctx context.Context) ([]domain.Principal, e
 		var p domain.Principal
 		var created string
 		if err := rows.Scan(&p.ID, &p.Kind, &p.Handle, &p.DisplayName, &created); err != nil {
-			return nil, err
+			return PaginatedResult[domain.Principal]{}, err
 		}
 		p.CreatedAt, _ = time.Parse(time.RFC3339, created)
 		out = append(out, p)
 	}
-	return out, rows.Err()
+	if err := rows.Err(); err != nil {
+		return PaginatedResult[domain.Principal]{}, err
+	}
+	return PaginatedResult[domain.Principal]{
+		Items: out,
+		Total: total,
+	}, nil
 }
 
 func (s *SQLiteStore) PrincipalExists(ctx context.Context, id int64) (bool, error) {
@@ -348,10 +411,57 @@ func nullableTime(t *time.Time) any {
 	return t.UTC().Format(time.RFC3339)
 }
 
-func (s *SQLiteStore) ListTasks(ctx context.Context) ([]domain.Task, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT id, title, description, state, project_id, assignee_id, board_column_id, due_at, created_at, updated_at FROM tasks ORDER BY id DESC`)
+func (s *SQLiteStore) ListTasks(ctx context.Context, opts ListTasksOptions) (PaginatedResult[domain.Task], error) {
+	page := opts.Page
+	if page <= 0 {
+		page = 1
+	}
+	pageSize := opts.PageSize
+	if pageSize <= 0 {
+		pageSize = 20
+	}
+	offset := (page - 1) * pageSize
+
+	clauses := make([]string, 0, 5)
+	args := make([]any, 0, 16)
+	if opts.State != nil {
+		clauses = append(clauses, "state = ?")
+		args = append(args, *opts.State)
+	}
+	if opts.ProjectID != nil {
+		clauses = append(clauses, "project_id = ?")
+		args = append(args, *opts.ProjectID)
+	}
+	if opts.AssigneeID != nil {
+		clauses = append(clauses, "assignee_id = ?")
+		args = append(args, *opts.AssigneeID)
+	}
+	if opts.BoardColumnID != nil {
+		clauses = append(clauses, "board_column_id = ?")
+		args = append(args, *opts.BoardColumnID)
+	}
+	if strings.TrimSpace(opts.Query) != "" {
+		clauses = append(clauses, "(LOWER(title) LIKE ? OR LOWER(description) LIKE ?)")
+		q := "%" + strings.ToLower(strings.TrimSpace(opts.Query)) + "%"
+		args = append(args, q, q)
+	}
+
+	where := ""
+	if len(clauses) > 0 {
+		where = " WHERE " + strings.Join(clauses, " AND ")
+	}
+
+	var total int64
+	countArgs := append([]any{}, args...)
+	if err := s.db.QueryRowContext(ctx, `SELECT COUNT(1) FROM tasks`+where, countArgs...).Scan(&total); err != nil {
+		return PaginatedResult[domain.Task]{}, err
+	}
+
+	query := `SELECT id, title, description, state, project_id, assignee_id, board_column_id, due_at, created_at, updated_at FROM tasks` + where + ` ORDER BY id DESC LIMIT ? OFFSET ?`
+	args = append(args, pageSize, offset)
+	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return PaginatedResult[domain.Task]{}, err
 	}
 	defer rows.Close()
 	var out []domain.Task
@@ -359,7 +469,7 @@ func (s *SQLiteStore) ListTasks(ctx context.Context) ([]domain.Task, error) {
 		var t domain.Task
 		var due, created, updated sql.NullString
 		if err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.State, &t.ProjectID, &t.AssigneeID, &t.BoardColumnID, &due, &created, &updated); err != nil {
-			return nil, err
+			return PaginatedResult[domain.Task]{}, err
 		}
 		if due.Valid {
 			d, _ := time.Parse(time.RFC3339, due.String)
@@ -373,7 +483,13 @@ func (s *SQLiteStore) ListTasks(ctx context.Context) ([]domain.Task, error) {
 		}
 		out = append(out, t)
 	}
-	return out, rows.Err()
+	if err := rows.Err(); err != nil {
+		return PaginatedResult[domain.Task]{}, err
+	}
+	return PaginatedResult[domain.Task]{
+		Items: out,
+		Total: total,
+	}, nil
 }
 
 func (s *SQLiteStore) ListStaleTasksForWeeklyReview(ctx context.Context, olderThan time.Duration) ([]domain.Task, error) {
