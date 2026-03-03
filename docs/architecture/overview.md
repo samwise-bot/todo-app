@@ -121,3 +121,7 @@ sequenceDiagram
 - Strengthened frontend API envelope resilience tests in `frontend/tests/api-client.test.ts`:
   1. Verified paged fetch compatibility with nested `results.items` envelopes while preserving pagination metadata.
   2. Verified deterministic pagination derivation when APIs return bare arrays (legacy/mixed endpoint response modes).
+- Added first board-first multi-page navigation slice:
+  1. `frontend/app/layout.tsx` now exposes a persistent primary nav (`/board`, `/tasks`, `/projects`, `/people`, `/settings`).
+  2. Stub route pages added for `/tasks`, `/projects`, `/people`, and `/settings` to support incremental extraction away from the monolithic dashboard page.
+  3. Added `frontend/tests/tasks-page.test.tsx` to keep the new task route scaffold under regression coverage.

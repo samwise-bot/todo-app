@@ -12,8 +12,9 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Current App Task Board (Project: TODO App)
 - [ ] #34 Ops blocker remains in **Blocked** (`state=waiting`, board `Blocked`) pending real worker completion/timeout evidence.
-- [ ] #41 UX IA: split monolithic dashboard into route-based pages (**next**, priority=3).
+- [x] #41 UX IA: split monolithic dashboard into route-based pages (**done**, priority=3).
 - [ ] #42 Board UX: inline task creation within board/column context (**next**, priority=3).
+- [ ] #43 Board UX: inline column creation and column management (**next**, priority=3).
 
 ## Verification
 - `bash -n ops/run/check-task-mutations.sh` ✅
