@@ -32,9 +32,10 @@
 - ✅ Completed: task #39 moved `Next -> In Progress -> Done` and extended sweep reporting with `workerOutcomeSummary` (`completed`, `timedOut`, ratios) in `ops/run/validate_subagent_fanout_sweep.py`.
 - ✅ Completed: task #38 validated deterministic full-queue coverage with `.run/subagent-fanout-sweep-report.json` (`coverageRatio=1.0`, `cyclesRun=4`).
 - ✅ Completed: task #32 documented canonical Go fallback strategy for contract-test generation in `docs/backend-testing.md` (resolution order + env vars + operator guidance).
+- ✅ Completed: task #31 moved `Next -> In Progress -> Done` by hardening mutation smoke cleanup in `ops/run/check-task-mutations.sh` (new tasks now auto-transition to `done` at script end).
 - 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
-  - ✅ Shipped SPA architecture baseline (task #11): root route now redirects to `/board` with dashboard moved to `app/_dashboard.tsx` and mounted at `/board`.
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
+  - Continue board UX/navigation queue from prioritized `Next`
   - Continue auth/benchmark roadmap queue from prioritized `Next`

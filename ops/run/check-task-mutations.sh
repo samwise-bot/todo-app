@@ -29,4 +29,7 @@ column_code=$(curl -sS -o /tmp/task-column-smoke.json -w '%{http_code}' -X PATCH
 assignee_code=$(curl -sS -o /tmp/task-assignee-smoke.json -w '%{http_code}' -X PATCH "$API_BASE/api/tasks/$task_id/assignee" -H 'Content-Type: application/json' -d '{"assigneeId":null}')
 [[ "$assignee_code" == "200" ]] || { echo "assignee mutation failed" >&2; cat /tmp/task-assignee-smoke.json; exit 1; }
 
-echo "task mutation smoke passed (task_id=$task_id)"
+done_code=$(curl -sS -o /tmp/task-done-smoke.json -w '%{http_code}' -X PATCH "$API_BASE/api/tasks/$task_id/state" -H 'Content-Type: application/json' -d '{"state":"done"}')
+[[ "$done_code" == "200" ]] || { echo "done-state cleanup failed" >&2; cat /tmp/task-done-smoke.json; exit 1; }
+
+echo "task mutation smoke passed (task_id=$task_id, cleanup_state=done)"
