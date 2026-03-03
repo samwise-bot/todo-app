@@ -5,9 +5,9 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, canonical board columns).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Mainline execution: task #42 moved `Next -> In Progress -> Done`, assigned to `samwise`.
-- [x] Implemented one atomic board UX change: inline task creation form now exists in each board column (`/board`) for rapid lane-local capture.
-- [x] Added lane-to-state mapping in inline create flow to preserve GTD constraints (`In Progress` lane maps to backend `scheduled` state).
+- [x] Mainline execution: task #41 delivery increment (route-split extraction), assigned to `samwise`.
+- [x] Implemented one atomic IA change: `/projects` now renders API-backed project list instead of static scaffold.
+- [x] Added regression coverage: `frontend/tests/projects-page.test.tsx` validates `/api/projects` fetch + rendered names.
 
 ## Current App Task Board (Project: TODO App)
 - [ ] #34 Ops blocker remains in **Blocked** (`state=waiting`, board `Blocked`) pending real worker completion/timeout evidence.
