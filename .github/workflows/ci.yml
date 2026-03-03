@@ -84,12 +84,37 @@ jobs:
       - name: Repro backend tests
         run: ./ops/run/test-backend.sh
 
-      - name: Fail when generated backend contract tests are stale
+      - name: Backend contract drift check
+        id: backend-contract-drift
+        continue-on-error: true
+        run: make test-backend-contracts
+
+      - name: Capture backend contract drift context
+        if: steps.backend-contract-drift.outcome == 'failure'
         run: |
-          git diff --exit-code -- backend/tests/generated_openapi_mutation_contract_test.go || {
-            echo "backend/tests/generated_openapi_mutation_contract_test.go is stale. Run ./ops/run/generate-backend-contract-tests.sh and commit the updated file."
-            exit 1
-          }
+          mkdir -p "$RUNNER_TEMP/backend-contract-drift"
+          {
+            echo "Backend contract drift detected."
+            echo
+            git status --short -- backend/tests/generated_openapi_mutation_contract_test.go backend/tests/generated_openapi_read_contract_test.go
+            echo
+            git --no-pager diff -- backend/tests/generated_openapi_mutation_contract_test.go backend/tests/generated_openapi_read_contract_test.go
+          } > "$RUNNER_TEMP/backend-contract-drift/diff-context.txt"
+
+      - name: Upload backend contract drift artifact
+        if: steps.backend-contract-drift.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-contract-drift-context
+          path: ${{ runner.temp }}/backend-contract-drift/diff-context.txt
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Fail when backend contract drift is detected
+        if: steps.backend-contract-drift.outcome == 'failure'
+        run: |
+          echo "Backend contract tests are stale. Run 'make test-backend-contracts' and commit generated changes."
+          exit 1
 
       - name: Collect CI telemetry
         if: always()
