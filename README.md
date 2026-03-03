@@ -43,6 +43,11 @@ Local-first GTD + Kanban task system for humans and OpenClaw agents.
 
 ## Run locally
 
+### Nix dev shell (recommended)
+```bash
+nix develop
+```
+
 ### Backend
 ```bash
 make dev-backend
