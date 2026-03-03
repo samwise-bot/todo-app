@@ -319,8 +319,8 @@ func (s *Server) handleBoards(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleBoardByID(w http.ResponseWriter, r *http.Request) {
-	_, id, ok := splitResourceID(r.URL.Path, "/api/boards/")
-	if !ok {
+	parts, id, ok := splitResourceID(r.URL.Path, "/api/boards/")
+	if !ok || len(parts) != 1 {
 		writeJSON(w, 404, map[string]string{"error": "not found"})
 		return
 	}
@@ -438,8 +438,8 @@ func (s *Server) handleColumns(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleColumnByID(w http.ResponseWriter, r *http.Request) {
-	_, id, ok := splitResourceID(r.URL.Path, "/api/columns/")
-	if !ok {
+	parts, id, ok := splitResourceID(r.URL.Path, "/api/columns/")
+	if !ok || len(parts) != 1 {
 		writeJSON(w, 404, map[string]string{"error": "not found"})
 		return
 	}
