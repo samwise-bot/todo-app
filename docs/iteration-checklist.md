@@ -1,10 +1,11 @@
 # Todo-App Iteration Checklist
 
 ## Completed This Iteration
-- [x] Expanded generated OpenAPI contract test coverage from critical mutations to selected read/list endpoints (`/api/tasks`, `/api/projects`, `/api/boards`, `/api/columns`, `/api/boards/{id}`), including merged path/operation query-parameter metadata and generated valid/invalid query assertion coverage.
+- [x] Added frontend dependency preflight installer (`ops/run/install-frontend-deps.sh`) that skips redundant `npm ci` when `frontend/node_modules` matches `frontend/package-lock.json` hash, while preserving deterministic lockfile-based installs.
+- [x] Wired the preflight installer into browser smoke automation (`ops/run/test-browser-smoke.sh`) and CI jobs (`frontend-test`, `browser-smoke`) in `.github/workflows/ci.yml`.
 
 ## Next Iteration (Priority Order)
-- [ ] Add frontend smoke preflight to skip redundant `npm ci` when lockfile hash + `node_modules` are already in sync while preserving deterministic install guarantees.
+- [ ] Unblock backend test execution in this environment: install Go toolchain and/or restore GitHub Actions remote fallback auth so `./ops/run/test-backend.sh` can complete successfully.
 - [ ] Add CI artifact retention + summary links for telemetry/regression reports to speed triage on threshold failures.
 - [ ] Split generated OpenAPI contract outputs into mutation/read files to reduce churn and improve test failure locality.
 - [ ] Add read-contract coverage for additional path-param endpoints (`/api/columns/{id}` and `/api/boards/{id}` invalid-id/shape edge cases) with stricter query invalidation fixtures.

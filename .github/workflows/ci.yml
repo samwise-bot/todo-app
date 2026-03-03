@@ -15,9 +15,13 @@ jobs:
     name: OpenAPI Contract
     runs-on: ubuntu-latest
     steps:
+      - name: Mark telemetry start
+        run: echo "$(date +%s)" > "$RUNNER_TEMP/ci-telemetry-start"
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-go@v5
+        id: setup-go
         with:
           go-version-file: backend/go.mod
           cache: true
@@ -40,12 +44,38 @@ jobs:
       - name: Validate OpenAPI schema (OpenAPI 3.0)
         run: ./ops/run/validate-openapi.sh docs/openapi/openapi.json
 
+      - name: Collect CI telemetry
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-telemetry"
+          python3 ./ops/run/collect-ci-telemetry.py \
+            --job-id "${{ github.job }}" \
+            --job-name "OpenAPI Contract" \
+            --start-epoch-file "$RUNNER_TEMP/ci-telemetry-start" \
+            --output-json "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.json" \
+            --output-csv "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.csv" \
+            --cache setup_go=${{ steps.setup-go.outputs.cache-hit }}
+
+      - name: Upload CI telemetry artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-telemetry-${{ github.job }}
+          path: |
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
+          if-no-files-found: error
+
   backend-test:
     name: Backend Tests
     runs-on: ubuntu-latest
     steps:
+      - name: Mark telemetry start
+        run: echo "$(date +%s)" > "$RUNNER_TEMP/ci-telemetry-start"
+
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
+        id: setup-go
         with:
           go-version-file: backend/go.mod
           cache: true
@@ -60,39 +90,153 @@ jobs:
             exit 1
           }
 
+      - name: Collect CI telemetry
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-telemetry"
+          python3 ./ops/run/collect-ci-telemetry.py \
+            --job-id "${{ github.job }}" \
+            --job-name "Backend Tests" \
+            --start-epoch-file "$RUNNER_TEMP/ci-telemetry-start" \
+            --output-json "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.json" \
+            --output-csv "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.csv" \
+            --cache setup_go=${{ steps.setup-go.outputs.cache-hit }}
+
+      - name: Upload CI telemetry artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-telemetry-${{ github.job }}
+          path: |
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
+          if-no-files-found: error
+
   frontend-test:
     name: Frontend Tests
     runs-on: ubuntu-latest
     steps:
+      - name: Mark telemetry start
+        run: echo "$(date +%s)" > "$RUNNER_TEMP/ci-telemetry-start"
+
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        id: setup-node
         with:
           node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - name: Install deps
-        run: cd frontend && npm ci
+        run: ./ops/run/install-frontend-deps.sh
       - name: Vitest
         run: cd frontend && npm test
+
+      - name: Collect CI telemetry
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-telemetry"
+          python3 ./ops/run/collect-ci-telemetry.py \
+            --job-id "${{ github.job }}" \
+            --job-name "Frontend Tests" \
+            --start-epoch-file "$RUNNER_TEMP/ci-telemetry-start" \
+            --output-json "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.json" \
+            --output-csv "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.csv" \
+            --cache setup_node=${{ steps.setup-node.outputs.cache-hit }}
+
+      - name: Upload CI telemetry artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-telemetry-${{ github.job }}
+          path: |
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
+          if-no-files-found: error
 
   browser-smoke:
     name: Browser Smoke
     runs-on: ubuntu-latest
     steps:
+      - name: Mark telemetry start
+        run: echo "$(date +%s)" > "$RUNNER_TEMP/ci-telemetry-start"
+
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
+        id: setup-go
         with:
           go-version-file: backend/go.mod
           cache: true
           cache-dependency-path: backend/go.sum
       - uses: actions/setup-node@v4
+        id: setup-node
         with:
           node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - name: Install frontend deps
-        run: cd frontend && npm ci
+        run: ./ops/run/install-frontend-deps.sh
       - name: Install Chromium for Playwright
         run: cd frontend && npm run test:smoke:install
       - name: Run browser smoke
         run: cd frontend && npm run test:smoke
+
+      - name: Collect CI telemetry
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-telemetry"
+          python3 ./ops/run/collect-ci-telemetry.py \
+            --job-id "${{ github.job }}" \
+            --job-name "Browser Smoke" \
+            --start-epoch-file "$RUNNER_TEMP/ci-telemetry-start" \
+            --output-json "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.json" \
+            --output-csv "$RUNNER_TEMP/ci-telemetry/${{ github.job }}.csv" \
+            --cache setup_go=${{ steps.setup-go.outputs.cache-hit }} \
+            --cache setup_node=${{ steps.setup-node.outputs.cache-hit }}
+
+      - name: Upload CI telemetry artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-telemetry-${{ github.job }}
+          path: |
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.json
+            ${{ runner.temp }}/ci-telemetry/${{ github.job }}.csv
+          if-no-files-found: error
+
+  ci-telemetry-regression:
+    name: CI Telemetry Regression Gate
+    runs-on: ubuntu-latest
+    needs:
+      - openapi-contract
+      - backend-test
+      - frontend-test
+      - browser-smoke
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download job telemetry artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/ci-telemetry/input
+          pattern: ci-telemetry-*
+          merge-multiple: true
+
+      - name: Check telemetry against thresholds
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-telemetry/output"
+          python3 ./ops/run/check-ci-telemetry.py \
+            --thresholds ./.github/ci-telemetry-thresholds.json \
+            --telemetry-dir "$RUNNER_TEMP/ci-telemetry/input" \
+            --output-json "$RUNNER_TEMP/ci-telemetry/output/summary.json" \
+            --output-csv "$RUNNER_TEMP/ci-telemetry/output/summary.csv"
+
+      - name: Upload telemetry summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-telemetry-summary
+          path: |
+            ${{ runner.temp }}/ci-telemetry/output/summary.json
+            ${{ runner.temp }}/ci-telemetry/output/summary.csv
+          if-no-files-found: error
