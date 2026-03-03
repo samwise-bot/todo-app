@@ -67,3 +67,25 @@ jobs:
         run: cd frontend && npm ci
       - name: Vitest
         run: cd frontend && npm test
+
+  browser-smoke:
+    name: Browser Smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache: true
+          cache-dependency-path: backend/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend deps
+        run: cd frontend && npm ci
+      - name: Install Chromium for Playwright
+        run: cd frontend && npm run test:smoke:install
+      - name: Run browser smoke
+        run: cd frontend && npm run test:smoke

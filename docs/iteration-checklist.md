@@ -13,8 +13,10 @@
 - [x] Added OpenAPI schema validation in CI for `docs/openapi/openapi.json` via deterministic pinned tooling (`swagger-cli@4.0.4`) with explicit OpenAPI `3.0.x` version enforcement.
 - [x] Added CI caching + workflow concurrency controls to reduce duplicate runs and runtime (`actions/setup-go` module/build cache, npm cache, `cancel-in-progress` concurrency group).
 - [x] Added end-to-end board-lane smoke coverage for create board/column/task + lane assignment with API/UI parity assertions in `frontend/tests/board-lane-smoke.test.tsx`.
+- [x] Added real browser-driven CI smoke coverage via Playwright with backend + frontend bootstrapping and live board-lane interactions in `frontend/tests/board-lane-smoke.e2e.spec.ts`, wired through `.github/workflows/ci.yml`.
 
 ## Next Iteration (Priority Order)
-- [ ] Add a real browser-driven CI smoke test (backend + frontend process boot) to validate interactive board-lane actions beyond mocked fetch flows.
-- [ ] Introduce backend API contract tests generated directly from `docs/openapi/openapi.json` for critical board/task mutation endpoints.
-- [ ] Add CI runtime telemetry (per-job timing trend + cache hit visibility) and enforce regression thresholds.
+- [ ] Add generated backend API contract tests from `docs/openapi/openapi.json` for critical mutation endpoints (`POST /api/tasks`, `PATCH /api/tasks/:id/state`, `PATCH /api/tasks/:id/board-column`, `POST /api/boards`, `POST /api/columns`).
+- [ ] Add local backend test bootstrap fallback for non-Go/non-Docker environments in this runtime (or document/automate a remote runner) so each loop can satisfy mandatory backend test execution.
+- [ ] Add CI runtime telemetry: persist per-job duration/cache-hit metrics and fail builds on configurable regression thresholds.
+- [ ] Make Playwright smoke install deterministic by moving from `npx playwright@...` to pinned local dev dependency + lockfile enforcement.

@@ -54,6 +54,8 @@ make dev-backend
 make test-backend
 # reproducible fallback runner (uses Docker if local Go is missing)
 make test-backend-repro
+# browser-driven smoke test (boots backend on :8080 and frontend on :3000 with isolated /tmp sqlite db)
+make test-browser-smoke
 ```
 
 Detailed backend testing bootstrap docs: `docs/backend-testing.md`.

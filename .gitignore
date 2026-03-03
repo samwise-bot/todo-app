@@ -20,6 +20,9 @@ coverage.out
 # Uploads/artifacts
 uploads/
 artifacts/
+playwright-report/
+frontend/playwright-report/
+frontend/test-results/
 
 # OS
 .DS_Store
