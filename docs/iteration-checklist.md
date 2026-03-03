@@ -1,11 +1,18 @@
-# Todo-App Iteration Checklist
+# Todo-App Iteration Checklist (Mirror from App)
+
+_Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration
-- [x] Documented OpenAPI contract generator CLI usage in `docs/backend-testing.md`, including `-out-mutation`, `-out-read`, and a local regeneration + verification workflow.
-- [x] Re-ran backend test suite via `make test-backend`.
+- [x] Add CI assertion for backend contract drift artifacts (mutation+read) — **done**
 
-## Next Iteration (Priority Order)
-- [ ] Add CI assertion that backend contract drift artifacts include both mutation and read generated test file paths when drift occurs.
-- [ ] Add frontend telemetry/log marker for which endpoint returned malformed payloads to speed regression triage.
-- [ ] Expand board-lane regression coverage to include mixed envelope fallbacks for `/api/columns` and `/api/tasks` in addition to `/api/boards`.
-- [ ] Add a short troubleshooting note in `docs/backend-testing.md` for common generator failures (missing spec path, stale generated files, go module issues).
+## Current App Task Board (Project: TODO App)
+- [ ] Add frontend malformed payload telemetry marker by endpoint — **next**
+- [ ] Expand board-lane regression tests for columns/tasks mixed envelope fallbacks — **next**
+- [ ] Document backend contract generator troubleshooting in docs/backend-testing.md — **next**
+- [ ] Investigate PATCH /api/tasks/:id/board-column returning 404 on running service — **next**
+
+## Notes
+- Principal ensured: `samwise` (`kind=agent`)
+- Project ensured: `TODO App`
+- Board ensured: `TODO App Board`
+- Default columns ensured: Inbox, Next, In Progress, Review, Done

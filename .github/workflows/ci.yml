@@ -93,12 +93,26 @@ jobs:
         if: steps.backend-contract-drift.outcome == 'failure'
         run: |
           mkdir -p "$RUNNER_TEMP/backend-contract-drift"
+          mutation_path="backend/tests/generated_openapi_mutation_contract_test.go"
+          read_path="backend/tests/generated_openapi_read_contract_test.go"
+
+          for required_path in "$mutation_path" "$read_path"; do
+            if [ ! -f "$required_path" ]; then
+              echo "Missing required backend contract artifact: $required_path"
+              exit 1
+            fi
+          done
+
           {
             echo "Backend contract drift detected."
             echo
-            git status --short -- backend/tests/generated_openapi_mutation_contract_test.go backend/tests/generated_openapi_read_contract_test.go
+            echo "Required generated artifact paths:"
+            echo "- $mutation_path"
+            echo "- $read_path"
             echo
-            git --no-pager diff -- backend/tests/generated_openapi_mutation_contract_test.go backend/tests/generated_openapi_read_contract_test.go
+            git status --short -- "$mutation_path" "$read_path"
+            echo
+            git --no-pager diff -- "$mutation_path" "$read_path"
           } > "$RUNNER_TEMP/backend-contract-drift/diff-context.txt"
 
       - name: Upload backend contract drift artifact
