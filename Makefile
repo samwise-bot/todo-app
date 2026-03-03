@@ -1,4 +1,4 @@
-.PHONY: dev-backend test-backend test-backend-repro test-backend-remote test-browser-smoke generate-backend-contract-tests
+.PHONY: dev-backend test-backend test-backend-repro test-backend-remote test-browser-smoke generate-backend-contract-tests test-backend-contracts
 
 dev-backend:
 	cd backend && go run ./cmd/api
@@ -17,3 +17,7 @@ test-browser-smoke:
 
 generate-backend-contract-tests:
 	./ops/run/generate-backend-contract-tests.sh
+
+test-backend-contracts:
+	./ops/run/generate-backend-contract-tests.sh
+	git diff --exit-code
