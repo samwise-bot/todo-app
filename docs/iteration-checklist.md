@@ -9,9 +9,9 @@
 - [x] Enforced OpenAPI drift in CI via `.github/workflows/ci.yml` by regenerating and diff-checking `docs/openapi/openapi.json`.
 - [x] Added backend integration test coverage for `/metrics` Prometheus text exposition format (HELP/TYPE/sample/label checks).
 - [x] Added frontend page-level rendering coverage for non-empty board lanes with mixed assigned/unassigned tasks.
+- [x] Added Prometheus alert rules and Grafana dashboard panels for weekly-review and board-lane failure observability metrics.
 
 ## Next Iteration (Priority Order)
-- [ ] Add dashboard panels/alerts for the new weekly-review and board-lane failure metrics.
+- [ ] Add OpenAPI schema validation in CI (lint/validate `docs/openapi/openapi.json` against OpenAPI 3.0 rules).
 - [ ] Add CI caching/concurrency controls to reduce workflow runtime and duplicate runs.
 - [ ] Add end-to-end smoke coverage for a full board-lane flow (create board/column/task, assign lane, verify UI/API parity).
-- [ ] Add OpenAPI schema validation in CI (lint/validate `docs/openapi/openapi.json` against OpenAPI 3.0 rules).

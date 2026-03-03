@@ -21,6 +21,9 @@
 ## Phase 4 - Observability + Hardening
 - /metrics, dashboards, alert rules
 - Acceptance: key SLO metrics exported and scrapeable
+- Current artifacts:
+  - `ops/prometheus/alerts.yml` for weekly-review failure-rate/latency and board-lane fetch-failure alerting
+  - `ops/grafana/todo-app-observability.json` for weekly-review and board-lane metric panels
 
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook

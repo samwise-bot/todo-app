@@ -63,3 +63,15 @@ sequenceDiagram
   API-->>FE: 200 + updated task
   FE-->>U: Show assignee + audit trail
 ```
+
+## Observability Artifacts
+- Prometheus alert rules: `ops/prometheus/alerts.yml`
+- Grafana dashboard: `ops/grafana/todo-app-observability.json`
+
+## Using Observability Artifacts
+1. Configure Prometheus to load `ops/prometheus/alerts.yml` and verify alert state for:
+   - high weekly review failure ratio (15m, with minimum request-volume guard)
+   - board lane fetch failures by `endpoint` over 10m
+   - high weekly review p95 latency over 15m
+2. Import `ops/grafana/todo-app-observability.json` in Grafana and map `DS_PROMETHEUS` to your Prometheus datasource.
+3. Use the dashboard panels to confirm weekly review request/failure rates, failure ratio, p95 latency, and board lane failure spikes by endpoint.

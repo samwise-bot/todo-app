@@ -15,3 +15,35 @@ groups:
           severity: warning
         annotations:
           summary: no task events written in last 30m
+      - alert: WeeklyReviewFailureRateHigh
+        expr: |
+          (
+            increase(todo_app_weekly_review_failures_total[15m])
+            /
+            increase(todo_app_weekly_review_requests_total[15m])
+          ) > 0.2
+          and
+          increase(todo_app_weekly_review_requests_total[15m]) >= 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: weekly review failure rate is above 20% (15m window)
+      - alert: BoardLaneFetchFailuresDetected
+        expr: sum by (endpoint) (increase(todo_app_board_lane_fetch_failures_total[10m])) > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: board lane fetch failures detected for {{ $labels.endpoint }} in the last 10m
+      - alert: WeeklyReviewP95LatencyHigh
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(todo_app_weekly_review_duration_seconds_bucket[15m]))
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: weekly review p95 latency is above 1s (15m window)
