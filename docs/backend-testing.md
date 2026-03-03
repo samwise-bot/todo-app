@@ -91,3 +91,17 @@ make generate-backend-contract-tests
 make test-backend
 git diff --exit-code backend/tests/generated_openapi_mutation_contract_test.go backend/tests/generated_openapi_read_contract_test.go
 ```
+
+## Troubleshooting: stale backend binary during mutation checks
+
+If `PATCH /api/tasks/:id/board-column` or other mutation endpoints unexpectedly return `404` while the route exists in source, restart the local backend to ensure the running process matches your latest checkout:
+
+```bash
+make restart-backend
+```
+
+Then rerun the mutation smoke check:
+
+```bash
+make smoke-task-mutations
+```

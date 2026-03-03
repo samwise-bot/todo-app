@@ -1,4 +1,4 @@
-.PHONY: dev-backend test-backend test-backend-repro test-backend-remote test-browser-smoke generate-backend-contract-tests test-backend-contracts
+.PHONY: dev-backend restart-backend test-backend test-backend-repro test-backend-remote test-browser-smoke generate-backend-contract-tests test-backend-contracts
 
 GO ?= $(shell command -v go 2>/dev/null)
 ifeq ($(GO),)
@@ -7,6 +7,18 @@ endif
 
 dev-backend:
 	cd backend && $(GO) run ./cmd/api
+
+restart-backend:
+	mkdir -p .run logs/runtime
+	@if [ -f .run/backend.pid ]; then \
+		pid=$$(cat .run/backend.pid); \
+		if kill -0 $$pid 2>/dev/null; then kill $$pid 2>/dev/null || true; fi; \
+		sleep 1; \
+		if kill -0 $$pid 2>/dev/null; then kill -9 $$pid 2>/dev/null || true; fi; \
+		rm -f .run/backend.pid; \
+	fi
+	nohup bash -lc "cd '$(CURDIR)/backend' && $(GO) run ./cmd/api" >> logs/runtime/backend.log 2>&1 & echo $$! > .run/backend.pid
+	@echo "backend restarted pid=$$(cat .run/backend.pid)"
 
 test-backend:
 	cd backend && $(GO) test ./...
