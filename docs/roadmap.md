@@ -29,15 +29,11 @@
 - docs/handoff/v1.md, known limitations, ops runbook
 
 ## Current Iteration Status (2026-03-03)
-- ✅ Completed: task #40 moved `Next -> In Progress -> Done` by locking board-first default routing with a regression test in `frontend/tests/home-page-routing.test.tsx` (root route redirects to `/board`).
-- ✅ Completed: task #39 moved `Next -> In Progress -> Done` and extended sweep reporting with `workerOutcomeSummary` (`completed`, `timedOut`, ratios) in `ops/run/validate_subagent_fanout_sweep.py`.
-- ✅ Completed: task #38 validated deterministic full-queue coverage with `.run/subagent-fanout-sweep-report.json` (`coverageRatio=1.0`, `cyclesRun=4`).
-- ✅ Completed: task #32 documented canonical Go fallback strategy for contract-test generation in `docs/backend-testing.md` (resolution order + env vars + operator guidance).
-- ✅ Completed: task #31 moved `Next -> In Progress -> Done` by hardening mutation smoke cleanup in `ops/run/check-task-mutations.sh` (new tasks now auto-transition to `done` at script end).
+- ✅ Completed: task #33 moved `Next -> In Progress -> Done` after cleaning lingering mutation-smoke residue.
+- ✅ Completed: hardened `ops/run/check-task-mutations.sh` with EXIT-trap cleanup to force synthetic smoke tasks to `done` even on interrupted/error exits.
+- ✅ Completed: revalidated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, canonical GTD board columns).
 - 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
-- ✅ Completed: task #11 moved `Next -> In Progress -> Done` by capturing the SPA architecture baseline ADR in `docs/adr/0002-spa-routing-state-data.md` (routing split, normalized state model, SWR fetching policy, deterministic Next ordering contract).
-- 🔄 In progress: roadmap decomposition tasks for SPA extraction, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
-  - Expose priority/due-date controls in frontend create/edit flows (task #27)
-  - Document GO fallback strategy for local/CI scripts (task #32)
-  - Continue board UX/navigation queue from prioritized `Next`
+  - #41 UX IA: split dashboard into route-based pages
+  - #42 Board UX: inline task creation in board/column context
+  - #43 Board UX: inline column creation and column management

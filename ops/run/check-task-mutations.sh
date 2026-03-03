@@ -2,6 +2,16 @@
 set -euo pipefail
 
 API_BASE="${API_BASE:-http://localhost:8080}"
+task_id=""
+
+cleanup_task_to_done() {
+  [[ -n "$task_id" ]] || return 0
+  curl -sS -o /tmp/task-done-smoke-cleanup.json -w '%{http_code}' \
+    -X PATCH "$API_BASE/api/tasks/$task_id/state" \
+    -H 'Content-Type: application/json' \
+    -d '{"state":"done"}' >/tmp/task-done-smoke-cleanup.code || true
+}
+trap cleanup_task_to_done EXIT
 
 project_resp=$(curl -sS -X POST "$API_BASE/api/projects" -H 'Content-Type: application/json' -d '{"name":"Mutation Smoke Project"}')
 project_id=$(echo "$project_resp" | sed -n 's/.*"id":\([0-9][0-9]*\).*/\1/p')
