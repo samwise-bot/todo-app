@@ -92,3 +92,7 @@ sequenceDiagram
   2. Optionally filters by `--project-id` (used for TODO App loop isolation).
   3. Exports fresh `.run/tasks.json` before selection.
   4. Invokes `ops/run/plan_subagent_fanout.py` to emit deterministic worker batch + persisted cursor.
+- Added compact worker-spec emission in `ops/run/select_subagent_fanout_batch.py`:
+  1. `--emit-spawn-spec` outputs ready-to-send `sessions_spawn` payloads.
+  2. Worker prompts are intentionally short and task-scoped via `_build_worker_prompt(...)`.
+  3. Default worker timeout is now explicitly tuned to `180s` (`--worker-timeout-seconds`) to reduce 60s timeout churn.
