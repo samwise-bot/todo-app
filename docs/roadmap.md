@@ -35,6 +35,6 @@
 - 🚧 Blocked: task #34 remains in **Blocked** pending one run with real worker outcome capture proving acceptable timeout ratio.
 - 🔄 In progress: roadmap decomposition tasks for SPA architecture, auth rollout, and benchmarking remain in `Next` with prioritization by `priority` then deadline.
 - ▶ Next milestone:
-  - Ship SPA architecture ADR baseline (task #11)
+  - ✅ Shipped SPA architecture baseline (task #11): root route now redirects to `/board` with dashboard moved to `app/_dashboard.tsx` and mounted at `/board`.
   - Expose priority/due-date controls in frontend create/edit flows (task #27)
   - Continue auth/benchmark roadmap queue from prioritized `Next`

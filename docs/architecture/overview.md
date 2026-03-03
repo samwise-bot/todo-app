@@ -106,3 +106,8 @@ sequenceDiagram
   1. Reads `.run/subagent-worker-results.json` (or `--worker-results-json` override) when present.
   2. Emits `workerOutcomeSummary` with completion/timeout counts plus ratios.
   3. Provides unblock evidence for task #34 without coupling selection logic to spawn execution.
+
+- Added board-first route split baseline for SPA IA:
+  1. `frontend/app/page.tsx` now redirects root traffic to `/board`.
+  2. `frontend/app/board/page.tsx` serves the existing dashboard implementation via `app/_dashboard.tsx`.
+  3. This keeps behavior stable while enabling future extraction of Tasks/Projects/People/Settings routes.
