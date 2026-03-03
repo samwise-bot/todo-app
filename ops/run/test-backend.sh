@@ -21,26 +21,37 @@ run_remote_backend_tests() {
     return 1
   fi
 
-  local head_sha run_id attempts
-  head_sha="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
+  local dispatch_time gh_user run_id delay run_query
+  dispatch_time="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  gh_user="$(gh api user --jq .login 2>/dev/null || true)"
 
   echo "go/docker unavailable; running backend tests remotely via GitHub Actions workflow '$REMOTE_WORKFLOW' on ref '$REMOTE_REF'"
   gh workflow run "$REMOTE_WORKFLOW" --ref "$REMOTE_REF"
 
   run_id=""
-  attempts=0
-  while [[ -z "$run_id" && "$attempts" -lt 20 ]]; do
-    run_id="$(gh run list --workflow "$REMOTE_WORKFLOW" --event workflow_dispatch --limit 20 --json databaseId,headSha --jq "map(select(.headSha == \"$head_sha\"))[0].databaseId" 2>/dev/null || true)"
+  # GitHub Actions dispatch is eventually consistent; poll with deterministic backoff
+  # for about 60-90 seconds before failing.
+  if [[ -n "$gh_user" ]]; then
+    run_query="map(select(.createdAt >= \"$dispatch_time\" and .actor.login == \"$gh_user\")) | sort_by(.createdAt) | .[0].databaseId"
+  else
+    run_query="map(select(.createdAt >= \"$dispatch_time\")) | sort_by(.createdAt) | .[0].databaseId"
+  fi
+
+  for delay in 0 2 3 5 8 13 21 34; do
+    if [[ "$delay" -gt 0 ]]; then
+      sleep "$delay"
+    fi
+    run_id="$(gh run list --workflow "$REMOTE_WORKFLOW" --event workflow_dispatch --limit 50 --json databaseId,createdAt,actor --jq "$run_query" 2>/dev/null || true)"
     if [[ -z "$run_id" || "$run_id" == "null" ]]; then
       run_id=""
-      attempts=$((attempts + 1))
-      sleep 3
+      continue
     fi
+    break
   done
 
   if [[ -z "$run_id" ]]; then
-    echo "error: triggered '$REMOTE_WORKFLOW' but could not resolve run id for commit $head_sha" >&2
-    echo "hint: push your branch and set BACKEND_TEST_REMOTE_REF to that branch, then retry" >&2
+    echo "error: triggered '$REMOTE_WORKFLOW' but could not resolve its run id within polling window (started at $dispatch_time UTC)" >&2
+    echo "hint: verify GitHub CLI auth, confirm ref '$REMOTE_REF' is pushed, then retry" >&2
     return 1
   fi
 

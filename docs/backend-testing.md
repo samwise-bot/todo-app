@@ -26,6 +26,7 @@ This keeps backend test execution reproducible across developer machines and CI 
 Prerequisites:
 - `gh` is installed and authenticated (`gh auth status` succeeds).
 - Your target branch is pushed to origin (remote runners execute repository refs, not unpushed local commits).
+- After dispatch, the script polls GitHub Actions with deterministic backoff for up to about 86 seconds to resolve the created run ID before failing.
 
 Useful environment variables:
 - `BACKEND_TEST_REMOTE_WORKFLOW`: workflow file/name to dispatch (default: `backend-tests-remote.yml`).
