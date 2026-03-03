@@ -96,6 +96,8 @@ Response `200`:
       "projectId": 3,
       "assigneeId": 1,
       "boardColumnId": 12,
+      "priority": 1,
+      "dueAt": "2026-03-05T17:00:00Z",
       "createdAt": "2026-03-03T00:00:00Z",
       "updatedAt": "2026-03-03T00:00:00Z"
     }

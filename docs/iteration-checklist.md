@@ -3,13 +3,13 @@
 _Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration
-- [x] Add task priority + due date fields for deterministic Next ordering — **done**
-- [x] Process Inbox item into actionable Next with Samwise assignment — **done**
+- [x] Docs/API: update OpenAPI + examples for task priority field — **done**
+- [x] Processed Inbox item into Next with Samwise assignment (`Roadmap: SPA architecture decision record`) — **done**
 
 ## Current App Task Board (Project: TODO App)
-- [ ] Frontend: expose priority selector + due date in task create/edit flows — **next**
-- [ ] Docs/API: update OpenAPI + examples for task priority field — **next**
-- [ ] Auth: Implement account + session schema and migration plan — **next**
+- [ ] DevEx: make openapi generation script honor configured GO binary in non-interactive shells — **next**
+- [ ] Expand board-lane regression tests for columns/tasks mixed envelope fallbacks — **next**
+- [ ] Roadmap: SPA architecture decision record (routing, state, data fetching) — **next**
 
 ## Notes
 - Principal ensured: `samwise` (`kind=agent`)

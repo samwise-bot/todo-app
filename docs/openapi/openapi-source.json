@@ -891,6 +891,11 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
           }
         },
         "required": [
@@ -898,6 +903,7 @@
           "title",
           "description",
           "state",
+          "priority",
           "createdAt",
           "updatedAt"
         ]
@@ -1098,6 +1104,12 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 3
           }
         },
         "required": [

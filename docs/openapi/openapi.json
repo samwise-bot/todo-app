@@ -143,6 +143,12 @@
             "nullable": true,
             "type": "string"
           },
+          "priority": {
+            "default": 3,
+            "maximum": 5,
+            "minimum": 1,
+            "type": "integer"
+          },
           "projectId": {
             "nullable": true,
             "type": "integer"
@@ -320,6 +326,11 @@
           "id": {
             "type": "integer"
           },
+          "priority": {
+            "maximum": 5,
+            "minimum": 1,
+            "type": "integer"
+          },
           "projectId": {
             "nullable": true,
             "type": "integer"
@@ -349,6 +360,7 @@
           "title",
           "description",
           "state",
+          "priority",
           "createdAt",
           "updatedAt"
         ],
