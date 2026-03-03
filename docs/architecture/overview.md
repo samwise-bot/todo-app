@@ -112,3 +112,4 @@ sequenceDiagram
   1. `frontend/app/page.tsx` now redirects root traffic to `/board`.
   2. `frontend/app/board/page.tsx` serves the existing dashboard implementation via `app/_dashboard.tsx`.
   3. This keeps behavior stable while enabling future extraction of Tasks/Projects/People/Settings routes.
+- Added regression coverage for board-first default routing in `frontend/tests/home-page-routing.test.tsx`, guarding against accidental root-route regressions away from `/board`.

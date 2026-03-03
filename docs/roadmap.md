@@ -29,6 +29,7 @@
 - docs/handoff/v1.md, known limitations, ops runbook
 
 ## Current Iteration Status (2026-03-03)
+- ✅ Completed: task #40 moved `Next -> In Progress -> Done` by locking board-first default routing with a regression test in `frontend/tests/home-page-routing.test.tsx` (root route redirects to `/board`).
 - ✅ Completed: task #39 moved `Next -> In Progress -> Done` and extended sweep reporting with `workerOutcomeSummary` (`completed`, `timedOut`, ratios) in `ops/run/validate_subagent_fanout_sweep.py`.
 - ✅ Completed: task #38 validated deterministic full-queue coverage with `.run/subagent-fanout-sweep-report.json` (`coverageRatio=1.0`, `cyclesRun=4`).
 - ✅ Completed: task #32 documented canonical Go fallback strategy for contract-test generation in `docs/backend-testing.md` (resolution order + env vars + operator guidance).
