@@ -1,10 +1,15 @@
 .PHONY: dev-backend test-backend test-backend-repro test-backend-remote test-browser-smoke generate-backend-contract-tests test-backend-contracts
 
+GO ?= $(shell command -v go 2>/dev/null)
+ifeq ($(GO),)
+GO := /home/bot/.nix-profile/bin/go
+endif
+
 dev-backend:
-	cd backend && go run ./cmd/api
+	cd backend && $(GO) run ./cmd/api
 
 test-backend:
-	cd backend && go test ./...
+	cd backend && $(GO) test ./...
 
 test-backend-repro:
 	./ops/run/test-backend.sh
