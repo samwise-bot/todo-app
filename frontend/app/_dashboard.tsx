@@ -64,6 +64,10 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   const principalPageSize = readPositiveIntParam(currentParams, 'principalPageSize', 10);
 
   const taskState = readStringParam(currentParams, 'taskState', '');
+  const taskStates = taskState
+    .split(',')
+    .map((state) => state.trim())
+    .filter((state): state is (typeof TASK_STATES)[number] => TASK_STATES.includes(state as (typeof TASK_STATES)[number]));
   const taskQ = readStringParam(currentParams, 'taskQ', '');
   const taskProjectId = readStringParam(currentParams, 'taskProjectId', '');
   const taskAssigneeId = readStringParam(currentParams, 'taskAssigneeId', '');
@@ -86,8 +90,8 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
     page: String(taskPage),
     pageSize: String(taskPageSize)
   });
-  if (taskState) {
-    taskAPIQuery.set('state', taskState);
+  if (taskStates.length === 1) {
+    taskAPIQuery.set('state', taskStates[0]);
   }
   if (taskQ) {
     taskAPIQuery.set('q', taskQ);
@@ -118,7 +122,9 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   const boards = boardsResult.items;
   const columns = columnsResult.items;
   const tasks = tasksAllResult.items;
-  const taskList = tasksListResult.items;
+  const taskList = taskStates.length > 1
+    ? tasksListResult.items.filter((task) => taskStates.includes(task.state as (typeof TASK_STATES)[number]))
+    : tasksListResult.items;
   const boardInspector = buildBoardInspectorMetrics(tasks);
 
   const laneView = buildBoardLaneView({
@@ -248,7 +254,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         </form>
 
         <p className="muted" style={{ marginTop: 10 }}>
-          Showing {taskList.length} of {tasksListResult.totalItems} tasks.
+          Showing {taskList.length} of {taskStates.length > 1 ? taskList.length : tasksListResult.totalItems} tasks.
         </p>
 
         {taskList.length === 0 ? (
@@ -274,9 +280,15 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         )}
 
         <div className="pagination-row">
-          {taskPage > 1 ? <Link className="btn btn-secondary" href={taskPrevLink}>Previous</Link> : <span className="muted">Previous</span>}
-          <span>Page {tasksListResult.page} / {Math.max(tasksListResult.totalPages, 1)}</span>
-          {tasksListResult.page < tasksListResult.totalPages ? <Link className="btn btn-secondary" href={taskNextLink}>Next</Link> : <span className="muted">Next</span>}
+          {taskStates.length > 1 ? (
+            <span className="muted">Multi-state focus mode is showing in-memory filtered results.</span>
+          ) : (
+            <>
+              {taskPage > 1 ? <Link className="btn btn-secondary" href={taskPrevLink}>Previous</Link> : <span className="muted">Previous</span>}
+              <span>Page {tasksListResult.page} / {Math.max(tasksListResult.totalPages, 1)}</span>
+              {tasksListResult.page < tasksListResult.totalPages ? <Link className="btn btn-secondary" href={taskNextLink}>Next</Link> : <span className="muted">Next</span>}
+            </>
+          )}
         </div>
       </section>
 

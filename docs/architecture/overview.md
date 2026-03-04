@@ -144,6 +144,10 @@ sequenceDiagram
 - Added board focus defaults on `/board` route:
   1. `frontend/app/board/page.tsx` now injects default task filters when absent (`taskAssigneeId=2` for Samwise and active-state focus) before delegating to `_dashboard`.
   2. Added coverage in `frontend/tests/board-page-defaults.test.tsx` to prevent regressions in default/explicit filter handling.
+- Completed `/board` focus-mode rendering hardening for multi-state defaults (`next,scheduled`):
+  1. `frontend/app/_dashboard.tsx` now parses comma-separated `taskState` inputs into validated state arrays.
+  2. Single-state filters still execute server-side; multi-state filters fall back to deterministic in-memory filtering of fetched task rows.
+  3. Pagination UI now surfaces explicit focus-mode messaging when multi-state filters are active to avoid misleading page math.
 - Added first inspector-panel slice for the board route (`task #13` increment):
   1. `frontend/lib/board-inspector.ts` computes board health counters from task state/assignee/due date.
   2. `frontend/app/_dashboard.tsx` now renders a `Board health` inspector panel immediately below board lanes.

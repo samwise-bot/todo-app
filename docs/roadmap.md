@@ -56,6 +56,7 @@
 - ✅ Completed: task #44 moved `Next -> In Progress -> Done` with draggable task-card metadata (`draggable`, `data-task-id`, `data-task-state`) as the first atomic step toward optimistic cross-column drag/drop interactions.
 - ✅ Completed: route-split extraction increment on `/projects` (real API-backed project list + coverage) aligned to task #41 scope.
 - ✅ Completed: task #47 moved `Next -> In Progress -> Done` with `/board` default focus for active work assigned to Samwise.
+- ✅ Completed: task #47 follow-through hardening in `_dashboard` for multi-state focus rendering (`next,scheduled`) with deterministic local filtering + explicit focus-mode pagination messaging.
 - ✅ Completed: task #12 moved `Next -> In Progress -> Done` by expanding the SPA migration plan into phased deliverables with explicit acceptance criteria.
 - ✅ Completed: task #13 moved `Next -> In Progress -> Done` with initial board inspector slice (`Board health` counters) and deterministic metric tests.
 - ✅ Completed: task #1 moved `Next -> In Progress -> Done`; backend now returns empty paginated task lists as `items: []` and includes regression coverage for empty inbox queries.
@@ -64,4 +65,4 @@
 - ▶ Next milestone:
   - #45 Settings: Create Advanced Settings page for configuration and power-user controls
   - #46 Navigation: Add persistent top nav/sidebar with clear active page and quick-create
-  - #47 Board UX: Focus active view defaults to Next/In Progress + assignee Samwise
+  - #13 Roadmap: Implement SPA shell with persistent board + inspector panels
