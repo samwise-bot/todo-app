@@ -176,3 +176,8 @@ sequenceDiagram
   1. Surfaces effective `TODO_APP_SWR_SECONDS` policy (including explicit `0 (no-store)` label).
   2. Documents board-first focus defaults used by the autonomous execution loop.
   3. Exposes current roadmap scope context so operators can sanity-check runtime posture in-app.
+- Completed navigation clarity + quick-create affordance (`task #46` increment):
+  1. Promoted top nav into `frontend/app/ui/top-nav.tsx` client component so active route highlighting can use `usePathname()`.
+  2. Added explicit `aria-current="page"` + active styling (`.top-nav-link-active`) for orientation across `/board|/tasks|/projects|/people|/settings`.
+  3. Added persistent `+ Quick create` nav action linking to `/board#quick-create-task`, and anchored board intake in `_dashboard` for direct jump-to-create.
+  4. Added regression coverage in `frontend/tests/top-nav.test.tsx`.

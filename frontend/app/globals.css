@@ -70,6 +70,24 @@ a:hover {
   border-color: #b7c6df;
 }
 
+.top-nav-link-active {
+  border-color: #aac0eb;
+  background: #eaf0ff;
+  color: #113ba9;
+}
+
+.top-nav-link-quick-create {
+  margin-left: auto;
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.top-nav-link-quick-create:hover {
+  border-color: var(--primary-strong);
+  background: var(--primary-strong);
+}
+
 .app-shell {
   max-width: 1280px;
   margin: 0 auto;

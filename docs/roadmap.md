@@ -65,7 +65,8 @@
 - ✅ Completed: task #14 moved `Next -> In Progress -> Done` via initial unified client-state snapshot utility (`frontend/lib/app-store.ts`) plus ordering/indexing test coverage.
 - ✅ Completed: task #15 moved `Next -> In Progress -> Done` by wiring frontend collection fetches to a configurable stale-while-revalidate policy (`TODO_APP_SWR_SECONDS`, default 30s) with explicit `no-store` fallback when set to `0`.
 - ✅ Completed: task #45 moved `Next -> In Progress -> Done`; `/settings` now exposes an advanced configuration panel covering SWR cache policy, board focus defaults, and current roadmap scope.
+- ✅ Completed: task #46 moved `Next -> In Progress -> Done`; nav now marks active route and exposes persistent `+ Quick create` jump-to-intake action.
 - ▶ Next milestone:
-  - #46 Navigation: Add persistent top nav/sidebar with clear active page and quick-create
-  - #16 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput)
-  - #13 Roadmap: Implement SPA shell with persistent board + inspector panels
+  - #34 Unblock: capture one real worker timeout/completion ratio sweep and define unblock threshold for fanout lane.
+  - #16 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).
+  - #48 Reliability: add regression coverage for nav active-state styling on non-board routes.

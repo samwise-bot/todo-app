@@ -202,7 +202,9 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
           </div>
         </form>
 
-        <CreateTaskForm projects={projects} taskColumns={taskColumns} />
+        <div id="quick-create-task">
+          <CreateTaskForm projects={projects} taskColumns={taskColumns} />
+        </div>
         <CreatePrincipalForm />
       </section>
 
