@@ -69,3 +69,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `npm test -- --run tests/board-lanes.test.ts` ✅
+
+## Iteration Update (2026-03-04 04:00 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #17 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Extended benchmark harness with throughput + run metadata for repeatable backend load checks.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `python3 -m unittest ops.tests.test_benchmark_task_board` ✅

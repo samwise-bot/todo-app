@@ -228,3 +228,7 @@ sequenceDiagram
 ## Architecture Delta (2026-03-04, autonomous loop)
 - Board lane assembly now applies deterministic ordering for `Next` column cards (`priority`, `dueAt`, `id`) in `frontend/lib/board-lanes.ts`.
 - Added focused regression coverage in `frontend/tests/board-lanes.test.ts` to lock `Next` ordering behavior.
+- Extended backend benchmark harness (`ops/run/benchmark_task_board.py`) with repeatability metadata and throughput output:
+  1. `run(...)` now accepts `delay_ms` pacing between requests to make benchmark pressure profiles explicit.
+  2. Endpoint summaries include `throughput_rps` for quick capacity trend checks alongside latency percentiles.
+  3. Output now includes `_meta` envelope with elapsed runtime and total request count for artifact comparability.

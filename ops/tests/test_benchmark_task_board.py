@@ -1,6 +1,7 @@
 import unittest
+from unittest import mock
 
-from ops.run.benchmark_task_board import evaluate_sla, percentile
+from ops.run.benchmark_task_board import evaluate_sla, percentile, run
 
 
 class BenchmarkTaskBoardTest(unittest.TestCase):
@@ -27,6 +28,15 @@ class BenchmarkTaskBoardTest(unittest.TestCase):
         self.assertFalse(report["allPassed"])
         self.assertTrue(report["endpoints"]["/api/tasks?page=1&pageSize=50"]["ok"])
         self.assertFalse(report["endpoints"]["/api/boards"]["ok"])
+
+    def test_run_emits_meta_and_throughput(self) -> None:
+        with mock.patch("ops.run.benchmark_task_board.hit", return_value=20.0):
+            summary = run("http://127.0.0.1:8080", iterations=2, delay_ms=5.0)
+
+        self.assertEqual(summary["/api/boards"]["count"], 2)
+        self.assertEqual(summary["/api/boards"]["throughput_rps"], 50.0)
+        self.assertEqual(summary["_meta"]["delay_ms"], 5.0)
+        self.assertEqual(summary["_meta"]["total_requests"], 6)
 
 
 if __name__ == "__main__":

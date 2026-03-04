@@ -49,23 +49,35 @@ def evaluate_sla(summary: Dict[str, dict], p95_targets_ms: Dict[str, float]) -> 
     return {"allPassed": all_pass, "endpoints": endpoints}
 
 
-def run(base_url: str, iterations: int) -> dict:
+def run(base_url: str, iterations: int, delay_ms: float = 0.0) -> dict:
     endpoints = ["/api/tasks?page=1&pageSize=50", "/api/boards", "/api/columns"]
     timings = {path: [] for path in endpoints}
 
+    started = time.perf_counter()
     for _ in range(iterations):
         for path in endpoints:
             timings[path].append(hit(f"{base_url}{path}"))
+            if delay_ms > 0:
+                time.sleep(delay_ms / 1000.0)
+    elapsed_ms = (time.perf_counter() - started) * 1000.0
 
     summary = {}
     for path, samples in timings.items():
+        avg_ms = statistics.fmean(samples)
         summary[path] = {
             "count": len(samples),
             "p50_ms": round(percentile(samples, 0.50), 2),
             "p95_ms": round(percentile(samples, 0.95), 2),
-            "avg_ms": round(statistics.fmean(samples), 2),
+            "avg_ms": round(avg_ms, 2),
             "max_ms": round(max(samples), 2),
+            "throughput_rps": round((1000.0 / avg_ms) if avg_ms > 0 else 0.0, 2),
         }
+
+    summary["_meta"] = {
+        "elapsed_ms": round(elapsed_ms, 2),
+        "delay_ms": delay_ms,
+        "total_requests": len(endpoints) * iterations,
+    }
     return summary
 
 
@@ -74,9 +86,10 @@ def main() -> int:
     parser.add_argument("--base-url", default="http://127.0.0.1:8080")
     parser.add_argument("--iterations", type=int, default=10)
     parser.add_argument("--output", default=".run/benchmark-task-board.json")
+    parser.add_argument("--delay-ms", type=float, default=0.0)
     args = parser.parse_args()
 
-    summary = run(args.base_url, args.iterations)
+    summary = run(args.base_url, args.iterations, args.delay_ms)
     result = {
         "baseUrl": args.base_url,
         "iterations": args.iterations,

@@ -91,3 +91,4 @@
 - ✅ Completed: task #16 moved `Next -> In Progress -> Done`; benchmark runner now emits SLA evaluation status (`sla.allPassed` + endpoint target comparisons) alongside latency summaries for deterministic gate checks.
 
 - ✅ Completed: task #54 moved `Next -> In Progress -> Done`; `Next` board lane cards are now sorted by `priority`, `dueAt`, then `id` during lane assembly, with focused regression coverage.
+- ✅ Completed: task #17 moved `Next -> In Progress -> Done`; backend benchmark harness now emits per-endpoint throughput (`throughput_rps`) and run metadata (`_meta.elapsed_ms`, `_meta.delay_ms`, `_meta.total_requests`) for repeatable load-trend comparisons.
