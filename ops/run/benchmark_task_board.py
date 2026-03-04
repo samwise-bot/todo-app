@@ -8,7 +8,7 @@ import json
 import statistics
 import time
 import urllib.request
-from typing import Iterable, List
+from typing import Dict, Iterable, List
 
 
 def percentile(samples: List[float], pct: float) -> float:
@@ -29,6 +29,24 @@ def hit(url: str) -> float:
     with urllib.request.urlopen(url, timeout=10) as resp:
         _ = resp.read()
     return (time.perf_counter() - start) * 1000.0
+
+
+DEFAULT_SLA_P95_MS: Dict[str, float] = {
+    "/api/tasks?page=1&pageSize=50": 350.0,
+    "/api/boards": 200.0,
+    "/api/columns": 200.0,
+}
+
+
+def evaluate_sla(summary: Dict[str, dict], p95_targets_ms: Dict[str, float]) -> dict:
+    endpoints = {}
+    all_pass = True
+    for path, target in p95_targets_ms.items():
+        measured = float(summary.get(path, {}).get("p95_ms", 0.0))
+        ok = measured <= target
+        all_pass = all_pass and ok
+        endpoints[path] = {"p95_ms": measured, "target_p95_ms": target, "ok": ok}
+    return {"allPassed": all_pass, "endpoints": endpoints}
 
 
 def run(base_url: str, iterations: int) -> dict:
@@ -58,10 +76,12 @@ def main() -> int:
     parser.add_argument("--output", default=".run/benchmark-task-board.json")
     args = parser.parse_args()
 
+    summary = run(args.base_url, args.iterations)
     result = {
         "baseUrl": args.base_url,
         "iterations": args.iterations,
-        "summary": run(args.base_url, args.iterations),
+        "summary": summary,
+        "sla": evaluate_sla(summary, DEFAULT_SLA_P95_MS),
         "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     with open(args.output, "w", encoding="utf-8") as f:

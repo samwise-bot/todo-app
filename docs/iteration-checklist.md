@@ -49,3 +49,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `npm test -- --run tests/api-client.test.ts` ✅
+
+## Iteration Update (2026-03-04 02:34 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #16 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added SLA pass/fail evaluation output in `ops/run/benchmark_task_board.py` with regression coverage.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `python3 -m unittest ops.tests.test_benchmark_task_board` ✅

@@ -1,0 +1,48 @@
+{
+  "baseUrl": "http://127.0.0.1:8080",
+  "iterations": 3,
+  "summary": {
+    "/api/tasks?page=1&pageSize=50": {
+      "count": 3,
+      "p50_ms": 1.13,
+      "p95_ms": 3.52,
+      "avg_ms": 1.99,
+      "max_ms": 3.78
+    },
+    "/api/boards": {
+      "count": 3,
+      "p50_ms": 0.64,
+      "p95_ms": 0.9,
+      "avg_ms": 0.72,
+      "max_ms": 0.93
+    },
+    "/api/columns": {
+      "count": 3,
+      "p50_ms": 0.69,
+      "p95_ms": 1.07,
+      "avg_ms": 0.82,
+      "max_ms": 1.11
+    }
+  },
+  "sla": {
+    "allPassed": true,
+    "endpoints": {
+      "/api/tasks?page=1&pageSize=50": {
+        "p95_ms": 3.52,
+        "target_p95_ms": 350.0,
+        "ok": true
+      },
+      "/api/boards": {
+        "p95_ms": 0.9,
+        "target_p95_ms": 200.0,
+        "ok": true
+      },
+      "/api/columns": {
+        "p95_ms": 1.07,
+        "target_p95_ms": 200.0,
+        "ok": true
+      }
+    }
+  },
+  "generatedAt": "2026-03-04T10:34:25Z"
+}

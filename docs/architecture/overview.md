@@ -220,3 +220,7 @@ sequenceDiagram
   1. Extended `frontend/lib/api-client.ts` collection cache policy to select SWR TTL by endpoint tier (Hot: tasks/boards/columns, Warm: projects/principals, Cold: fallback endpoints).
   2. Added env controls `TODO_APP_SWR_HOT_SECONDS`, `TODO_APP_SWR_WARM_SECONDS`, `TODO_APP_SWR_COLD_SECONDS` with fallback to `TODO_APP_SWR_SECONDS` for deterministic rollout.
   3. Added regression coverage in `frontend/tests/api-client.test.ts` validating tier selection and per-endpoint revalidate values.
+- Autonomous loop increment (2026-03-04 02:34 PT):
+  1. Completed TODO task #16 lifecycle (`Next -> In Progress -> Done`) while maintaining `samwise` ownership in source-of-truth task state.
+  2. Added benchmark SLA evaluation output to `ops/run/benchmark_task_board.py` (`result.sla.allPassed` + endpoint-level p95 target checks).
+  3. Added focused regression coverage in `ops/tests/test_benchmark_task_board.py` for pass/fail SLA evaluation behavior.
