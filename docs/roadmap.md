@@ -94,3 +94,5 @@
 - ✅ Completed: task #17 moved `Next -> In Progress -> Done`; backend benchmark harness now emits per-endpoint throughput (`throughput_rps`) and run metadata (`_meta.elapsed_ms`, `_meta.delay_ms`, `_meta.total_requests`) for repeatable load-trend comparisons.
 - ✅ Completed: task #55 moved `Next -> In Progress -> Done`; benchmark harness now accepts `--endpoints` for focused path-level latency checks while preserving SLA evaluation on selected targets.
 - ✅ Completed: task #18 moved `Next -> In Progress -> Done`; shipped initial frontend interaction benchmark slice with reusable lane-assembly latency summarizer + focused regression test coverage.
+
+- 2026-03-04 13:37 UTC: Completed task #19 slice: added historical trend tracking to CI telemetry regression gate (JSON/CSV outputs include history deltas; new threshold key `max_history_regression_percent`).
