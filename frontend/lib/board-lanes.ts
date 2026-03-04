@@ -16,6 +16,8 @@ type Task = {
   assigneeId?: number | null;
   projectId?: number | null;
   boardColumnId?: number | null;
+  priority?: number | null;
+  dueAt?: string | null;
 };
 
 type BoardLaneColumn = {
@@ -35,6 +37,22 @@ export type BoardLaneView = {
   tasksWithoutColumn: Task[];
   fetchErrors: string[];
 };
+
+function sortLaneTasks(columnName: string, tasks: Task[]): Task[] {
+  const sorted = [...tasks];
+  if (columnName.toLowerCase() === 'next') {
+    sorted.sort((a, b) => {
+      const aPriority = a.priority ?? 3;
+      const bPriority = b.priority ?? 3;
+      if (aPriority !== bPriority) return aPriority - bPriority;
+      const aDue = a.dueAt ?? '9999-12-31T23:59:59Z';
+      const bDue = b.dueAt ?? '9999-12-31T23:59:59Z';
+      if (aDue !== bDue) return aDue.localeCompare(bDue);
+      return a.id - b.id;
+    });
+  }
+  return sorted;
+}
 
 export function buildBoardLaneView({
   boards,
@@ -76,7 +94,7 @@ export function buildBoardLaneView({
       columns: boardColumns.map((column) => ({
         id: column.id,
         name: column.name,
-        tasks: tasksByColumn.get(column.id) ?? []
+        tasks: sortLaneTasks(column.name, tasksByColumn.get(column.id) ?? [])
       }))
     };
   });

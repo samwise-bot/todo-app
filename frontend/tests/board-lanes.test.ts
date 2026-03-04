@@ -32,5 +32,21 @@ describe('buildBoardLaneView', () => {
     expect(view.tasksWithoutColumn.map((task) => task.id)).toEqual([101, 102]);
     expect(view.boards[0].columns[0].tasks.map((task) => task.id)).toEqual([103]);
   });
+
+  test('sorts Next column tasks by priority then due date', () => {
+    const view = buildBoardLaneView({
+      boards: [{ id: 1, name: 'Execution' }],
+      columns: [{ id: 11, boardId: 1, name: 'Next' }],
+      tasks: [
+        { id: 203, title: 'P2', state: 'next', boardColumnId: 11, priority: 2, dueAt: '2030-01-01T00:00:00Z' },
+        { id: 201, title: 'P1 later', state: 'next', boardColumnId: 11, priority: 1, dueAt: '2030-01-03T00:00:00Z' },
+        { id: 202, title: 'P1 sooner', state: 'next', boardColumnId: 11, priority: 1, dueAt: '2030-01-02T00:00:00Z' },
+        { id: 204, title: 'P1 no due', state: 'next', boardColumnId: 11, priority: 1 }
+      ],
+      fetchErrors: []
+    });
+
+    expect(view.boards[0].columns[0].tasks.map((task) => task.id)).toEqual([202, 201, 204, 203]);
+  });
 });
 

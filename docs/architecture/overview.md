@@ -224,3 +224,7 @@ sequenceDiagram
   1. Completed TODO task #16 lifecycle (`Next -> In Progress -> Done`) while maintaining `samwise` ownership in source-of-truth task state.
   2. Added benchmark SLA evaluation output to `ops/run/benchmark_task_board.py` (`result.sla.allPassed` + endpoint-level p95 target checks).
   3. Added focused regression coverage in `ops/tests/test_benchmark_task_board.py` for pass/fail SLA evaluation behavior.
+
+## Architecture Delta (2026-03-04, autonomous loop)
+- Board lane assembly now applies deterministic ordering for `Next` column cards (`priority`, `dueAt`, `id`) in `frontend/lib/board-lanes.ts`.
+- Added focused regression coverage in `frontend/tests/board-lanes.test.ts` to lock `Next` ordering behavior.

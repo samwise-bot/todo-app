@@ -89,3 +89,5 @@
 
 - ✅ Completed: task #15 moved `Next -> In Progress -> Done`; implemented endpoint-tiered SWR controls in frontend fetch policy (`TODO_APP_SWR_HOT_SECONDS`, `TODO_APP_SWR_WARM_SECONDS`, `TODO_APP_SWR_COLD_SECONDS`) with deterministic fallback to `TODO_APP_SWR_SECONDS`.
 - ✅ Completed: task #16 moved `Next -> In Progress -> Done`; benchmark runner now emits SLA evaluation status (`sla.allPassed` + endpoint target comparisons) alongside latency summaries for deterministic gate checks.
+
+- ✅ Completed: task #54 moved `Next -> In Progress -> Done`; `Next` board lane cards are now sorted by `priority`, `dueAt`, then `id` during lane assembly, with focused regression coverage.
