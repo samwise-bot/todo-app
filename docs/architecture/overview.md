@@ -131,6 +131,10 @@ sequenceDiagram
   1. Each column now has an inline `Add` form for rapid capture directly in board context.
   2. Inline create maps lane names to GTD task states (`Inbox -> inbox`, `Next -> next`, `In Progress -> scheduled`, `Blocked -> waiting`, `Done -> done`).
   3. Inline create binds board column + project id so GTD constraints remain valid while reducing context switches.
+- Added inline board-level column intake in `frontend/app/ui/board-lanes-section.tsx`:
+  1. Each board shell now exposes an `Add column` form directly above lane columns.
+  2. New column `position` auto-increments from the current max board column position (+10), with default `10` for empty boards.
+  3. Added regression assertion in `frontend/tests/board-lanes-rendering.test.tsx` to keep board-lane column creation affordance present.
 - Extended route-split extraction on `/projects`:
   1. `frontend/app/projects/page.tsx` now fetches real project data from `/api/projects` instead of static scaffold text.
   2. Added regression test `frontend/tests/projects-page.test.tsx` to lock API fetch contract + rendered project names.

@@ -51,6 +51,7 @@ describe('BoardLanesSection', () => {
       />
     );
 
+    expect(html).toContain('Add column');
     expect(html).toContain('No columns defined for this board yet.');
     expect(html).toContain('No tasks in this column.');
   });

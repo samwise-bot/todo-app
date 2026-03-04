@@ -1,6 +1,6 @@
 import React from 'react';
 import type { BoardLaneView } from '../../lib/board-lanes';
-import { createTaskAction } from '../actions';
+import { createColumnAction, createTaskAction } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
@@ -60,6 +60,22 @@ function InlineCreateTaskForm({
         required
       />
       <button type="submit">Add</button>
+    </form>
+  );
+}
+
+function InlineCreateColumnForm({ boardId, nextPosition }: { boardId: number; nextPosition: number }) {
+  async function inlineCreateColumn(formData: FormData) {
+    'use server';
+    formData.set('boardId', String(boardId));
+    formData.set('position', String(nextPosition));
+    await createColumnAction(INITIAL_ACTION_STATE, formData);
+  }
+
+  return (
+    <form action={inlineCreateColumn} className="form-row" style={{ marginTop: '0.5rem' }}>
+      <input name="name" placeholder="Add column" aria-label="New column name" required />
+      <button type="submit">Add column</button>
     </form>
   );
 }
@@ -142,6 +158,14 @@ export function BoardLanesSection({
             <h3>{board.name}</h3>
             <span className="count-pill">{board.columns.length} columns</span>
           </div>
+          <InlineCreateColumnForm
+            boardId={board.id}
+            nextPosition={
+              board.columns.length === 0
+                ? 10
+                : Math.max(...board.columns.map((column) => Number(column.position) || 0)) + 10
+            }
+          />
 
           {board.columns.length === 0 ? (
             <div className="empty-state">No columns defined for this board yet.</div>
