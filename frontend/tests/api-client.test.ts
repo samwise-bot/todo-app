@@ -12,10 +12,16 @@ function okJSONResponse(body: unknown): Response {
 
 describe('fetchCollection', () => {
   const originalSWR = process.env.TODO_APP_SWR_SECONDS;
+  const originalHotSWR = process.env.TODO_APP_SWR_HOT_SECONDS;
+  const originalWarmSWR = process.env.TODO_APP_SWR_WARM_SECONDS;
+  const originalColdSWR = process.env.TODO_APP_SWR_COLD_SECONDS;
 
   afterEach(() => {
     vi.restoreAllMocks();
     process.env.TODO_APP_SWR_SECONDS = originalSWR;
+    process.env.TODO_APP_SWR_HOT_SECONDS = originalHotSWR;
+    process.env.TODO_APP_SWR_WARM_SECONDS = originalWarmSWR;
+    process.env.TODO_APP_SWR_COLD_SECONDS = originalColdSWR;
   });
 
   test('accepts common collection envelope shapes', async () => {
@@ -58,6 +64,31 @@ describe('fetchCollection', () => {
     expect(fetchMock).toHaveBeenCalledWith('http://localhost:8080/api/boards', {
       cache: 'force-cache',
       next: { revalidate: 30 }
+    });
+  });
+
+  test('uses cache tier overrides by endpoint type', async () => {
+    process.env.TODO_APP_SWR_SECONDS = '30';
+    process.env.TODO_APP_SWR_HOT_SECONDS = '20';
+    process.env.TODO_APP_SWR_WARM_SECONDS = '180';
+    process.env.TODO_APP_SWR_COLD_SECONDS = '900';
+    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okJSONResponse([]));
+
+    await fetchCollection('/api/tasks?page=1', 'Tasks');
+    await fetchCollection('/api/projects', 'Projects');
+    await fetchCollection('/api/reviews/weekly', 'Review');
+
+    expect(fetchMock).toHaveBeenNthCalledWith(1, 'http://localhost:8080/api/tasks?page=1', {
+      cache: 'force-cache',
+      next: { revalidate: 20 }
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(2, 'http://localhost:8080/api/projects', {
+      cache: 'force-cache',
+      next: { revalidate: 180 }
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(3, 'http://localhost:8080/api/reviews/weekly', {
+      cache: 'force-cache',
+      next: { revalidate: 900 }
     });
   });
 

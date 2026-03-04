@@ -39,3 +39,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Verification
 - `python3 -m unittest ops.tests.test_benchmark_task_board` ✅
 - `python3 ops/run/benchmark_task_board.py --iterations 3 --output .run/benchmark-task-board.json` ✅
+
+## Iteration Update (2026-03-04 02:01 PT)
+- [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) against API source-of-truth.
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #15 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Implemented endpoint-tiered SWR cache controls in `frontend/lib/api-client.ts` with env overrides for Hot/Warm/Cold collections.
+- [x] Refreshed task export snapshot from API (`.run/tasks.json`) and re-ranked Next by `priority`, `dueAt`, then `id`.
+
+## Verification
+- `npm test -- --run tests/api-client.test.ts` ✅

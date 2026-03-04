@@ -216,3 +216,7 @@ sequenceDiagram
 - Autonomous loop increment (2026-03-04 01:14 PT):
   1. Added `ops/run/benchmark_task_board.py` to measure local API read-path latency (`/api/tasks`, `/api/boards`, `/api/columns`) with p50/p95/avg/max summary output.
   2. Added focused percentile coverage in `ops/tests/test_benchmark_task_board.py` to keep SLO math deterministic.
+- Autonomous loop increment (2026-03-04 02:01 PT):
+  1. Extended `frontend/lib/api-client.ts` collection cache policy to select SWR TTL by endpoint tier (Hot: tasks/boards/columns, Warm: projects/principals, Cold: fallback endpoints).
+  2. Added env controls `TODO_APP_SWR_HOT_SECONDS`, `TODO_APP_SWR_WARM_SECONDS`, `TODO_APP_SWR_COLD_SECONDS` with fallback to `TODO_APP_SWR_SECONDS` for deterministic rollout.
+  3. Added regression coverage in `frontend/tests/api-client.test.ts` validating tier selection and per-endpoint revalidate values.
