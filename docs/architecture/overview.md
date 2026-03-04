@@ -196,3 +196,11 @@ sequenceDiagram
   1. Completed TODO task #53 lifecycle transition (`Next -> In Progress -> Done`) in the app board while keeping `samwise` ownership.
   2. Hardened fanout sweep reporting for missing worker-outcome files: `workerOutcomeSummary` now keeps `requestedPath` even when neither live results nor fixture are present.
   3. Added focused regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py` for the missing-path provenance case.
+
+### SLA Baseline (Task #51, 2026-03-03)
+- API read latency SLOs: `GET /api/tasks` p50 <= 120ms, p95 <= 350ms under local benchmark load.
+- Board render budget: initial `/board` contentful render <= 1.2s p50 and <= 2.0s p95 on warm cache.
+- Interaction budget: lane move/create action feedback <= 150ms p50 and <= 300ms p95 (optimistic UI + server ack).
+- Throughput target: sustain >= 40 task mutation requests/minute with <1% non-4xx failures.
+- Regression gate: fail CI when measured p95 regresses >20% versus rolling 7-run median or absolute SLO ceiling is exceeded.
+
