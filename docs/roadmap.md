@@ -103,3 +103,5 @@
 
 - ✅ Completed: task #23 moved `Next -> In Progress -> Done`; shipped initial auth role/permission domain model (`owner|agent|collaborator` + permission matrix helper) with focused regression tests (`backend/tests/auth_role_permissions_test.go`).
 - ✅ Completed: task #24 moved `Next -> In Progress -> Done`; added account-principal link persistence helper with audit-event emission (`backend/internal/store/account_principal_links.go`) plus focused coverage (`backend/tests/account_principal_links_test.go`).
+
+- ✅ Completed: task #25 moved `Next -> In Progress -> Done`; added auth hardening baseline checklist in `docs/auth/security-hardening-checklist.md` (password policy, login rate limits, CSRF, secure session handling, and audit events).

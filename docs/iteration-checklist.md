@@ -160,3 +160,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `/home/bot/.nix-profile/bin/go test ./tests -run TestLinkAccountPrincipalWritesAuditEvent` ✅
+
+## Iteration Update (2026-03-04 13:15 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #25 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added auth security hardening checklist baseline in `docs/auth/security-hardening-checklist.md`.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `git diff -- docs/auth/security-hardening-checklist.md docs/architecture/overview.md docs/roadmap.md docs/iteration-checklist.md` ✅

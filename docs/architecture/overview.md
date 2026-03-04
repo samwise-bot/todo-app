@@ -270,3 +270,8 @@ sequenceDiagram
   1. `LinkAccountPrincipal(...)` upserts account/principal role bindings.
   2. Each link/update writes `account_principal.linked` audit evidence to `account_principal_events`.
   3. Added focused coverage in `backend/tests/account_principal_links_test.go`.
+
+## Architecture Delta (2026-03-04, autonomous loop)
+- Completed TODO task #25 lifecycle (`Next -> In Progress -> Done`) with `samwise` ownership.
+- Added `docs/auth/security-hardening-checklist.md` as the concrete security-hardening baseline for auth rollout.
+- Checklist codifies password/rate-limit/CSRF/session-fixation/audit requirements and verification targets for upcoming auth implementation increments.
