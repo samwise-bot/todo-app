@@ -131,3 +131,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `python3 - <<'PY' ... sqlite executescript migration check ... PY` ✅
+
+## Iteration Update (2026-03-04 09:43 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #22 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added secure auth session-cookie helpers in `backend/internal/app/auth_cookie.go` with focused tests in `backend/internal/app/auth_cookie_test.go`.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `/home/bot/.nix-profile/bin/go test ./internal/app -run 'Test(NewSessionCookieSecureDefaults|ClearSessionCookieExpiresImmediately)$'` ✅

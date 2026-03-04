@@ -254,3 +254,7 @@ sequenceDiagram
 - Added ADR `docs/adr/0003-auth-identity-model.md` to formalize two-layer identity (`accounts` for auth, `principals` for domain actors).
 - Locked migration path for single-user bootstrap to multi-user collaboration without changing `tasks.assignee_id` / `task_events.actor_principal_id` semantics.
 - Added migration `backend/migrations/003_auth_accounts_sessions.sql` to establish auth persistence primitives (`accounts`, `account_principals`, `sessions`) with role/status constraints and supporting indexes.
+- Added secure session cookie primitives in `backend/internal/app/auth_cookie.go`:
+  1. `newSessionCookie(token, now)` issues a 24h `HttpOnly`, `Secure`, `SameSite=Strict` cookie scoped to `/`.
+  2. `clearSessionCookie()` emits immediate-expiry cookie state (`MaxAge=-1`, epoch expiry) for logout semantics.
+  3. Added focused regression coverage in `backend/internal/app/auth_cookie_test.go` to lock cookie security defaults before wiring login/logout handlers.
