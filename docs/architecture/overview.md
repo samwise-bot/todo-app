@@ -189,3 +189,6 @@ sequenceDiagram
   1. Added deterministic worker-outcome fixture fallback in `ops/run/validate_subagent_fanout_sweep.py` via `--worker-results-fixture-json` (default `ops/fixtures/subagent-worker-results.sample.json`).
   2. `workerOutcomeSummary` now reports `usedFixture` and `requestedPath` for explicit provenance when live worker output is absent.
   3. Added regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py` for fixture fallback behavior.
+- Autonomous loop increment (2026-03-03 21:31 PT):
+  1. Expanded `frontend/tests/top-nav.test.tsx` into parameterized coverage for non-board routes (`/tasks`, `/projects`, `/people`, `/settings`).
+  2. Each route now asserts active-page semantics (`aria-current="page"`) while preserving persistent quick-create navigation (`/board#quick-create-task`).

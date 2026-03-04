@@ -20,3 +20,6 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `npm test -- top-nav.test.tsx` (run from `frontend/`) ✅
+- [x] Mainline execution completed on highest-priority Next task #50; moved `Next -> In Progress -> Done` assigned to `samwise`.
+- [x] Expanded nav active-state regression coverage for non-board routes in `frontend/tests/top-nav.test.tsx`.
+- [x] Synced architecture + roadmap notes (`docs/architecture/overview.md`, `docs/roadmap.md`) for this increment.

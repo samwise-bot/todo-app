@@ -2,17 +2,24 @@ import React from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 
+const usePathnameMock = vi.fn(() => '/tasks');
+
 vi.mock('next/navigation', () => ({
-  usePathname: () => '/tasks'
+  usePathname: () => usePathnameMock()
 }));
 
 import { TopNav } from '../app/ui/top-nav';
 
 describe('top nav', () => {
-  test('marks active route and exposes quick-create action', () => {
-    const html = renderToStaticMarkup(<TopNav />);
-    expect(html).toContain('aria-current="page"');
-    expect(html).toContain('href="/board#quick-create-task"');
-    expect(html).toContain('+ Quick create');
-  });
+  test.each(['/tasks', '/projects', '/people', '/settings'])(
+    'marks non-board route %s as active and keeps quick-create action',
+    (route) => {
+      usePathnameMock.mockReturnValue(route);
+      const html = renderToStaticMarkup(<TopNav />);
+      expect(html).toContain('aria-current="page"');
+      expect(html).toContain(`href="${route}"`);
+      expect(html).toContain('href="/board#quick-create-task"');
+      expect(html).toContain('+ Quick create');
+    }
+  );
 });

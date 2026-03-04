@@ -73,3 +73,4 @@
   - #52 Unblock: define timeout threshold for fanout lane using captured outcome evidence.
   - #50 Reliability: add regression coverage for nav active-state styling on non-board routes.
   - #51 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).
+- ✅ Completed: task #50 moved `Next -> In Progress -> Done`; nav active-state regression coverage now explicitly spans non-board routes (`/tasks|/projects|/people|/settings`) in `frontend/tests/top-nav.test.tsx`.
