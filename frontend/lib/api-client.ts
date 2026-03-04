@@ -50,9 +50,21 @@ function readNumber(value: unknown, fallback: number): number {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
+function collectionRequestInit(): RequestInit {
+  const swrSeconds = readNumber(process.env.TODO_APP_SWR_SECONDS, 30);
+  if (swrSeconds <= 0) {
+    return { cache: 'no-store' };
+  }
+
+  return {
+    cache: 'force-cache',
+    next: { revalidate: swrSeconds }
+  };
+}
+
 export async function fetchCollection<T>(path: string, label: string): Promise<ListFetchResult<T>> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, collectionRequestInit());
     if (!res.ok) {
       return { items: [], error: `${label} data is unavailable (HTTP ${res.status}).` };
     }
@@ -70,7 +82,7 @@ export async function fetchCollection<T>(path: string, label: string): Promise<L
 
 export async function fetchPagedCollection<T>(path: string, label: string): Promise<PagedListFetchResult<T>> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'}${path}`, collectionRequestInit());
     if (!res.ok) {
       return {
         items: [],

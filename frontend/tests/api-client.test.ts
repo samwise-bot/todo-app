@@ -11,8 +11,11 @@ function okJSONResponse(body: unknown): Response {
 }
 
 describe('fetchCollection', () => {
+  const originalSWR = process.env.TODO_APP_SWR_SECONDS;
+
   afterEach(() => {
     vi.restoreAllMocks();
+    process.env.TODO_APP_SWR_SECONDS = originalSWR;
   });
 
   test('accepts common collection envelope shapes', async () => {
@@ -46,11 +49,34 @@ describe('fetchCollection', () => {
       error: 'Boards data is malformed.'
     });
   });
+
+  test('uses stale-while-revalidate fetch options by default', async () => {
+    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okJSONResponse([]));
+
+    await fetchCollection('/api/boards', 'Boards');
+
+    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8080/api/boards', {
+      cache: 'force-cache',
+      next: { revalidate: 30 }
+    });
+  });
+
+  test('disables cache when TODO_APP_SWR_SECONDS is zero', async () => {
+    process.env.TODO_APP_SWR_SECONDS = '0';
+    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(okJSONResponse([]));
+
+    await fetchCollection('/api/boards', 'Boards');
+
+    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8080/api/boards', { cache: 'no-store' });
+  });
 });
 
 describe('fetchPagedCollection', () => {
+  const originalSWR = process.env.TODO_APP_SWR_SECONDS;
+
   afterEach(() => {
     vi.restoreAllMocks();
+    process.env.TODO_APP_SWR_SECONDS = originalSWR;
   });
 
   test('accepts nested results.items envelopes and metadata', async () => {

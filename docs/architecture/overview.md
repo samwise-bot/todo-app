@@ -148,3 +148,7 @@ sequenceDiagram
   1. `frontend/lib/app-store.ts` now builds normalized entity maps for tasks/boards/columns/principals.
   2. Utility exports deterministic `orderedNextTaskIds` ranked by `priority`, then `dueAt`, then `id`.
   3. Added coverage in `frontend/tests/app-store.test.ts` to guard ordering + indexing behavior.
+- Implemented first offline-first read-cache slice (`task #15` increment):
+  1. `frontend/lib/api-client.ts` now centralizes collection fetch policy with stale-while-revalidate defaults (`cache: force-cache`, `next.revalidate: 30`).
+  2. Added explicit kill switch via `TODO_APP_SWR_SECONDS=0` to force `cache: no-store` during debugging or strict freshness runs.
+  3. Added regression tests in `frontend/tests/api-client.test.ts` for default SWR behavior and the zero-second no-store fallback.

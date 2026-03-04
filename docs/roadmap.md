@@ -51,7 +51,8 @@
 - ✅ Completed: task #13 moved `Next -> In Progress -> Done` with initial board inspector slice (`Board health` counters) and deterministic metric tests.
 - ✅ Completed: task #1 moved `Next -> In Progress -> Done`; backend now returns empty paginated task lists as `items: []` and includes regression coverage for empty inbox queries.
 - ✅ Completed: task #14 moved `Next -> In Progress -> Done` via initial unified client-state snapshot utility (`frontend/lib/app-store.ts`) plus ordering/indexing test coverage.
+- ✅ Completed: task #15 moved `Next -> In Progress -> Done` by wiring frontend collection fetches to a configurable stale-while-revalidate policy (`TODO_APP_SWR_SECONDS`, default 30s) with explicit `no-store` fallback when set to `0`.
 - ▶ Next milestone:
-  - #15 Roadmap: Offline-first cache strategy for SPA (stale-while-revalidate)
   - #16 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput)
   - #17 Benchmark: Build repeatable backend load test harness for task/board endpoints
+  - #34 Capture one real worker run outcome proving acceptable timeout ratio (unblock evidence)
