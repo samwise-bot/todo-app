@@ -66,7 +66,9 @@
 - ✅ Completed: task #15 moved `Next -> In Progress -> Done` by wiring frontend collection fetches to a configurable stale-while-revalidate policy (`TODO_APP_SWR_SECONDS`, default 30s) with explicit `no-store` fallback when set to `0`.
 - ✅ Completed: task #45 moved `Next -> In Progress -> Done`; `/settings` now exposes an advanced configuration panel covering SWR cache policy, board focus defaults, and current roadmap scope.
 - ✅ Completed: task #46 moved `Next -> In Progress -> Done`; nav now marks active route and exposes persistent `+ Quick create` jump-to-intake action.
+- 🚧 Blocked this cycle: #52 moved to Blocked after focused validation confirmed worker-outcome dataset is unavailable (`.run/subagent-worker-results.json` missing) while subagent execution is disabled.
+- ✅ Created unblock task #53 (priority=1) to capture one worker outcome sample via non-subagent runner or fixture import, then resume #52 threshold decision.
 - ▶ Next milestone:
-  - #34 Unblock: capture one real worker timeout/completion ratio sweep and define unblock threshold for fanout lane.
+  - #53 Unblock: capture one concrete worker timeout/completion dataset.
+  - #52 Unblock: define timeout threshold for fanout lane using captured outcome evidence.
   - #16 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).
-  - #48 Reliability: add regression coverage for nav active-state styling on non-board routes.

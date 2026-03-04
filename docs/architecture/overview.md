@@ -181,3 +181,7 @@ sequenceDiagram
   2. Added explicit `aria-current="page"` + active styling (`.top-nav-link-active`) for orientation across `/board|/tasks|/projects|/people|/settings`.
   3. Added persistent `+ Quick create` nav action linking to `/board#quick-create-task`, and anchored board intake in `_dashboard` for direct jump-to-create.
   4. Added regression coverage in `frontend/tests/top-nav.test.tsx`.
+- Autonomous loop checkpoint (2026-03-03 20:51 PT):
+  1. Executed focused fanout checkpoint run (`validate_subagent_fanout_sweep.py --max-cycles 1`) to validate readiness for timeout-threshold decision task #52.
+  2. Validation report showed no worker-outcome evidence source (`.run/subagent-worker-results.json` absent), so completion/timeout ratio remains undefined in current no-subagent mode.
+  3. Moved #52 to Blocked and created #53 (`priority=1`) to acquire one outcome dataset via non-subagent path before resuming threshold decision.
