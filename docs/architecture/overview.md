@@ -118,6 +118,9 @@ sequenceDiagram
 - Added board-first route split baseline for SPA IA:
   1. `frontend/app/page.tsx` now redirects root traffic to `/board`.
   2. `frontend/app/board/page.tsx` serves the existing dashboard implementation via `app/_dashboard.tsx`.
+- Added drag-and-drop foundation metadata on board lane task cards:
+  1. `TaskCard` now renders with `draggable` and task identity attributes (`data-task-id`, `data-task-state`).
+  2. This enables follow-on client handlers for optimistic cross-column move interactions without changing server contracts yet.
   3. This keeps behavior stable while enabling future extraction of Tasks/Projects/People/Settings routes.
 - Added regression coverage for board-first default routing in `frontend/tests/home-page-routing.test.tsx`, guarding against accidental root-route regressions away from `/board`.
 - Strengthened frontend API envelope resilience tests in `frontend/tests/api-client.test.ts`:

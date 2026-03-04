@@ -15,7 +15,13 @@ function TaskCard({
   projectName: string;
 }) {
   return (
-    <article className="task-card">
+    <article
+      className="task-card"
+      draggable
+      data-task-id={task.id}
+      data-task-state={task.state}
+      aria-label={`Task ${task.title} draggable card`}
+    >
       <h5>{task.title}</h5>
       <div className="badge-row">
         <span className="badge badge-state">{task.state}</span>

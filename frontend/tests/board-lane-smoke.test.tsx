@@ -224,6 +224,8 @@ describe('board-lane smoke flow', () => {
     expect(html).toContain('Doing');
     expect(html).toContain('Ship release');
     expect(html).toContain('next');
+    expect(html).toContain('draggable="true"');
+    expect(html).toContain('data-task-id="4"');
 
     expect(fetchMock).toHaveBeenCalled();
   });

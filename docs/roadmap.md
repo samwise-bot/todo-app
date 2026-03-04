@@ -53,6 +53,7 @@
 - ✅ Completed: task #41 moved `Next -> In Progress -> Done` with a board-first navigation slice (`/board` plus scaffold pages for `/tasks|/projects|/people|/settings`).
 - ✅ Completed: task #42 moved `Next -> In Progress -> Done` with inline board-lane task creation forms (column-local quick add in `/board`).
 - ✅ Completed: task #43 moved `Next -> In Progress -> Done` with inline board-level column creation directly from the `/board` lane UI.
+- ✅ Completed: task #44 moved `Next -> In Progress -> Done` with draggable task-card metadata (`draggable`, `data-task-id`, `data-task-state`) as the first atomic step toward optimistic cross-column drag/drop interactions.
 - ✅ Completed: route-split extraction increment on `/projects` (real API-backed project list + coverage) aligned to task #41 scope.
 - ✅ Completed: task #47 moved `Next -> In Progress -> Done` with `/board` default focus for active work assigned to Samwise.
 - ✅ Completed: task #12 moved `Next -> In Progress -> Done` by expanding the SPA migration plan into phased deliverables with explicit acceptance criteria.
@@ -61,6 +62,6 @@
 - ✅ Completed: task #14 moved `Next -> In Progress -> Done` via initial unified client-state snapshot utility (`frontend/lib/app-store.ts`) plus ordering/indexing test coverage.
 - ✅ Completed: task #15 moved `Next -> In Progress -> Done` by wiring frontend collection fetches to a configurable stale-while-revalidate policy (`TODO_APP_SWR_SECONDS`, default 30s) with explicit `no-store` fallback when set to `0`.
 - ▶ Next milestone:
-  - #16 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput)
-  - #17 Benchmark: Build repeatable backend load test harness for task/board endpoints
-  - #34 Capture one real worker run outcome proving acceptable timeout ratio (unblock evidence)
+  - #45 Settings: Create Advanced Settings page for configuration and power-user controls
+  - #46 Navigation: Add persistent top nav/sidebar with clear active page and quick-create
+  - #47 Board UX: Focus active view defaults to Next/In Progress + assignee Samwise
