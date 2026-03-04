@@ -16,6 +16,11 @@
   2. Shared client state/cache layer for tasks, projects, boards, columns, principals with deterministic selectors.
   3. Data fetching policy: stale-while-revalidate reads + optimistic mutation rollback for lane/task operations.
   4. Progressive extraction of monolithic dashboard sections into route-local modules while preserving GTD state constraints.
+  5. Offline-first cache tiers:
+     - Hot (board lanes, Next list): SWR 15-30s + mutation-triggered revalidation.
+     - Warm (projects/principals): SWR 2-5m.
+     - Cold (settings/metadata): SWR 10-30m.
+  6. Invalidation contract: task mutations invalidate task collections + impacted board lane; board/column mutations invalidate board topology; assignment changes invalidate assignee-focused views.
 - Acceptance:
   - end-to-end create->clarify->organize->execute flow works on `/board`
   - route split pages render with API-backed data (no static placeholders)
@@ -77,3 +82,5 @@
 - ✅ Completed: task #50 follow-up hardening shipped; active-route regression now asserts the current non-board route is the **only** `aria-current="page"` nav item.
 - ✅ Completed: task #53 provenance follow-up hardening shipped; missing worker-results reports now preserve `requestedPath` even when no live/fixture file exists, with focused regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py`.
 - ✅ Completed: task #51 moved `Next -> In Progress -> Done`; defined TODO App performance SLA baseline (API latency, board render, interaction latency, throughput, and CI regression gates).
+
+- ✅ Completed: task #15 moved `Next -> In Progress -> Done` in this cycle; expanded offline-first cache strategy from single TTL to policy tiers (Hot/Warm/Cold), invalidation triggers, and rollout checkpoints in Phase 2.

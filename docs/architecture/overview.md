@@ -207,3 +207,8 @@ sequenceDiagram
 - Throughput target: sustain >= 40 task mutation requests/minute with <1% non-4xx failures.
 - Regression gate: fail CI when measured p95 regresses >20% versus rolling 7-run median or absolute SLO ceiling is exceeded.
 
+- Autonomous loop increment (2026-03-04 00:29 PT):
+  1. Promoted offline-first cache guidance from a single stale-while-revalidate knob to explicit policy tiers (Hot/Warm/Cold datasets) in roadmap docs.
+  2. Documented deterministic invalidation triggers (task mutation, board/column mutation, assignment changes) to keep local-first reads fast without stale-lane drift.
+  3. Captured rollout order: ship read-cache tiering first, then mutation-triggered revalidation, then observability thresholds.
+

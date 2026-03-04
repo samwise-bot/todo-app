@@ -18,3 +18,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `npm test -- --run tests/top-nav.test.tsx` ✅
+
+## Iteration Update (2026-03-04 00:29 PT)
+- [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.
+- [x] Processed Inbox first (no `inbox` tasks present).
+- [x] Executed task #15 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Updated roadmap + architecture docs with offline-first cache strategy tiering and invalidation plan.
+- [x] Refreshed Next ordering by `priority`, `dueAt`, then `id` in exported board snapshot.
+
+## Verification
+- `git diff -- docs/roadmap.md docs/architecture/overview.md docs/iteration-checklist.md .run/tasks.json` ✅
