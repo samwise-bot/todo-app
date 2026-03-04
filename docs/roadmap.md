@@ -59,6 +59,7 @@
 - ✅ Completed: task #47 follow-through hardening in `_dashboard` for multi-state focus rendering (`next,scheduled`) with deterministic local filtering + explicit focus-mode pagination messaging.
 - ✅ Completed: task #12 moved `Next -> In Progress -> Done` by expanding the SPA migration plan into phased deliverables with explicit acceptance criteria.
 - ✅ Completed: task #13 moved `Next -> In Progress -> Done` with initial board inspector slice (`Board health` counters) and deterministic metric tests.
+- ✅ Completed: task #13 follow-up increment shipped in autonomous loop; board inspector now includes `Due soon (24h)` visibility for non-done tasks plus regression coverage.
 - ✅ Completed: task #1 moved `Next -> In Progress -> Done`; backend now returns empty paginated task lists as `items: []` and includes regression coverage for empty inbox queries.
 - ✅ Completed: task #14 moved `Next -> In Progress -> Done` via initial unified client-state snapshot utility (`frontend/lib/app-store.ts`) plus ordering/indexing test coverage.
 - ✅ Completed: task #15 moved `Next -> In Progress -> Done` by wiring frontend collection fetches to a configurable stale-while-revalidate policy (`TODO_APP_SWR_SECONDS`, default 30s) with explicit `no-store` fallback when set to `0`.

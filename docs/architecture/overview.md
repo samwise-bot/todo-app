@@ -152,6 +152,10 @@ sequenceDiagram
   1. `frontend/lib/board-inspector.ts` computes board health counters from task state/assignee/due date.
   2. `frontend/app/_dashboard.tsx` now renders a `Board health` inspector panel immediately below board lanes.
   3. Added unit coverage in `frontend/tests/board-inspector.test.ts` for deterministic metric derivation.
+- Extended inspector health metrics with a due-soon horizon (`task #13` follow-up increment):
+  1. `frontend/lib/board-inspector.ts` now emits `dueSoonCount` for non-done tasks due within 24 hours.
+  2. `frontend/app/_dashboard.tsx` now displays a `Due soon (24h)` badge alongside existing board-health counters.
+  3. Added deterministic test coverage in `frontend/tests/board-inspector.test.ts` for due-soon window behavior.
 - Expanded SPA migration roadmap contract in `docs/roadmap.md` (task #12):
   1. Broke Phase 2 into explicit implementation slices (route shell, shared state, SWR policy, modular extraction).
   2. Added concrete acceptance checks to keep route-split work measurable and regression-resistant.

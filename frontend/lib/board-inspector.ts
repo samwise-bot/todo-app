@@ -10,10 +10,12 @@ export type BoardInspectorMetrics = {
   blockedCount: number;
   unassignedCount: number;
   overdueCount: number;
+  dueSoonCount: number;
 };
 
 export function buildBoardInspectorMetrics(tasks: TaskLike[], now = new Date()): BoardInspectorMetrics {
   const nowMs = now.getTime();
+  const dueSoonWindowMs = nowMs + 24 * 60 * 60 * 1000;
 
   return tasks.reduce<BoardInspectorMetrics>(
     (acc, task) => {
@@ -32,13 +34,17 @@ export function buildBoardInspectorMetrics(tasks: TaskLike[], now = new Date()):
 
       if (task.dueAt && task.state !== 'done') {
         const dueMs = Date.parse(task.dueAt);
-        if (!Number.isNaN(dueMs) && dueMs < nowMs) {
-          acc.overdueCount += 1;
+        if (!Number.isNaN(dueMs)) {
+          if (dueMs < nowMs) {
+            acc.overdueCount += 1;
+          } else if (dueMs <= dueSoonWindowMs) {
+            acc.dueSoonCount += 1;
+          }
         }
       }
 
       return acc;
     },
-    { nextCount: 0, inProgressCount: 0, blockedCount: 0, unassignedCount: 0, overdueCount: 0 }
+    { nextCount: 0, inProgressCount: 0, blockedCount: 0, unassignedCount: 0, overdueCount: 0, dueSoonCount: 0 }
   );
 }

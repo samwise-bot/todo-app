@@ -221,6 +221,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
           <span className="badge">Blocked: {boardInspector.blockedCount}</span>
           <span className="badge">Unassigned: {boardInspector.unassignedCount}</span>
           <span className="badge">Overdue: {boardInspector.overdueCount}</span>
+          <span className="badge">Due soon (24h): {boardInspector.dueSoonCount}</span>
         </div>
       </section>
 
