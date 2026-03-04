@@ -71,8 +71,9 @@
 - ✅ Completed: task #53 moved `Next -> In Progress -> Done`; fanout sweep validator now falls back to a checked-in worker-outcome fixture with explicit provenance fields (`usedFixture`, `requestedPath`) when live worker output is missing.
 - ▶ Next milestone:
   - #52 Unblock: define timeout threshold for fanout lane using captured outcome evidence.
-  - #50 Reliability: add regression coverage for nav active-state styling on non-board routes.
   - #51 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).
+  - #17 Benchmark: Build repeatable backend load test harness for task/board endpoints.
 - ✅ Completed: task #50 moved `Next -> In Progress -> Done`; nav active-state regression coverage now explicitly spans non-board routes (`/tasks|/projects|/people|/settings`) in `frontend/tests/top-nav.test.tsx`.
+- ✅ Completed: task #50 follow-up hardening shipped; active-route regression now asserts the current non-board route is the **only** `aria-current="page"` nav item.
 - ✅ Completed: task #53 provenance follow-up hardening shipped; missing worker-results reports now preserve `requestedPath` even when no live/fixture file exists, with focused regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py`.
 - ✅ Completed: task #51 moved `Next -> In Progress -> Done`; defined TODO App performance SLA baseline (API latency, board render, interaction latency, throughput, and CI regression gates).

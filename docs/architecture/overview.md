@@ -192,6 +192,9 @@ sequenceDiagram
 - Autonomous loop increment (2026-03-03 21:31 PT):
   1. Expanded `frontend/tests/top-nav.test.tsx` into parameterized coverage for non-board routes (`/tasks`, `/projects`, `/people`, `/settings`).
   2. Each route now asserts active-page semantics (`aria-current="page"`) while preserving persistent quick-create navigation (`/board#quick-create-task`).
+- Autonomous loop increment (2026-03-03 23:38 PT):
+  1. Hardened nav-route regression semantics in `frontend/tests/top-nav.test.tsx` to assert exactly one active link (`aria-current="page"`) per route render.
+  2. Added explicit active-link matcher ensuring the `aria-current` marker is attached to the expected non-board route anchor.
 - Autonomous loop increment (2026-03-03 22:01 PT):
   1. Completed TODO task #53 lifecycle transition (`Next -> In Progress -> Done`) in the app board while keeping `samwise` ownership.
   2. Hardened fanout sweep reporting for missing worker-outcome files: `workerOutcomeSummary` now keeps `requestedPath` even when neither live results nor fixture are present.
