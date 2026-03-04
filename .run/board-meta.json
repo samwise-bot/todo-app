@@ -8,7 +8,8 @@
     "name": "TODO App"
   },
   "board": {
-    "name": "TODO App"
+    "id": 1,
+    "name": "TODO App Board"
   },
   "columns": [
     "Inbox",
@@ -16,6 +17,5 @@
     "In Progress",
     "Done",
     "Blocked"
-  ],
-  "updatedAt": "2026-03-04T14:35:29Z"
+  ]
 }

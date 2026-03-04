@@ -248,3 +248,8 @@ sequenceDiagram
 - Completed TODO task #26 lifecycle (`Next -> In Progress -> Done`) with `samwise` assignment.
 - Added auth E2E matrix doc (`docs/auth/e2e-test-matrix.md`) defining happy-path, invalid-credentials, and expired-session coverage for single-user mode.
 - Captured deterministic test IDs and ownership to keep upcoming auth implementation slices measurable.
+
+## Architecture Delta (2026-03-04, autonomous loop 07:45 PT)
+- Completed TODO task #20 lifecycle (`Next -> In Progress -> Done`) with `samwise` assignment.
+- Added ADR `docs/adr/0003-auth-identity-model.md` to formalize two-layer identity (`accounts` for auth, `principals` for domain actors).
+- Locked migration path for single-user bootstrap to multi-user collaboration without changing `tasks.assignee_id` / `task_events.actor_principal_id` semantics.

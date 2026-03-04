@@ -111,3 +111,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `npm test -- --run tests/api-client.test.ts` (focused regression guard) 
+
+## Iteration Update (2026-03-04 07:45 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, board `TODO App`, Inbox/Next/In Progress/Done/Blocked).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #20 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added ADR `docs/adr/0003-auth-identity-model.md` documenting account/principal split and migration sequence.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `git diff -- docs/adr/0003-auth-identity-model.md docs/architecture/overview.md docs/roadmap.md docs/iteration-checklist.md` ✅
