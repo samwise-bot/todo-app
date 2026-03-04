@@ -4,6 +4,7 @@ type TaskEntity = StoreEntity & {
   priority?: number | null;
   dueAt?: string | null;
   state?: string;
+  assigneeId?: number | null;
 };
 
 type AppStoreInput = {
@@ -19,6 +20,7 @@ export type AppStoreSnapshot = {
   columnsById: Map<number, StoreEntity>;
   principalsById: Map<number, StoreEntity>;
   orderedNextTaskIds: number[];
+  nextTaskIdsByAssignee: Map<number, number[]>;
 };
 
 function indexById<T extends StoreEntity>(items: T[]): Map<number, T> {
@@ -49,6 +51,21 @@ function nextComparator(a: TaskEntity, b: TaskEntity): number {
   return a.id - b.id;
 }
 
+function indexNextTasksByAssignee(nextTasks: TaskEntity[]): Map<number, number[]> {
+  const nextTaskIdsByAssignee = new Map<number, number[]>();
+
+  for (const task of nextTasks) {
+    if (typeof task.assigneeId !== 'number') {
+      continue;
+    }
+    const existing = nextTaskIdsByAssignee.get(task.assigneeId) ?? [];
+    existing.push(task.id);
+    nextTaskIdsByAssignee.set(task.assigneeId, existing);
+  }
+
+  return nextTaskIdsByAssignee;
+}
+
 export function createAppStoreSnapshot(input: AppStoreInput): AppStoreSnapshot {
   const nextTasks = input.tasks.filter((task) => task.state === 'next').sort(nextComparator);
 
@@ -57,6 +74,7 @@ export function createAppStoreSnapshot(input: AppStoreInput): AppStoreSnapshot {
     boardsById: indexById(input.boards),
     columnsById: indexById(input.columns),
     principalsById: indexById(input.principals),
-    orderedNextTaskIds: nextTasks.map((task) => task.id)
+    orderedNextTaskIds: nextTasks.map((task) => task.id),
+    nextTaskIdsByAssignee: indexNextTasksByAssignee(nextTasks)
   };
 }

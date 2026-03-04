@@ -77,6 +77,10 @@ sequenceDiagram
 3. Use the dashboard panels to confirm weekly review request/failure rates, failure ratio, p95 latency, and board lane failure spikes by endpoint.
 
 ## Architecture Delta (2026-03-03, autonomous loop)
+- Added assignee-scoped deterministic Next selectors in `frontend/lib/app-store.ts`:
+  1. `createAppStoreSnapshot(...)` now emits `nextTaskIdsByAssignee` keyed by principal id.
+  2. Per-assignee ordering reuses the global deterministic comparator (`priority`, `dueAt`, `id`) to keep board focus views stable.
+  3. Added regression coverage in `frontend/tests/app-store.test.ts` for grouped ordering output.
 - Normalized paginated API responses to always return `items: []` (never `null`) for empty task queries; this removes frontend shape branching and hardens board/task lane rendering.
 - Added regression coverage for empty inbox pagination payload shape.
 - Added task intake metadata controls in the frontend create flow:
