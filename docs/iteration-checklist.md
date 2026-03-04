@@ -121,3 +121,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `git diff -- docs/adr/0003-auth-identity-model.md docs/architecture/overview.md docs/roadmap.md docs/iteration-checklist.md` ✅
+
+## Iteration Update (2026-03-04 08:43 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #21 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added auth schema migration baseline in `backend/migrations/003_auth_accounts_sessions.sql`.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `python3 - <<'PY' ... sqlite executescript migration check ... PY` ✅

@@ -253,3 +253,4 @@ sequenceDiagram
 - Completed TODO task #20 lifecycle (`Next -> In Progress -> Done`) with `samwise` assignment.
 - Added ADR `docs/adr/0003-auth-identity-model.md` to formalize two-layer identity (`accounts` for auth, `principals` for domain actors).
 - Locked migration path for single-user bootstrap to multi-user collaboration without changing `tasks.assignee_id` / `task_events.actor_principal_id` semantics.
+- Added migration `backend/migrations/003_auth_accounts_sessions.sql` to establish auth persistence primitives (`accounts`, `account_principals`, `sessions`) with role/status constraints and supporting indexes.
