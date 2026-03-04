@@ -42,6 +42,7 @@ type Task = {
   assigneeId?: number | null;
   projectId?: number | null;
   boardColumnId?: number | null;
+  priority?: number | null;
   dueAt?: string | null;
 };
 
@@ -72,6 +73,8 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   const taskProjectId = readStringParam(currentParams, 'taskProjectId', '');
   const taskAssigneeId = readStringParam(currentParams, 'taskAssigneeId', '');
   const taskBoardColumnId = readStringParam(currentParams, 'taskBoardColumnId', '');
+  const taskPriority = readStringParam(currentParams, 'taskPriority', '');
+  const taskDueWindow = readStringParam(currentParams, 'taskDueWindow', '');
   const taskPage = readPositiveIntParam(currentParams, 'taskPage', 1);
   const taskPageSize = readPositiveIntParam(currentParams, 'taskPageSize', 10);
 
@@ -122,15 +125,56 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   const boards = boardsResult.items;
   const columns = columnsResult.items;
   const tasks = tasksAllResult.items;
-  const taskList = taskStates.length > 1
-    ? tasksListResult.items.filter((task) => taskStates.includes(task.state as (typeof TASK_STATES)[number]))
-    : tasksListResult.items;
-  const boardInspector = buildBoardInspectorMetrics(tasks);
+
+  const priorityFilter = taskPriority ? Number(taskPriority) : null;
+  const dueWindowHours = taskDueWindow ? Number(taskDueWindow) : null;
+  const nowMs = Date.now();
+  const dueWindowLimitMs = Number.isFinite(dueWindowHours) && dueWindowHours && dueWindowHours > 0
+    ? nowMs + dueWindowHours * 60 * 60 * 1000
+    : null;
+
+  const matchesTaskFilters = (task: Task): boolean => {
+    if (taskStates.length > 0 && !taskStates.includes(task.state as (typeof TASK_STATES)[number])) {
+      return false;
+    }
+    if (taskProjectId && String(task.projectId ?? '') !== taskProjectId) {
+      return false;
+    }
+    if (taskAssigneeId && String(task.assigneeId ?? '') !== taskAssigneeId) {
+      return false;
+    }
+    if (taskBoardColumnId && String(task.boardColumnId ?? '') !== taskBoardColumnId) {
+      return false;
+    }
+    if (priorityFilter !== null && Number.isFinite(priorityFilter) && (task.priority ?? 3) !== priorityFilter) {
+      return false;
+    }
+    if (taskQ) {
+      const haystack = `${task.title} ${task.description ?? ''}`.toLowerCase();
+      if (!haystack.includes(taskQ.toLowerCase())) {
+        return false;
+      }
+    }
+    if (dueWindowLimitMs !== null) {
+      if (!task.dueAt) {
+        return false;
+      }
+      const dueAtMs = Date.parse(task.dueAt);
+      if (Number.isNaN(dueAtMs) || dueAtMs > dueWindowLimitMs) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const filteredTasks = tasks.filter(matchesTaskFilters);
+  const taskList = filteredTasks;
+  const boardInspector = buildBoardInspectorMetrics(filteredTasks);
 
   const laneView = buildBoardLaneView({
     boards,
     columns,
-    tasks,
+    tasks: filteredTasks,
     fetchErrors: [boardsResult.error, columnsResult.error, tasksAllResult.error].filter((error): error is string => Boolean(error))
   });
 
@@ -162,7 +206,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   }
 
   const principalHidden = hiddenParamEntries(currentParams, ['principalKind', 'principalQ', 'principalPage', 'principalPageSize']);
-  const taskHidden = hiddenParamEntries(currentParams, ['taskState', 'taskQ', 'taskProjectId', 'taskAssigneeId', 'taskBoardColumnId', 'taskPage', 'taskPageSize']);
+  const taskHidden = hiddenParamEntries(currentParams, ['taskState', 'taskQ', 'taskProjectId', 'taskAssigneeId', 'taskBoardColumnId', 'taskPriority', 'taskDueWindow', 'taskPage', 'taskPageSize']);
 
   const principalPrevLink = withQueryString(updateSearchParams(currentParams, { principalPage: principalPage - 1 }));
   const principalNextLink = withQueryString(updateSearchParams(currentParams, { principalPage: principalPage + 1 }));
@@ -181,6 +225,8 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
     taskProjectId: null,
     taskAssigneeId: null,
     taskBoardColumnId: null,
+    taskPriority: null,
+    taskDueWindow: null,
     taskPage: null,
     taskPageSize: null
   }));
@@ -247,6 +293,18 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
           <input name="taskProjectId" defaultValue={taskProjectId} placeholder="Project ID" inputMode="numeric" />
           <input name="taskAssigneeId" defaultValue={taskAssigneeId} placeholder="Assignee ID" inputMode="numeric" />
           <input name="taskBoardColumnId" defaultValue={taskBoardColumnId} placeholder="Board column ID" inputMode="numeric" />
+          <select name="taskPriority" defaultValue={taskPriority}>
+            <option value="">Any priority</option>
+            <option value="1">P1</option>
+            <option value="2">P2</option>
+            <option value="3">P3</option>
+          </select>
+          <select name="taskDueWindow" defaultValue={taskDueWindow}>
+            <option value="">Any due window</option>
+            <option value="24">Due in 24h</option>
+            <option value="72">Due in 3d</option>
+            <option value="168">Due in 7d</option>
+          </select>
           <select name="taskPageSize" defaultValue={String(taskPageSize)}>
             <option value="10">10 / page</option>
             <option value="20">20 / page</option>
@@ -257,7 +315,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         </form>
 
         <p className="muted" style={{ marginTop: 10 }}>
-          Showing {taskList.length} of {taskStates.length > 1 ? taskList.length : tasksListResult.totalItems} tasks.
+          Showing {taskList.length} of {tasks.length} tasks.
         </p>
 
         {taskList.length === 0 ? (
@@ -283,15 +341,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         )}
 
         <div className="pagination-row">
-          {taskStates.length > 1 ? (
-            <span className="muted">Multi-state focus mode is showing in-memory filtered results.</span>
-          ) : (
-            <>
-              {taskPage > 1 ? <Link className="btn btn-secondary" href={taskPrevLink}>Previous</Link> : <span className="muted">Previous</span>}
-              <span>Page {tasksListResult.page} / {Math.max(tasksListResult.totalPages, 1)}</span>
-              {tasksListResult.page < tasksListResult.totalPages ? <Link className="btn btn-secondary" href={taskNextLink}>Next</Link> : <span className="muted">Next</span>}
-            </>
-          )}
+          <span className="muted">Board-first filter mode uses in-memory matching to keep board lanes + explorer in sync.</span>
         </div>
       </section>
 

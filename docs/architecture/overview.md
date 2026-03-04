@@ -275,3 +275,9 @@ sequenceDiagram
 - Completed TODO task #25 lifecycle (`Next -> In Progress -> Done`) with `samwise` ownership.
 - Added `docs/auth/security-hardening-checklist.md` as the concrete security-hardening baseline for auth rollout.
 - Checklist codifies password/rate-limit/CSRF/session-fixation/audit requirements and verification targets for upcoming auth implementation increments.
+
+## Architecture Delta (2026-03-04, autonomous loop 14:43 PT)
+- Completed TODO task #26 lifecycle (`Next -> In Progress -> Done`) in source-of-truth DB with `samwise` assignment.
+- Extended `/board` filter-first behavior in `frontend/app/_dashboard.tsx` so board lanes and task explorer now use the same in-memory filter matcher.
+- Added first-class board filters for `priority` and `due window` (`24h`, `3d`, `7d`) while preserving existing assignee/project/state/search controls.
+- Updated board health inspector to compute metrics from the active filtered set, keeping triage stats aligned with the visible board slice.

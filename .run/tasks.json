@@ -6,11 +6,11 @@
       "description": "Allow benchmark_task_board.py to run a subset of endpoints via CLI so operators can isolate regressions quickly.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-04T12:46:57Z",
-      "updatedAt": "2026-03-04T12:48:04Z"
+      "updatedAt": "2026-03-04T12:48:04Z",
+      "assigneeId": 2
     },
     {
       "id": 54,
@@ -18,11 +18,11 @@
       "description": "Keep Next lane deterministic for autonomous planning and operator triage.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-04T11:17:07Z",
-      "updatedAt": "2026-03-04T11:17:50Z"
+      "updatedAt": "2026-03-04T11:17:50Z",
+      "assigneeId": 2
     },
     {
       "id": 53,
@@ -30,11 +30,11 @@
       "description": "Need one concrete worker outcome dataset (completed vs timed_out) to set timeout threshold for #34/#52 while autonomous loop remains subagent-disabled.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-04T04:52:26Z",
-      "updatedAt": "2026-03-04T06:02:40Z"
+      "updatedAt": "2026-03-04T06:02:40Z",
+      "assigneeId": 2
     },
     {
       "id": 52,
@@ -42,11 +42,11 @@
       "description": "Execute one real fanout cycle, capture completion/timeout ratio, and document unblock threshold for #34.",
       "state": "waiting",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 7,
       "priority": 1,
       "createdAt": "2026-03-04T04:27:36Z",
-      "updatedAt": "2026-03-04T04:52:26Z"
+      "updatedAt": "2026-03-04T04:52:26Z",
+      "assigneeId": 2
     },
     {
       "id": 51,
@@ -54,11 +54,11 @@
       "description": "Produce measurable SLA targets and acceptance checks for board/task workflows.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-04T04:27:36Z",
-      "updatedAt": "2026-03-04T09:16:00Z"
+      "updatedAt": "2026-03-04T09:16:00Z",
+      "assigneeId": 2
     },
     {
       "id": 50,
@@ -66,11 +66,11 @@
       "description": "Assert active-route highlighting across /tasks,/projects,/people,/settings to prevent navigation orientation regressions.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 3,
       "createdAt": "2026-03-04T04:27:30Z",
-      "updatedAt": "2026-03-04T07:38:44Z"
+      "updatedAt": "2026-03-04T07:38:44Z",
+      "assigneeId": 2
     },
     {
       "id": 49,
@@ -100,11 +100,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-04T02:22:47Z"
+      "updatedAt": "2026-03-04T02:22:47Z",
+      "assigneeId": 2
     },
     {
       "id": 46,
@@ -112,11 +112,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-04T04:25:56Z"
+      "updatedAt": "2026-03-04T04:25:56Z",
+      "assigneeId": 2
     },
     {
       "id": 45,
@@ -124,11 +124,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-04T03:23:22Z"
+      "updatedAt": "2026-03-04T03:23:22Z",
+      "assigneeId": 2
     },
     {
       "id": 44,
@@ -136,11 +136,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-04T01:53:22Z"
+      "updatedAt": "2026-03-04T01:53:22Z",
+      "assigneeId": 2
     },
     {
       "id": 43,
@@ -148,11 +148,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-04T01:16:00Z"
+      "updatedAt": "2026-03-04T01:16:00Z",
+      "assigneeId": 2
     },
     {
       "id": 42,
@@ -160,11 +160,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-03T21:16:10Z"
+      "updatedAt": "2026-03-03T21:16:10Z",
+      "assigneeId": 2
     },
     {
       "id": 41,
@@ -172,11 +172,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-03T21:00:42Z"
+      "updatedAt": "2026-03-03T21:00:42Z",
+      "assigneeId": 2
     },
     {
       "id": 40,
@@ -184,11 +184,11 @@
       "description": "Requested by Ian: board-first multi-page UX architecture.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
-      "updatedAt": "2026-03-03T19:44:44Z"
+      "updatedAt": "2026-03-03T19:44:44Z",
+      "assigneeId": 2
     },
     {
       "id": 39,
@@ -196,11 +196,11 @@
       "description": "Run one full Next sweep with actual sessions_spawn workers using compact prompts + 180s timeout. Capture done/timeout ratios and propose quantitative unblock threshold for #34.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-03T18:18:32Z",
-      "updatedAt": "2026-03-03T18:45:39Z"
+      "updatedAt": "2026-03-03T18:45:39Z",
+      "assigneeId": 2
     },
     {
       "id": 38,
@@ -208,11 +208,11 @@
       "description": "Run one complete deterministic fanout cycle using emit-spawn-spec payloads and record completion/timeout metrics by task.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-03T18:02:18Z",
-      "updatedAt": "2026-03-03T18:18:28Z"
+      "updatedAt": "2026-03-03T18:18:28Z",
+      "assigneeId": 2
     },
     {
       "id": 37,
@@ -220,11 +220,11 @@
       "description": "Raise runTimeoutSeconds policy for analysis workers and shrink prompt payload so batched fanout returns actionable notes instead of timeouts.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-03T17:47:46Z",
-      "updatedAt": "2026-03-03T18:01:11Z"
+      "updatedAt": "2026-03-03T18:01:11Z",
+      "assigneeId": 2
     },
     {
       "id": 36,
@@ -232,11 +232,11 @@
       "description": "Use ops/run/plan_subagent_fanout.py output in loop to process all Next tasks over rolling cycles.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-03T17:33:45Z",
-      "updatedAt": "2026-03-03T17:47:40Z"
+      "updatedAt": "2026-03-03T17:47:40Z",
+      "assigneeId": 2
     },
     {
       "id": 35,
@@ -244,11 +244,11 @@
       "description": "Add deterministic batching (5 at a time), 45s worker timeout, and resume cursor so every Next task gets a worker pass over multiple cycles.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-03T17:18:44Z",
-      "updatedAt": "2026-03-03T17:33:45Z"
+      "updatedAt": "2026-03-03T17:33:45Z",
+      "assigneeId": 2
     },
     {
       "id": 34,
@@ -256,11 +256,11 @@
       "description": "Blocker: current subagent runtime allows 5 active workers and repeated 90-120s timeouts, preventing per-Next-task fanout completion in a single cycle.",
       "state": "waiting",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 7,
       "priority": 1,
       "createdAt": "2026-03-03T17:18:44Z",
-      "updatedAt": "2026-03-03T17:32:38Z"
+      "updatedAt": "2026-03-03T17:32:38Z",
+      "assigneeId": 2
     },
     {
       "id": 33,
@@ -268,11 +268,11 @@
       "description": "",
       "state": "done",
       "projectId": 6,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T17:16:06Z",
-      "updatedAt": "2026-03-03T20:15:23Z"
+      "updatedAt": "2026-03-03T20:15:23Z",
+      "assigneeId": 2
     },
     {
       "id": 32,
@@ -280,11 +280,11 @@
       "description": "Capture canonical GO binary resolution order and env vars for ops/run scripts.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-03T17:16:04Z",
-      "updatedAt": "2026-03-03T18:59:47Z"
+      "updatedAt": "2026-03-03T18:59:47Z",
+      "assigneeId": 2
     },
     {
       "id": 31,
@@ -292,11 +292,11 @@
       "description": "",
       "state": "done",
       "projectId": 5,
-      "assigneeId": 2,
       "boardColumnId": 9,
       "priority": 3,
       "createdAt": "2026-03-03T17:14:52Z",
-      "updatedAt": "2026-03-03T19:29:53Z"
+      "updatedAt": "2026-03-03T19:29:53Z",
+      "assigneeId": 2
     },
     {
       "id": 30,
@@ -304,11 +304,11 @@
       "description": "Mirror GO path resolution pattern in ops/run/generate-backend-contract-tests.sh for non-interactive shells.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-03T16:49:48Z",
-      "updatedAt": "2026-03-03T17:16:04Z"
+      "updatedAt": "2026-03-03T17:16:04Z",
+      "assigneeId": 2
     },
     {
       "id": 29,
@@ -316,12 +316,12 @@
       "description": "Update ops/run/generate-openapi.sh to use deterministic GO path fallback, matching Makefile behavior.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
-      "dueAt": "2026-03-04T16:35:56Z",
       "createdAt": "2026-03-03T16:35:56Z",
-      "updatedAt": "2026-03-03T16:49:41Z"
+      "updatedAt": "2026-03-03T16:49:41Z",
+      "assigneeId": 2,
+      "dueAt": "2026-03-04T16:35:56Z"
     },
     {
       "id": 28,
@@ -329,11 +329,11 @@
       "description": "Keep contract/docs aligned with backend priority support.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:20:01Z",
-      "updatedAt": "2026-03-03T16:36:26Z"
+      "updatedAt": "2026-03-03T16:36:26Z",
+      "assigneeId": 2
     },
     {
       "id": 27,
@@ -341,35 +341,35 @@
       "description": "Follow-up after backend priority ordering shipped.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-03T16:20:01Z",
-      "updatedAt": "2026-03-03T20:31:13Z"
+      "updatedAt": "2026-03-03T20:31:13Z",
+      "assigneeId": 2
     },
     {
       "id": 26,
       "title": "Auth: End-to-end auth test matrix (happy path, invalid creds, expired sessions)",
       "description": "Seeded roadmap inbox item requested by Ian.",
-      "state": "next",
+      "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
+      "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-03T16:48:41Z"
+      "updatedAt": "2026-03-04T22:45:52Z",
+      "assigneeId": 2
     },
     {
       "id": 25,
       "title": "Auth: Security hardening checklist (password policy, CSRF, rate limits)",
       "description": "Seeded roadmap inbox item requested by Ian.",
-      "state": "next",
+      "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
+      "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-03T16:48:41Z"
+      "updatedAt": "2026-03-04T21:15:18Z",
+      "assigneeId": 2
     },
     {
       "id": 24,
@@ -377,11 +377,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T19:45:42Z"
+      "updatedAt": "2026-03-04T19:45:42Z",
+      "assigneeId": 2
     },
     {
       "id": 23,
@@ -389,11 +389,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T18:45:09Z"
+      "updatedAt": "2026-03-04T18:45:09Z",
+      "assigneeId": 2
     },
     {
       "id": 22,
@@ -401,11 +401,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T17:45:18Z"
+      "updatedAt": "2026-03-04T17:45:18Z",
+      "assigneeId": 2
     },
     {
       "id": 21,
@@ -413,11 +413,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T16:46:15Z"
+      "updatedAt": "2026-03-04T16:46:15Z",
+      "assigneeId": 2
     },
     {
       "id": 20,
@@ -425,11 +425,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T15:45:43Z"
+      "updatedAt": "2026-03-04T15:45:43Z",
+      "assigneeId": 2
     },
     {
       "id": 19,
@@ -437,11 +437,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T13:37:18Z"
+      "updatedAt": "2026-03-04T13:37:18Z",
+      "assigneeId": 2
     },
     {
       "id": 18,
@@ -449,11 +449,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T13:04:17Z"
+      "updatedAt": "2026-03-04T13:04:17Z",
+      "assigneeId": 2
     },
     {
       "id": 17,
@@ -461,11 +461,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T12:02:30Z"
+      "updatedAt": "2026-03-04T12:02:30Z",
+      "assigneeId": 2
     },
     {
       "id": 16,
@@ -473,11 +473,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T10:34:06Z"
+      "updatedAt": "2026-03-04T10:34:06Z",
+      "assigneeId": 2
     },
     {
       "id": 15,
@@ -485,11 +485,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T10:01:10Z"
+      "updatedAt": "2026-03-04T10:01:10Z",
+      "assigneeId": 2
     },
     {
       "id": 14,
@@ -497,11 +497,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T03:52:48Z"
+      "updatedAt": "2026-03-04T03:52:48Z",
+      "assigneeId": 2
     },
     {
       "id": 13,
@@ -509,11 +509,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T02:52:23Z"
+      "updatedAt": "2026-03-04T02:52:23Z",
+      "assigneeId": 2
     },
     {
       "id": 12,
@@ -521,11 +521,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-04T00:46:08Z"
+      "updatedAt": "2026-03-04T00:46:08Z",
+      "assigneeId": 2
     },
     {
       "id": 11,
@@ -533,11 +533,11 @@
       "description": "Seeded roadmap inbox item requested by Ian.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-03T19:14:48Z"
+      "updatedAt": "2026-03-03T19:14:48Z",
+      "assigneeId": 2
     },
     {
       "id": 10,
@@ -545,11 +545,11 @@
       "description": "Autonomous loop needs stable Next ranking by priority/deadline; add backend fields + sorting support.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:04:40Z",
-      "updatedAt": "2026-03-03T16:20:01Z"
+      "updatedAt": "2026-03-03T16:20:01Z",
+      "assigneeId": 2
     },
     {
       "id": 9,
@@ -568,11 +568,11 @@
       "description": "Add make restart-backend helper and document when to use it before API mutation checks.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T15:56:00Z",
-      "updatedAt": "2026-03-03T16:04:32Z"
+      "updatedAt": "2026-03-03T16:04:32Z",
+      "assigneeId": 2
     },
     {
       "id": 7,
@@ -591,11 +591,11 @@
       "description": "Endpoint returns {\"error\":\"not found\"} despite route existing in source; verify deployed binary/version and handler path.",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T15:28:37Z",
-      "updatedAt": "2026-03-03T15:55:56Z"
+      "updatedAt": "2026-03-03T15:55:56Z",
+      "assigneeId": 2
     },
     {
       "id": 5,
@@ -603,11 +603,11 @@
       "description": "Auto-managed by autonomous loop",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
-      "updatedAt": "2026-03-03T16:05:03Z"
+      "updatedAt": "2026-03-03T16:05:03Z",
+      "assigneeId": 2
     },
     {
       "id": 4,
@@ -615,11 +615,11 @@
       "description": "Auto-managed by autonomous loop",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
-      "updatedAt": "2026-03-03T20:45:26Z"
+      "updatedAt": "2026-03-03T20:45:26Z",
+      "assigneeId": 2
     },
     {
       "id": 3,
@@ -627,11 +627,11 @@
       "description": "Auto-managed by autonomous loop",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
-      "updatedAt": "2026-03-03T16:36:26Z"
+      "updatedAt": "2026-03-03T16:36:26Z",
+      "assigneeId": 2
     },
     {
       "id": 2,
@@ -639,11 +639,11 @@
       "description": "Auto-managed by autonomous loop",
       "state": "done",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
-      "updatedAt": "2026-03-03T15:28:37Z"
+      "updatedAt": "2026-03-03T15:28:37Z",
+      "assigneeId": 2
     },
     {
       "id": 1,
@@ -651,11 +651,11 @@
       "description": "Implement inbox->next->done with review checks",
       "state": "done",
       "projectId": 1,
-      "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T08:38:41Z",
-      "updatedAt": "2026-03-03T23:15:45Z"
+      "updatedAt": "2026-03-03T23:15:45Z",
+      "assigneeId": 2
     }
   ],
   "page": 1,

@@ -170,3 +170,14 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `git diff -- docs/auth/security-hardening-checklist.md docs/architecture/overview.md docs/roadmap.md docs/iteration-checklist.md` ✅
+
+## Iteration Update (2026-03-04 14:43 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done) directly in DB source-of-truth.
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #26 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Shipped board-first filter increment: added first-class `taskPriority` + `taskDueWindow` controls and unified board-lane/task-explorer filtering in `frontend/app/_dashboard.tsx`.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `npm test -- --run tests/board-lanes-rendering.test.tsx tests/board-page-defaults.test.tsx` ✅
+- `npm test -- --run tests/tasks-page.test.tsx tests/board-lane-smoke.test.tsx` ✅

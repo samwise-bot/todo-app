@@ -105,3 +105,9 @@
 - ✅ Completed: task #24 moved `Next -> In Progress -> Done`; added account-principal link persistence helper with audit-event emission (`backend/internal/store/account_principal_links.go`) plus focused coverage (`backend/tests/account_principal_links_test.go`).
 
 - ✅ Completed: task #25 moved `Next -> In Progress -> Done`; added auth hardening baseline checklist in `docs/auth/security-hardening-checklist.md` (password policy, login rate limits, CSRF, secure session handling, and audit events).
+- ✅ Completed: task #26 moved `Next -> In Progress -> Done` in this cycle with explicit `samwise` ownership persisted in DB.
+- ✅ Completed: board-first filter milestone increment; `/board` now exposes first-class `priority` + `due-window` filters and applies one shared matcher across board lanes + task explorer to avoid route-hopping/filter drift.
+- ▶ Next milestone:
+  - Board UX: promote due-window presets to reusable chips and persist filter presets in URL templates.
+  - Board UX: add explicit lane-level filter summary badges so operators see active constraints at a glance.
+  - Unblock #52/#34: record one live worker-outcome artifact and set timeout threshold gate.
