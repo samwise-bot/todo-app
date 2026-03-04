@@ -71,6 +71,7 @@ def _worker_outcome_summary(path: Path, fixture_path: Path | None = None) -> dic
     if not source_path.exists():
         return {
             'path': str(path),
+            'requestedPath': str(path),
             'found': False,
             'usedFixture': False,
             'total': 0,

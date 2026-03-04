@@ -67,6 +67,15 @@ class ValidateSubagentFanoutSweepTest(unittest.TestCase):
             self.assertEqual(summary["path"], str(fixture))
             self.assertEqual(summary["total"], 2)
 
+    def test_worker_outcome_summary_missing_path_keeps_requested_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            primary = Path(tmp) / "missing-worker-results.json"
+            summary = module._worker_outcome_summary(primary)
+            self.assertFalse(summary["found"])
+            self.assertFalse(summary["usedFixture"])
+            self.assertEqual(summary["requestedPath"], str(primary))
+            self.assertEqual(summary["path"], str(primary))
+
 
 if __name__ == "__main__":
     unittest.main()

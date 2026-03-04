@@ -6,9 +6,8 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Mainline execution completed on highest-priority Next task #53; moved `Next -> In Progress -> Done` assigned to `samwise`.
-- [x] Added fixture-backed worker outcome evidence path for no-subagent mode (`ops/fixtures/subagent-worker-results.sample.json`).
-- [x] Extended `ops/run/validate_subagent_fanout_sweep.py` with `--worker-results-fixture-json` fallback and provenance flags (`usedFixture`, `requestedPath`).
-- [x] Added regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py` for fixture fallback behavior.
+- [x] Hardened worker-outcome provenance reporting to include `requestedPath` even when neither live results nor fixture file exists.
+- [x] Added focused regression coverage for missing worker-result path handling (`ops/tests/test_validate_subagent_fanout_sweep.py`).
 - [x] Synced architecture + roadmap notes (`docs/architecture/overview.md`, `docs/roadmap.md`) for this increment.
 
 ## Current App Task Board (Project: TODO App)
@@ -19,7 +18,4 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 - [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**waiting/blocked**, priority=1)
 
 ## Verification
-- `npm test -- top-nav.test.tsx` (run from `frontend/`) ✅
-- [x] Mainline execution completed on highest-priority Next task #50; moved `Next -> In Progress -> Done` assigned to `samwise`.
-- [x] Expanded nav active-state regression coverage for non-board routes in `frontend/tests/top-nav.test.tsx`.
-- [x] Synced architecture + roadmap notes (`docs/architecture/overview.md`, `docs/roadmap.md`) for this increment.
+- `python3 -m unittest ops.tests.test_validate_subagent_fanout_sweep` ✅

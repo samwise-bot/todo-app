@@ -74,3 +74,4 @@
   - #50 Reliability: add regression coverage for nav active-state styling on non-board routes.
   - #51 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).
 - ✅ Completed: task #50 moved `Next -> In Progress -> Done`; nav active-state regression coverage now explicitly spans non-board routes (`/tasks|/projects|/people|/settings`) in `frontend/tests/top-nav.test.tsx`.
+- ✅ Completed: task #53 provenance follow-up hardening shipped; missing worker-results reports now preserve `requestedPath` even when no live/fixture file exists, with focused regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py`.
