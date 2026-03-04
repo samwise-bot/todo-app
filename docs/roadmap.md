@@ -93,3 +93,4 @@
 - ✅ Completed: task #54 moved `Next -> In Progress -> Done`; `Next` board lane cards are now sorted by `priority`, `dueAt`, then `id` during lane assembly, with focused regression coverage.
 - ✅ Completed: task #17 moved `Next -> In Progress -> Done`; backend benchmark harness now emits per-endpoint throughput (`throughput_rps`) and run metadata (`_meta.elapsed_ms`, `_meta.delay_ms`, `_meta.total_requests`) for repeatable load-trend comparisons.
 - ✅ Completed: task #55 moved `Next -> In Progress -> Done`; benchmark harness now accepts `--endpoints` for focused path-level latency checks while preserving SLA evaluation on selected targets.
+- ✅ Completed: task #18 moved `Next -> In Progress -> Done`; shipped initial frontend interaction benchmark slice with reusable lane-assembly latency summarizer + focused regression test coverage.

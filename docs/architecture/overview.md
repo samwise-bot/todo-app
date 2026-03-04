@@ -236,3 +236,8 @@ sequenceDiagram
   1. CLI now supports `--endpoints` (comma-separated paths) to run subset benchmarks without editing script internals.
   2. `run(...)` accepts an explicit endpoint list so tests and automation can isolate a single API path deterministically.
   3. SLA evaluation now scopes to selected endpoints that have configured targets, avoiding false failures for ad-hoc paths.
+
+## Architecture Delta (2026-03-04, autonomous loop 05:06 PT)
+- Completed TODO task #18 lifecycle (`Next -> In Progress -> Done`) with `samwise` ownership while preserving TODO App board-state mapping (`In Progress` column + `scheduled` state, then `Done`).
+- Added initial frontend interaction benchmark utility in `frontend/lib/interaction-benchmark.ts` to measure board-lane assembly latency over repeated iterations.
+- Added focused coverage in `frontend/tests/interaction-benchmark.test.ts` that asserts deterministic benchmark summary output (`avg`, `p50`, `p95`, `max`, duration samples).
