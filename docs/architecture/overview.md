@@ -232,3 +232,7 @@ sequenceDiagram
   1. `run(...)` now accepts `delay_ms` pacing between requests to make benchmark pressure profiles explicit.
   2. Endpoint summaries include `throughput_rps` for quick capacity trend checks alongside latency percentiles.
   3. Output now includes `_meta` envelope with elapsed runtime and total request count for artifact comparability.
+- Added focused benchmark endpoint selection for operator triage:
+  1. CLI now supports `--endpoints` (comma-separated paths) to run subset benchmarks without editing script internals.
+  2. `run(...)` accepts an explicit endpoint list so tests and automation can isolate a single API path deterministically.
+  3. SLA evaluation now scopes to selected endpoints that have configured targets, avoiding false failures for ad-hoc paths.

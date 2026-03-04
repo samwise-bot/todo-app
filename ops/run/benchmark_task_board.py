@@ -8,7 +8,7 @@ import json
 import statistics
 import time
 import urllib.request
-from typing import Dict, Iterable, List
+from typing import Dict, List, Sequence
 
 
 def percentile(samples: List[float], pct: float) -> float:
@@ -31,6 +31,12 @@ def hit(url: str) -> float:
     return (time.perf_counter() - start) * 1000.0
 
 
+DEFAULT_ENDPOINTS: List[str] = [
+    "/api/tasks?page=1&pageSize=50",
+    "/api/boards",
+    "/api/columns",
+]
+
 DEFAULT_SLA_P95_MS: Dict[str, float] = {
     "/api/tasks?page=1&pageSize=50": 350.0,
     "/api/boards": 200.0,
@@ -49,13 +55,13 @@ def evaluate_sla(summary: Dict[str, dict], p95_targets_ms: Dict[str, float]) -> 
     return {"allPassed": all_pass, "endpoints": endpoints}
 
 
-def run(base_url: str, iterations: int, delay_ms: float = 0.0) -> dict:
-    endpoints = ["/api/tasks?page=1&pageSize=50", "/api/boards", "/api/columns"]
-    timings = {path: [] for path in endpoints}
+def run(base_url: str, iterations: int, delay_ms: float = 0.0, endpoints: Sequence[str] | None = None) -> dict:
+    endpoint_list = list(endpoints or DEFAULT_ENDPOINTS)
+    timings = {path: [] for path in endpoint_list}
 
     started = time.perf_counter()
     for _ in range(iterations):
-        for path in endpoints:
+        for path in endpoint_list:
             timings[path].append(hit(f"{base_url}{path}"))
             if delay_ms > 0:
                 time.sleep(delay_ms / 1000.0)
@@ -76,7 +82,7 @@ def run(base_url: str, iterations: int, delay_ms: float = 0.0) -> dict:
     summary["_meta"] = {
         "elapsed_ms": round(elapsed_ms, 2),
         "delay_ms": delay_ms,
-        "total_requests": len(endpoints) * iterations,
+        "total_requests": len(endpoint_list) * iterations,
     }
     return summary
 
@@ -87,14 +93,22 @@ def main() -> int:
     parser.add_argument("--iterations", type=int, default=10)
     parser.add_argument("--output", default=".run/benchmark-task-board.json")
     parser.add_argument("--delay-ms", type=float, default=0.0)
+    parser.add_argument(
+        "--endpoints",
+        default=",".join(DEFAULT_ENDPOINTS),
+        help="Comma-separated API paths to benchmark (default: tasks,boards,columns)",
+    )
     args = parser.parse_args()
 
-    summary = run(args.base_url, args.iterations, args.delay_ms)
+    endpoints = [part.strip() for part in args.endpoints.split(",") if part.strip()]
+    summary = run(args.base_url, args.iterations, args.delay_ms, endpoints=endpoints)
+    sla_targets = {path: DEFAULT_SLA_P95_MS[path] for path in endpoints if path in DEFAULT_SLA_P95_MS}
     result = {
         "baseUrl": args.base_url,
         "iterations": args.iterations,
+        "endpoints": endpoints,
         "summary": summary,
-        "sla": evaluate_sla(summary, DEFAULT_SLA_P95_MS),
+        "sla": evaluate_sla(summary, sla_targets),
         "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     with open(args.output, "w", encoding="utf-8") as f:

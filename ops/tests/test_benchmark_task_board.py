@@ -38,6 +38,19 @@ class BenchmarkTaskBoardTest(unittest.TestCase):
         self.assertEqual(summary["_meta"]["delay_ms"], 5.0)
         self.assertEqual(summary["_meta"]["total_requests"], 6)
 
+    def test_run_supports_endpoint_subset(self) -> None:
+        with mock.patch("ops.run.benchmark_task_board.hit", return_value=25.0):
+            summary = run(
+                "http://127.0.0.1:8080",
+                iterations=3,
+                endpoints=["/api/boards"],
+            )
+
+        self.assertIn("/api/boards", summary)
+        self.assertNotIn("/api/columns", summary)
+        self.assertEqual(summary["/api/boards"]["count"], 3)
+        self.assertEqual(summary["_meta"]["total_requests"], 3)
+
 
 if __name__ == "__main__":
     unittest.main()
