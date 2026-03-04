@@ -28,3 +28,14 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Verification
 - `git diff -- docs/roadmap.md docs/architecture/overview.md docs/iteration-checklist.md .run/tasks.json` ✅
+
+## Iteration Update (2026-03-04 01:14 PT)
+- [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) against API source-of-truth.
+- [x] Processed Inbox first (no `inbox` tasks present).
+- [x] Executed task #51 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added benchmark harness `ops/run/benchmark_task_board.py` with focused percentile tests (`ops/tests/test_benchmark_task_board.py`).
+- [x] Refreshed Next ordering by `priority`, `dueAt`, then `id` from API task export.
+
+## Verification
+- `python3 -m unittest ops.tests.test_benchmark_task_board` ✅
+- `python3 ops/run/benchmark_task_board.py --iterations 3 --output .run/benchmark-task-board.json` ✅

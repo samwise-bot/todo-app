@@ -84,3 +84,5 @@
 - ✅ Completed: task #51 moved `Next -> In Progress -> Done`; defined TODO App performance SLA baseline (API latency, board render, interaction latency, throughput, and CI regression gates).
 
 - ✅ Completed: task #15 moved `Next -> In Progress -> Done` in this cycle; expanded offline-first cache strategy from single TTL to policy tiers (Hot/Warm/Cold), invalidation triggers, and rollout checkpoints in Phase 2.
+
+- ✅ Completed: task #51 moved `Next -> In Progress -> Done`; added `ops/run/benchmark_task_board.py` lightweight read-endpoint benchmark runner (tasks/boards/columns) with JSON artifact output for SLA tracking.

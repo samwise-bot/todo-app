@@ -212,3 +212,7 @@ sequenceDiagram
   2. Documented deterministic invalidation triggers (task mutation, board/column mutation, assignment changes) to keep local-first reads fast without stale-lane drift.
   3. Captured rollout order: ship read-cache tiering first, then mutation-triggered revalidation, then observability thresholds.
 
+
+- Autonomous loop increment (2026-03-04 01:14 PT):
+  1. Added `ops/run/benchmark_task_board.py` to measure local API read-path latency (`/api/tasks`, `/api/boards`, `/api/columns`) with p50/p95/avg/max summary output.
+  2. Added focused percentile coverage in `ops/tests/test_benchmark_task_board.py` to keep SLO math deterministic.
