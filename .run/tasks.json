@@ -1,6 +1,42 @@
 {
   "items": [
     {
+      "id": 58,
+      "title": "Unblock #52: capture live worker-outcome artifact and set timeout threshold",
+      "description": "Run one live worker-outcome capture and document threshold decision for #34/#52.",
+      "state": "next",
+      "projectId": 2,
+      "boardColumnId": 2,
+      "priority": 1,
+      "createdAt": "2026-03-04T22:46:46Z",
+      "updatedAt": "2026-03-04T22:46:46Z",
+      "assigneeId": 2
+    },
+    {
+      "id": 57,
+      "title": "Board UX: show active filter summary badges above lanes",
+      "description": "Display compact chips for active board filters to avoid hidden constraints during triage.",
+      "state": "next",
+      "projectId": 2,
+      "boardColumnId": 2,
+      "priority": 2,
+      "createdAt": "2026-03-04T22:46:46Z",
+      "updatedAt": "2026-03-04T22:46:46Z",
+      "assigneeId": 2
+    },
+    {
+      "id": 56,
+      "title": "Board UX: persist board filter presets as URL templates",
+      "description": "Save/restore common board filter sets (assignee/project/state/priority/due-window/search).",
+      "state": "next",
+      "projectId": 2,
+      "boardColumnId": 2,
+      "priority": 1,
+      "createdAt": "2026-03-04T22:46:46Z",
+      "updatedAt": "2026-03-04T22:46:46Z",
+      "assigneeId": 2
+    },
+    {
       "id": 55,
       "title": "Benchmark UX: add optional endpoint filter for focused load checks",
       "description": "Allow benchmark_task_board.py to run a subset of endpoints via CLI so operators can isolate regressions quickly.",
@@ -660,6 +696,6 @@
   ],
   "page": 1,
   "pageSize": 100,
-  "totalItems": 55,
+  "totalItems": 58,
   "totalPages": 1
 }
