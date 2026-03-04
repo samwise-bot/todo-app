@@ -168,3 +168,7 @@ sequenceDiagram
   2. Added explicit kill switch via `TODO_APP_SWR_SECONDS=0` to force `cache: no-store` during debugging or strict freshness runs.
   3. Added regression tests in `frontend/tests/api-client.test.ts` for default SWR behavior and the zero-second no-store fallback.
 - Added explicit Phase-2 execution gates to roadmap (`task #12` atomic doc increment) so SPA migration progress can be assessed with binary pass/fail checks instead of narrative-only status updates.
+- Upgraded `/settings` from placeholder scaffold to an actionable advanced-settings panel (`task #45` increment):
+  1. Surfaces effective `TODO_APP_SWR_SECONDS` policy (including explicit `0 (no-store)` label).
+  2. Documents board-first focus defaults used by the autonomous execution loop.
+  3. Exposes current roadmap scope context so operators can sanity-check runtime posture in-app.
