@@ -185,3 +185,7 @@ sequenceDiagram
   1. Executed focused fanout checkpoint run (`validate_subagent_fanout_sweep.py --max-cycles 1`) to validate readiness for timeout-threshold decision task #52.
   2. Validation report showed no worker-outcome evidence source (`.run/subagent-worker-results.json` absent), so completion/timeout ratio remains undefined in current no-subagent mode.
   3. Moved #52 to Blocked and created #53 (`priority=1`) to acquire one outcome dataset via non-subagent path before resuming threshold decision.
+- Autonomous loop increment (2026-03-03 21:21 PT):
+  1. Added deterministic worker-outcome fixture fallback in `ops/run/validate_subagent_fanout_sweep.py` via `--worker-results-fixture-json` (default `ops/fixtures/subagent-worker-results.sample.json`).
+  2. `workerOutcomeSummary` now reports `usedFixture` and `requestedPath` for explicit provenance when live worker output is absent.
+  3. Added regression coverage in `ops/tests/test_validate_subagent_fanout_sweep.py` for fixture fallback behavior.

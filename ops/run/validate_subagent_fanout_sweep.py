@@ -20,6 +20,7 @@ DEFAULT_BATCH_SIZE = 5
 DEFAULT_MAX_CYCLES = 20
 DEFAULT_REPORT_PATH = Path('.run/subagent-fanout-sweep-report.json')
 DEFAULT_WORKER_RESULTS_PATH = Path('.run/subagent-worker-results.json')
+DEFAULT_WORKER_RESULTS_FIXTURE_PATH = Path('ops/fixtures/subagent-worker-results.sample.json')
 
 
 def _run_select(api_base: str, project_id: int, batch_size: int) -> dict:
@@ -59,11 +60,19 @@ def _next_ids_from_tasks_json(path: Path) -> list[int]:
     return sorted(next_ids)
 
 
-def _worker_outcome_summary(path: Path) -> dict:
-    if not path.exists():
+def _worker_outcome_summary(path: Path, fixture_path: Path | None = None) -> dict:
+    source_path = path
+    used_fixture = False
+
+    if not source_path.exists() and fixture_path and fixture_path.exists():
+        source_path = fixture_path
+        used_fixture = True
+
+    if not source_path.exists():
         return {
             'path': str(path),
             'found': False,
+            'usedFixture': False,
             'total': 0,
             'completed': 0,
             'timedOut': 0,
@@ -71,7 +80,7 @@ def _worker_outcome_summary(path: Path) -> dict:
             'timeoutRatio': 0.0,
         }
 
-    payload = json.loads(path.read_text())
+    payload = json.loads(source_path.read_text())
     rows = payload.get('items', []) if isinstance(payload, dict) else payload
     completed = 0
     timed_out = 0
@@ -86,8 +95,10 @@ def _worker_outcome_summary(path: Path) -> dict:
 
     total = len([r for r in rows if isinstance(r, dict)])
     return {
-        'path': str(path),
+        'path': str(source_path),
+        'requestedPath': str(path),
         'found': True,
+        'usedFixture': used_fixture,
         'total': total,
         'completed': completed,
         'timedOut': timed_out,
@@ -104,6 +115,7 @@ def main() -> int:
     parser.add_argument('--max-cycles', type=int, default=DEFAULT_MAX_CYCLES)
     parser.add_argument('--tasks-json', type=Path, default=Path('.run/tasks.json'))
     parser.add_argument('--worker-results-json', type=Path, default=DEFAULT_WORKER_RESULTS_PATH)
+    parser.add_argument('--worker-results-fixture-json', type=Path, default=DEFAULT_WORKER_RESULTS_FIXTURE_PATH)
     parser.add_argument('--report-path', type=Path, default=DEFAULT_REPORT_PATH)
     args = parser.parse_args()
 
@@ -144,7 +156,10 @@ def main() -> int:
         'seenIds': sorted(seen),
         'coverageRatio': (len(set(final_expected) & seen) / len(final_expected)) if final_expected else 1.0,
         'completedFullSweep': completed,
-        'workerOutcomeSummary': _worker_outcome_summary(args.worker_results_json),
+        'workerOutcomeSummary': _worker_outcome_summary(
+            args.worker_results_json,
+            fixture_path=args.worker_results_fixture_json,
+        ),
         'cycleSummaries': cycle_summaries,
     }
 

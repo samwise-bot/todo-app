@@ -68,7 +68,8 @@
 - ✅ Completed: task #46 moved `Next -> In Progress -> Done`; nav now marks active route and exposes persistent `+ Quick create` jump-to-intake action.
 - 🚧 Blocked this cycle: #52 moved to Blocked after focused validation confirmed worker-outcome dataset is unavailable (`.run/subagent-worker-results.json` missing) while subagent execution is disabled.
 - ✅ Created unblock task #53 (priority=1) to capture one worker outcome sample via non-subagent runner or fixture import, then resume #52 threshold decision.
+- ✅ Completed: task #53 moved `Next -> In Progress -> Done`; fanout sweep validator now falls back to a checked-in worker-outcome fixture with explicit provenance fields (`usedFixture`, `requestedPath`) when live worker output is missing.
 - ▶ Next milestone:
-  - #53 Unblock: capture one concrete worker timeout/completion dataset.
   - #52 Unblock: define timeout threshold for fanout lane using captured outcome evidence.
-  - #16 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).
+  - #50 Reliability: add regression coverage for nav active-state styling on non-board routes.
+  - #51 Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput).

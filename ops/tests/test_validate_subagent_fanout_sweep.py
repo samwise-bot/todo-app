@@ -47,9 +47,25 @@ class ValidateSubagentFanoutSweepTest(unittest.TestCase):
             ]}))
             summary = module._worker_outcome_summary(path)
             self.assertTrue(summary["found"])
+            self.assertFalse(summary["usedFixture"])
             self.assertEqual(summary["total"], 4)
             self.assertEqual(summary["completed"], 2)
             self.assertEqual(summary["timedOut"], 2)
+
+    def test_worker_outcome_summary_falls_back_to_fixture(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            primary = Path(tmp) / "missing-worker-results.json"
+            fixture = Path(tmp) / "fixture-worker-results.json"
+            fixture.write_text(json.dumps([
+                {"taskId": 1, "status": "completed"},
+                {"taskId": 2, "status": "timed_out"},
+            ]))
+            summary = module._worker_outcome_summary(primary, fixture_path=fixture)
+            self.assertTrue(summary["found"])
+            self.assertTrue(summary["usedFixture"])
+            self.assertEqual(summary["requestedPath"], str(primary))
+            self.assertEqual(summary["path"], str(fixture))
+            self.assertEqual(summary["total"], 2)
 
 
 if __name__ == "__main__":
