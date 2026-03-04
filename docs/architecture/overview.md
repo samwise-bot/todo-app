@@ -243,3 +243,8 @@ sequenceDiagram
 - Added focused coverage in `frontend/tests/interaction-benchmark.test.ts` that asserts deterministic benchmark summary output (`avg`, `p50`, `p95`, `max`, duration samples).
 
 - 2026-03-04 13:37 UTC: CI telemetry gate now supports optional historical trend comparison via `--history-csv` + `max_history_regression_percent` for per-job drift checks.
+
+## Architecture Delta (2026-03-04, autonomous loop 06:34 PT)
+- Completed TODO task #26 lifecycle (`Next -> In Progress -> Done`) with `samwise` assignment.
+- Added auth E2E matrix doc (`docs/auth/e2e-test-matrix.md`) defining happy-path, invalid-credentials, and expired-session coverage for single-user mode.
+- Captured deterministic test IDs and ownership to keep upcoming auth implementation slices measurable.

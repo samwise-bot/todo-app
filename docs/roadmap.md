@@ -96,3 +96,5 @@
 - ✅ Completed: task #18 moved `Next -> In Progress -> Done`; shipped initial frontend interaction benchmark slice with reusable lane-assembly latency summarizer + focused regression test coverage.
 
 - 2026-03-04 13:37 UTC: Completed task #19 slice: added historical trend tracking to CI telemetry regression gate (JSON/CSV outputs include history deltas; new threshold key `max_history_regression_percent`).
+
+- ✅ Completed: task #26 moved `Next -> In Progress -> Done`; authored initial auth E2E matrix covering happy path, invalid credentials, and expired-session handling (`docs/auth/e2e-test-matrix.md`).

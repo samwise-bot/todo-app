@@ -351,12 +351,12 @@
       "id": 26,
       "title": "Auth: End-to-end auth test matrix (happy path, invalid creds, expired sessions)",
       "description": "Seeded roadmap inbox item requested by Ian.",
-      "state": "next",
+      "state": "done",
       "projectId": 2,
-      "boardColumnId": 2,
+      "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
-      "updatedAt": "2026-03-03T16:48:41Z",
+      "updatedAt": "2026-03-04T14:35:29Z",
       "assigneeId": 2
     },
     {

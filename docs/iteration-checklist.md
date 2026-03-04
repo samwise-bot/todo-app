@@ -101,3 +101,13 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 - `npm test -- --run tests/interaction-benchmark.test.ts` ✅
 
 - 2026-03-04 13:37 UTC: Loop execution checkpoint — implemented and tested historical CI telemetry regression checks against recent run history.
+
+## Iteration Update (2026-03-04 06:34 PT)
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #26 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Added auth E2E matrix baseline in `docs/auth/e2e-test-matrix.md`.
+- [x] Synced architecture + roadmap docs for this increment.
+
+## Verification
+- `npm test -- --run tests/api-client.test.ts` (focused regression guard) 
