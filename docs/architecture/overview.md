@@ -266,3 +266,7 @@ sequenceDiagram
   - `Permission` constants: `tasks.read`, `tasks.write`, `users.manage`
   - `RoleHasPermission(role, permission)` matrix helper for deterministic authorization checks.
 - Added focused backend tests in `backend/tests/auth_role_permissions_test.go` to lock role validity and permission matrix behavior.
+- Added account-principal linking persistence primitive in `backend/internal/store/account_principal_links.go`:
+  1. `LinkAccountPrincipal(...)` upserts account/principal role bindings.
+  2. Each link/update writes `account_principal.linked` audit evidence to `account_principal_events`.
+  3. Added focused coverage in `backend/tests/account_principal_links_test.go`.

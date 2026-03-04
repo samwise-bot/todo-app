@@ -149,3 +149,14 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 - [x] Executed task #23 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
 - [x] Implemented one atomic auth-domain change: role/permission primitives + focused test coverage.
 - [x] Refreshed Next ordering snapshot by `priority`, `dueAt`, `id` from API export.
+
+## Autonomous Loop Run — 2026-03-04 11:43 PT
+
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (no `inbox` tasks present for TODO App).
+- [x] Executed task #24 lifecycle (`Next -> In Progress -> Done`) assigned to `samwise`.
+- [x] Implemented one atomic auth-domain change: account-principal link upsert + audit-event logging support (`backend/internal/store/account_principal_links.go`, `backend/migrations/004_account_principal_link_events.sql`).
+- [x] Refreshed task export snapshot from API (`.run/tasks.json`) and re-ranked Next by `priority`, `dueAt`, then `id`.
+
+## Verification
+- `/home/bot/.nix-profile/bin/go test ./tests -run TestLinkAccountPrincipalWritesAuditEvent` ✅

@@ -102,3 +102,4 @@
 - ✅ Completed: task #22 moved `Next -> In Progress -> Done`; added secure auth session-cookie helpers (`newSessionCookie`/`clearSessionCookie`) with focused backend unit tests as the first atomic login/logout flow building block.
 
 - ✅ Completed: task #23 moved `Next -> In Progress -> Done`; shipped initial auth role/permission domain model (`owner|agent|collaborator` + permission matrix helper) with focused regression tests (`backend/tests/auth_role_permissions_test.go`).
+- ✅ Completed: task #24 moved `Next -> In Progress -> Done`; added account-principal link persistence helper with audit-event emission (`backend/internal/store/account_principal_links.go`) plus focused coverage (`backend/tests/account_principal_links_test.go`).
