@@ -152,3 +152,4 @@ sequenceDiagram
   1. `frontend/lib/api-client.ts` now centralizes collection fetch policy with stale-while-revalidate defaults (`cache: force-cache`, `next.revalidate: 30`).
   2. Added explicit kill switch via `TODO_APP_SWR_SECONDS=0` to force `cache: no-store` during debugging or strict freshness runs.
   3. Added regression tests in `frontend/tests/api-client.test.ts` for default SWR behavior and the zero-second no-store fallback.
+- Added explicit Phase-2 execution gates to roadmap (`task #12` atomic doc increment) so SPA migration progress can be assessed with binary pass/fail checks instead of narrative-only status updates.

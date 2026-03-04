@@ -21,6 +21,13 @@
   - route split pages render with API-backed data (no static placeholders)
   - deterministic `Next` ordering preserved across refresh/navigation
 
+### Phase 2 Execution Gates (2026-03-03)
+- **Gate A — IA shell parity**: persistent nav + board-first default route in place.
+- **Gate B — Data consistency**: shared selectors/cache preserve deterministic `Next` ordering (`priority`, `dueAt`, `id`).
+- **Gate C — Route extraction**: `/tasks`, `/projects`, `/people`, `/settings` each render API-backed content (no placeholder-only pages).
+- **Gate D — Interaction reliability**: lane/task create + state transitions pass focused regression coverage.
+- **Gate E — Rollout safety**: SWR policy tunable via env with explicit `no-store` fallback for debugging.
+
 ## Phase 3 - Assignment + Agent Ops
 - Human/agent principal directory
 - Assignment UI/API and activity feed
