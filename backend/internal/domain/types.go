@@ -47,6 +47,44 @@ type Principal struct {
 	CreatedAt   time.Time     `json:"createdAt"`
 }
 
+type AccountPrincipalRole string
+
+const (
+	RoleOwner        AccountPrincipalRole = "owner"
+	RoleAgent        AccountPrincipalRole = "agent"
+	RoleCollaborator AccountPrincipalRole = "collaborator"
+)
+
+func (r AccountPrincipalRole) Valid() bool {
+	switch r {
+	case RoleOwner, RoleAgent, RoleCollaborator:
+		return true
+	default:
+		return false
+	}
+}
+
+type Permission string
+
+const (
+	PermissionReadTasks   Permission = "tasks.read"
+	PermissionWriteTasks  Permission = "tasks.write"
+	PermissionManageUsers Permission = "users.manage"
+)
+
+func RoleHasPermission(role AccountPrincipalRole, permission Permission) bool {
+	switch role {
+	case RoleOwner:
+		return true
+	case RoleAgent:
+		return permission == PermissionReadTasks || permission == PermissionWriteTasks
+	case RoleCollaborator:
+		return permission == PermissionReadTasks || permission == PermissionWriteTasks
+	default:
+		return false
+	}
+}
+
 type Project struct {
 	ID          int64     `json:"id"`
 	Name        string    `json:"name"`

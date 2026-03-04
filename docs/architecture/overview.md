@@ -258,3 +258,11 @@ sequenceDiagram
   1. `newSessionCookie(token, now)` issues a 24h `HttpOnly`, `Secure`, `SameSite=Strict` cookie scoped to `/`.
   2. `clearSessionCookie()` emits immediate-expiry cookie state (`MaxAge=-1`, epoch expiry) for logout semantics.
   3. Added focused regression coverage in `backend/internal/app/auth_cookie_test.go` to lock cookie security defaults before wiring login/logout handlers.
+
+## Update 2026-03-04 (autonomous loop)
+
+- Introduced initial auth role/permission domain primitives in `backend/internal/domain/types.go`:
+  - `AccountPrincipalRole` enum: `owner | agent | collaborator`
+  - `Permission` constants: `tasks.read`, `tasks.write`, `users.manage`
+  - `RoleHasPermission(role, permission)` matrix helper for deterministic authorization checks.
+- Added focused backend tests in `backend/tests/auth_role_permissions_test.go` to lock role validity and permission matrix behavior.

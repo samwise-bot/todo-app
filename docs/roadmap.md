@@ -100,3 +100,5 @@
 - ✅ Completed: task #26 moved `Next -> In Progress -> Done`; authored initial auth E2E matrix covering happy path, invalid credentials, and expired-session handling (`docs/auth/e2e-test-matrix.md`).
 - ✅ Completed: task #21 moved `Next -> In Progress -> Done`; added auth schema migration baseline (`backend/migrations/003_auth_accounts_sessions.sql`) for accounts, account-principal roles, and sessions.
 - ✅ Completed: task #22 moved `Next -> In Progress -> Done`; added secure auth session-cookie helpers (`newSessionCookie`/`clearSessionCookie`) with focused backend unit tests as the first atomic login/logout flow building block.
+
+- ✅ Completed: task #23 moved `Next -> In Progress -> Done`; shipped initial auth role/permission domain model (`owner|agent|collaborator` + permission matrix helper) with focused regression tests (`backend/tests/auth_role_permissions_test.go`).
