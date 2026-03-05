@@ -12,8 +12,8 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Current App Task Board (Project: TODO App)
 - [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**next**, priority=1)
-- [ ] #7 Mutation smoke task (**next**, priority=3)
-- [ ] #9 Mutation smoke task (**next**, priority=3)
+- [ ] #59 Board UX: make active filter badges removable inline from /board (**next**, priority=2)
+- [ ] #60 Board UX: persist /board filter presets as shareable URL templates (**next**, priority=3)
 
 ## Verification
 - `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
