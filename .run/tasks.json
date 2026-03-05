@@ -1,6 +1,18 @@
 {
   "items": [
     {
+      "id": 77,
+      "title": "Board UX: persist active saved-view chip state in toolbar",
+      "description": "Make saved-view chips indicate current match to improve orientation on board.",
+      "state": "next",
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2,
+      "priority": 3,
+      "createdAt": "2026-03-05T12:25:48Z",
+      "updatedAt": "2026-03-05T12:25:48Z"
+    },
+    {
       "id": 76,
       "title": "Navigation: add compact board quick-jump between /board and /settings",
       "description": "Keep board primary while making advanced controls reachable with one tap.",
@@ -16,13 +28,13 @@
       "id": 75,
       "title": "Board UX: add saved-view chips row for common board filter combinations",
       "description": "Expose one-tap view chips near toolbar for Mobile/Priority/Assigned slices.",
-      "state": "next",
+      "state": "done",
       "projectId": 2,
       "assigneeId": 2,
-      "boardColumnId": 2,
+      "boardColumnId": 5,
       "priority": 3,
       "createdAt": "2026-03-05T12:07:52Z",
-      "updatedAt": "2026-03-05T12:07:52Z"
+      "updatedAt": "2026-03-05T12:25:48Z"
     },
     {
       "id": 74,
@@ -165,7 +177,7 @@
       "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
-      "createdAt": "2026-03-05T06:16:37.559698+00:00",
+      "createdAt": "2026-03-05T06:16:37.559698Z",
       "updatedAt": "2026-03-05T08:27:50Z"
     },
     {
@@ -177,7 +189,7 @@
       "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
-      "createdAt": "2026-03-05T06:16:37.559698+00:00",
+      "createdAt": "2026-03-05T06:16:37.559698Z",
       "updatedAt": "2026-03-05T07:53:31.475243Z"
     },
     {
@@ -189,7 +201,7 @@
       "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 1,
-      "createdAt": "2026-03-05T06:16:37.559698+00:00",
+      "createdAt": "2026-03-05T06:16:37.559698Z",
       "updatedAt": "2026-03-05T06:26:05Z"
     },
     {
@@ -202,7 +214,7 @@
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-05T03:17:25Z",
-      "updatedAt": "2026-03-05T06:16:20.908341+00:00"
+      "updatedAt": "2026-03-05T06:16:20.908341Z"
     },
     {
       "id": 59,
@@ -214,7 +226,7 @@
       "boardColumnId": 5,
       "priority": 2,
       "createdAt": "2026-03-05T03:17:25Z",
-      "updatedAt": "2026-03-05T04:45:56.708895+00:00"
+      "updatedAt": "2026-03-05T04:45:56.708895Z"
     },
     {
       "id": 58,
@@ -490,7 +502,7 @@
       "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-03T17:18:44Z",
-      "updatedAt": "2026-03-05T06:16:05.841103+00:00"
+      "updatedAt": "2026-03-05T06:16:05.841103Z"
     },
     {
       "id": 32,
@@ -525,9 +537,9 @@
       "assigneeId": 2,
       "boardColumnId": 5,
       "priority": 2,
+      "dueAt": "2026-03-04T16:35:56Z",
       "createdAt": "2026-03-03T16:35:56Z",
-      "updatedAt": "2026-03-03T16:49:41Z",
-      "dueAt": "2026-03-04T16:35:56Z"
+      "updatedAt": "2026-03-03T16:49:41Z"
     },
     {
       "id": 28,

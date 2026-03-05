@@ -1,5 +1,16 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 04:23 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox items), ordered UI `Next` by (`priority`, `dueAt`, `id`), and executed task #75 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped board saved-view chips row polish for fast filter IA on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Added `Saved views` one-tap chips for `Assigned to me`, `Priority P1`, and `Mobile sweep (3d)` directly in the sticky board toolbar.
+  2. Added deterministic board-filter URL builder that preserves hidden query context while applying/clearing filter slices.
+  3. Styled saved-view chips for Trello-like scanability without introducing non-board clutter.
+- Added focused rendering regression assertions in `frontend/tests/board-lanes-rendering.test.tsx` for saved-view row labels and chip affordances.
+- Validation:
+  - `npm test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 04:10 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox items), ordered UI `Next` by (`priority`, `dueAt`, `id`), and executed task #73 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

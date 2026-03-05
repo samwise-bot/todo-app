@@ -223,10 +223,21 @@ a:hover {
 }
 
 .board-preset-row,
+.board-saved-view-row,
 .board-filter-quick-clear,
 .board-filter-reset-cluster {
   margin-bottom: 8px;
   gap: 8px;
+}
+
+.board-saved-view-row {
+  align-items: center;
+}
+
+.badge-saved-view {
+  background: #e6f5ea;
+  color: #1f5e34;
+  border: 1px solid #b7e1c5;
 }
 
 .board-filter-reset-cluster {
@@ -456,6 +467,7 @@ button:hover,
   }
 
   .board-preset-row,
+  .board-saved-view-row,
   .board-filter-quick-clear,
   .board-filter-reset-cluster {
     gap: 6px;

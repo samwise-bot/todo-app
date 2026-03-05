@@ -125,6 +125,12 @@ describe('BoardLanesSection', () => {
 
     expect(html).toContain('aria-label="Board filter toolbar"');
     expect(html).toContain('class="board-filter-toolbar"');
+    expect(html).toContain('aria-label="Saved board views"');
+    expect(html).toContain('Saved views:');
+    expect(html).toContain('Assigned to me');
+    expect(html).toContain('Priority P1');
+    expect(html).toContain('Mobile sweep (3d)');
+    expect(html).toContain('class="badge badge-saved-view"');
     expect(html).toContain('aria-label="Board filters"');
     expect(html).toContain('Filter board by assignee');
     expect(html).toContain('Search board cards');

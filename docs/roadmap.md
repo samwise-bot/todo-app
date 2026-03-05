@@ -1,5 +1,15 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 04:23 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #75 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first UX increment shipped — sticky toolbar now includes a saved-view chip row (`Assigned to me`, `Priority P1`, `Mobile sweep (3d)`) for one-tap filter pivots.
+- ▶ Next milestone:
+  - #77 Board UX: persist active saved-view chip state in toolbar.
+  - #74 Settings: add board-to-settings advanced-controls shortcut card.
+  - #76 Navigation: add compact board quick-jump between `/board` and `/settings`.
+
 ## Current Iteration Status (2026-03-05 04:10 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

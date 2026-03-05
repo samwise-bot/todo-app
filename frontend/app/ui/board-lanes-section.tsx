@@ -14,6 +14,51 @@ import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
 
+type BoardFilterOverrides = {
+  assigneeId?: string;
+  projectId?: string;
+  state?: string;
+  priority?: string;
+  dueWindow?: string;
+  search?: string;
+};
+
+function buildBoardFilterHref(
+  boardHref: string,
+  hiddenParams: [string, string][],
+  overrides: BoardFilterOverrides
+): string {
+  const [basePath, existingQuery = ''] = boardHref.split('?');
+  const params = new URLSearchParams(existingQuery);
+
+  for (const [key, value] of hiddenParams) {
+    params.set(key, value);
+  }
+
+  params.set('taskPage', '1');
+
+  const mapping: Array<[keyof BoardFilterOverrides, string]> = [
+    ['assigneeId', 'taskAssigneeId'],
+    ['projectId', 'taskProjectId'],
+    ['state', 'taskState'],
+    ['priority', 'taskPriority'],
+    ['dueWindow', 'taskDueWindow'],
+    ['search', 'taskQ']
+  ];
+
+  for (const [sourceKey, queryKey] of mapping) {
+    const value = overrides[sourceKey];
+    if (value && value.trim() !== '') {
+      params.set(queryKey, value);
+    } else {
+      params.delete(queryKey);
+    }
+  }
+
+  const query = params.toString();
+  return query ? `${basePath}?${query}` : basePath;
+}
+
 function TaskCard({
   task,
   principalName,
@@ -306,6 +351,46 @@ export function BoardLanesSection({
   columnMoveStatus?: string;
 }) {
   const activeFilterCount = activeFilterBadges.length;
+  const boardSavedViewLinks = boardFilter
+    ? [
+        {
+          key: 'assigned',
+          label: 'Assigned to me',
+          href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, {
+            assigneeId: boardFilter.assigneeId || '2',
+            projectId: boardFilter.projectId,
+            state: 'next,scheduled',
+            priority: '',
+            dueWindow: '',
+            search: ''
+          })
+        },
+        {
+          key: 'priority',
+          label: 'Priority P1',
+          href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, {
+            assigneeId: boardFilter.assigneeId,
+            projectId: boardFilter.projectId,
+            state: 'next,scheduled',
+            priority: '1',
+            dueWindow: '',
+            search: ''
+          })
+        },
+        {
+          key: 'mobile',
+          label: 'Mobile sweep (3d)',
+          href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, {
+            assigneeId: boardFilter.assigneeId,
+            projectId: boardFilter.projectId,
+            state: 'next,scheduled',
+            priority: '',
+            dueWindow: '72',
+            search: ''
+          })
+        }
+      ]
+    : [];
 
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -341,6 +426,17 @@ export function BoardLanesSection({
             {presetLinks.map((preset) => (
               <a key={preset.key} className="btn btn-secondary" href={preset.href} title={`Open ${preset.label} preset`}>
                 {preset.label}
+              </a>
+            ))}
+          </div>
+        )}
+
+        {boardSavedViewLinks.length > 0 && (
+          <div className="badge-row board-saved-view-row" aria-label="Saved board views">
+            <span className="muted">Saved views:</span>
+            {boardSavedViewLinks.map((view) => (
+              <a key={view.key} className="badge badge-saved-view" href={view.href} title={`Open ${view.label} board view`}>
+                {view.label}
               </a>
             ))}
           </div>
