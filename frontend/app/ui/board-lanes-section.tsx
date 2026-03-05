@@ -1,6 +1,6 @@
 import React from 'react';
 import type { BoardLaneView } from '../../lib/board-lanes';
-import { createColumnAction, createTaskAction, deleteTaskAction, updateColumnAction, updateTaskAction } from '../actions';
+import { assignTaskAction, createColumnAction, createTaskAction, deleteTaskAction, updateColumnAction, updateTaskAction } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
@@ -8,11 +8,15 @@ type Entity = { id: number; name?: string; displayName?: string; [key: string]: 
 function TaskCard({
   task,
   principalName,
-  projectName
+  projectName,
+  principals,
+  projects
 }: {
-  task: { id: number; title: string; description?: string; state: string; assigneeId?: number | null; projectId?: number | null };
+  task: { id: number; title: string; description?: string; state: string; assigneeId?: number | null; projectId?: number | null; priority?: number | null; dueAt?: string | null };
   principalName: string;
   projectName: string;
+  principals: Entity[];
+  projects: Entity[];
 }) {
   async function inlineUpdateTask(formData: FormData) {
     'use server';
@@ -20,11 +24,19 @@ function TaskCard({
     await updateTaskAction(INITIAL_ACTION_STATE, formData);
   }
 
+  async function inlineAssignTask(formData: FormData) {
+    'use server';
+    formData.set('taskId', String(task.id));
+    await assignTaskAction(INITIAL_ACTION_STATE, formData);
+  }
+
   async function inlineDeleteTask(formData: FormData) {
     'use server';
     formData.set('taskId', String(task.id));
     await deleteTaskAction(INITIAL_ACTION_STATE, formData);
   }
+
+  const dueAtLocal = task.dueAt ? task.dueAt.slice(0, 16) : '';
 
   return (
     <article
@@ -41,10 +53,44 @@ function TaskCard({
         <span className="badge">{projectName}</span>
       </div>
       <details style={{ marginTop: 8 }}>
-        <summary style={{ cursor: 'pointer' }}>Edit / Delete</summary>
+        <summary style={{ cursor: 'pointer' }}>Quick controls / Edit / Delete</summary>
+        <form action={inlineAssignTask} className="form-row" style={{ marginTop: 8 }}>
+          <input type="hidden" name="title" value={task.title} readOnly />
+          <label htmlFor={`assignee-${task.id}`}>Assignee</label>
+          <select id={`assignee-${task.id}`} name="assigneeId" defaultValue={task.assigneeId ? String(task.assigneeId) : ''} aria-label={`Set assignee for task ${task.id}`}>
+            <option value="">Unassigned</option>
+            {principals.map((principal) => (
+              <option key={principal.id} value={principal.id}>
+                {principal.displayName ?? `Principal ${principal.id}`}
+              </option>
+            ))}
+          </select>
+          <button type="submit" className="btn btn-secondary">Assign</button>
+        </form>
         <form action={inlineUpdateTask} className="form-stack" style={{ marginTop: 8 }}>
           <input name="title" defaultValue={task.title} aria-label={`Edit title for task ${task.id}`} required />
           <input name="description" defaultValue={task.description ?? ''} aria-label={`Edit description for task ${task.id}`} />
+          <div className="form-row">
+            <label htmlFor={`project-${task.id}`}>Project</label>
+            <select id={`project-${task.id}`} name="projectId" defaultValue={task.projectId ? String(task.projectId) : ''} aria-label={`Set project for task ${task.id}`}>
+              <option value="">No project</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name ?? `Project ${project.id}`}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-row">
+            <label htmlFor={`priority-${task.id}`}>Priority</label>
+            <select id={`priority-${task.id}`} name="priority" defaultValue={String(task.priority ?? 3)} aria-label={`Set priority for task ${task.id}`}>
+              {[1, 2, 3, 4, 5].map((level) => (
+                <option key={level} value={level}>{`P${level}`}</option>
+              ))}
+            </select>
+            <label htmlFor={`due-${task.id}`}>Due</label>
+            <input id={`due-${task.id}`} name="dueAt" type="datetime-local" defaultValue={dueAtLocal} aria-label={`Set due date for task ${task.id}`} />
+          </div>
           <div className="form-row">
             <button type="submit">Save</button>
             <button type="submit" formAction={inlineDeleteTask} className="btn btn-secondary" aria-label={`Delete task ${task.id}`}>
@@ -242,6 +288,8 @@ export function BoardLanesSection({
                 task={task}
                 principalName={task.assigneeId ? principalNames.get(task.assigneeId) ?? `Principal ${task.assigneeId}` : 'Unassigned'}
                 projectName={task.projectId ? projectNames.get(task.projectId) ?? `Project ${task.projectId}` : 'No project'}
+                principals={principals}
+                projects={projects}
               />
             ))}
           </div>
@@ -325,6 +373,8 @@ export function BoardLanesSection({
                             task={task}
                             principalName={task.assigneeId ? principalNames.get(task.assigneeId) ?? `Principal ${task.assigneeId}` : 'Unassigned'}
                             projectName={task.projectId ? projectNames.get(task.projectId) ?? `Project ${task.projectId}` : 'No project'}
+                            principals={principals}
+                            projects={projects}
                           />
                         ))}
                       </div>

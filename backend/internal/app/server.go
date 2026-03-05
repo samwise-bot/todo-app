@@ -293,9 +293,12 @@ func (s *Server) handleTaskBoardColumn(w http.ResponseWriter, r *http.Request, i
 
 func (s *Server) handleTaskUpdate(w http.ResponseWriter, r *http.Request, id int64) {
 	var body struct {
-		Title       *string `json:"title"`
-		Description *string `json:"description"`
-		ActorID     *int64  `json:"actorId"`
+		Title       *string    `json:"title"`
+		Description *string    `json:"description"`
+		ProjectID   *int64     `json:"projectId"`
+		Priority    *int       `json:"priority"`
+		DueAt       *time.Time `json:"dueAt"`
+		ActorID     *int64     `json:"actorId"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		writeErr(w, 400, err)
@@ -314,7 +317,11 @@ func (s *Server) handleTaskUpdate(w http.ResponseWriter, r *http.Request, id int
 	if body.Description != nil {
 		description = strings.TrimSpace(*body.Description)
 	}
-	if err := s.store.UpdateTaskFields(r.Context(), id, title, description, body.ActorID); err != nil {
+	priority := 3
+	if body.Priority != nil {
+		priority = *body.Priority
+	}
+	if err := s.store.UpdateTaskFields(r.Context(), id, title, description, body.ProjectID, priority, body.DueAt, body.ActorID); err != nil {
 		if errors.Is(err, store.ErrNotFound) {
 			writeJSON(w, 404, map[string]string{"error": "task not found"})
 			return

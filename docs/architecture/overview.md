@@ -1,5 +1,16 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 00:29 PT)
+- Re-validated source-of-truth board prerequisites idempotently in SQLite (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #63 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.
+- Shipped board-card quick-control slice directly on `/board` (`frontend/app/ui/board-lanes-section.tsx` + server action/API wiring):
+  1. Added inline assignee control per card via existing assignment mutation (`PATCH /api/tasks/:id/assignee`).
+  2. Extended task field update flow to support project/priority/due-date updates in-place (`PATCH /api/tasks/:id` now accepts `projectId`, `priority`, `dueAt`).
+  3. Preserved board-only operability by keeping assignee/project/priority/due/title/description/delete actions on each board card without route-hopping.
+- Added focused coverage updates:
+  - `frontend/tests/board-lanes-rendering.test.tsx`
+  - `backend/tests/api_endpoints_test.go` (`TestTaskUpdateAndDeleteEndpoints` now validates project/priority/due updates)
+
 ## Architecture Delta (2026-03-04, autonomous loop 23:55 PT)
 - Re-validated source-of-truth board prerequisites idempotently in SQLite (`samwise`, `TODO App`, `TODO App Board`, columns: Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 `inbox` tasks for TODO App), then selected highest-priority `Next` by (`priority`, `dueAt`, `id`).

@@ -253,6 +253,9 @@ export async function updateTaskAction(_: ActionState, formData: FormData): Prom
   const taskIdRaw = String(formData.get('taskId') ?? '').trim();
   const title = String(formData.get('title') ?? '').trim();
   const description = String(formData.get('description') ?? '').trim();
+  const projectIdRaw = String(formData.get('projectId') ?? '').trim();
+  const priorityRaw = String(formData.get('priority') ?? '').trim();
+  const dueAtRaw = String(formData.get('dueAt') ?? '').trim();
 
   const taskID = asPositiveInt(taskIdRaw);
   if (taskID === null) {
@@ -262,10 +265,48 @@ export async function updateTaskAction(_: ActionState, formData: FormData): Prom
     return validationErrorState({ title: 'Title is required.' });
   }
 
+  let projectId: number | null | undefined;
+  if (projectIdRaw) {
+    const parsedProjectId = asPositiveInt(projectIdRaw);
+    if (parsedProjectId === null) {
+      return validationErrorState({ projectId: 'Project is invalid.' });
+    }
+    projectId = parsedProjectId;
+  } else {
+    projectId = null;
+  }
+
+  let priority: number | undefined;
+  if (priorityRaw) {
+    const parsedPriority = Number(priorityRaw);
+    if (!Number.isInteger(parsedPriority) || parsedPriority < 1 || parsedPriority > 5) {
+      return validationErrorState({ priority: 'Priority must be between 1 and 5.' });
+    }
+    priority = parsedPriority;
+  }
+
+  let dueAt: string | null | undefined;
+  if (dueAtRaw) {
+    const parsed = new Date(dueAtRaw);
+    if (Number.isNaN(parsed.getTime())) {
+      return validationErrorState({ dueAt: 'Due date is invalid.' });
+    }
+    dueAt = parsed.toISOString();
+  } else {
+    dueAt = null;
+  }
+
   return runAction('Task details updated.', async () => {
+    const payload: Record<string, unknown> = { title, description };
+    payload.projectId = projectId;
+    if (priority !== undefined) {
+      payload.priority = priority;
+    }
+    payload.dueAt = dueAt;
+
     await apiFetch(`/api/tasks/${taskID}`, {
       method: 'PATCH',
-      body: JSON.stringify({ title, description })
+      body: JSON.stringify(payload)
     });
   });
 }

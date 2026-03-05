@@ -48,6 +48,16 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
+## Current Iteration Status (2026-03-05 00:29 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently in source-of-truth DB (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #63 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first UX increment shipped — board cards now expose quick controls on `/board` for assignee, project, priority, and due date (plus edit/delete), no route hopping.
+- ▶ Next milestone:
+  - #64 Board UX: add optimistic rollback messaging for column move failures.
+  - #65 Board UX: keyboard-accessible column reordering controls with aria-live feedback.
+  - Board UX hardening: extend API/contract coverage for quick-control validation error paths.
+
 ## Current Iteration Status (2026-03-04 23:55 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently in source-of-truth DB.
 - ✅ Completed: processed Inbox first (0 inbox tasks), then ranked `Next` by `priority`, `dueAt`, `id`.

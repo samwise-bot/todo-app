@@ -603,33 +603,53 @@
     {
       "id": 61,
       "title": "Board UX: inline task edit/delete controls directly on board cards",
-      "state": "next",
+      "state": "done",
       "priority": 1,
       "dueAt": null,
       "projectId": 2,
       "assigneeId": 2,
-      "boardColumnId": 2
+      "boardColumnId": 5
     },
     {
       "id": 62,
       "title": "Board UX: drag-drop column moves with optimistic persistence + rollback",
-      "state": "next",
+      "state": "done",
       "priority": 1,
       "dueAt": null,
       "projectId": 2,
       "assigneeId": 2,
-      "boardColumnId": 2
+      "boardColumnId": 5
     },
     {
       "id": 63,
       "title": "Board UX: board-card quick controls for assignee/project/priority/due",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 64,
+      "title": "Board UX: add optimistic rollback messaging for column move failures",
       "state": "next",
       "priority": 2,
       "dueAt": null,
       "projectId": 2,
       "assigneeId": 2,
       "boardColumnId": 2
+    },
+    {
+      "id": 65,
+      "title": "Board UX: keyboard-accessible column reordering controls with aria-live feedback",
+      "state": "next",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
     }
   ],
-  "count": 63
+  "count": 65
 }

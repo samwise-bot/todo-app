@@ -605,21 +605,64 @@ func (s *SQLiteStore) UpdateTaskBoardColumn(ctx context.Context, taskID int64, b
 	return s.appendEvent(ctx, taskID, actorID, "task.board_column.changed", map[string]any{"from": previous, "to": boardColumnID})
 }
 
-func (s *SQLiteStore) UpdateTaskFields(ctx context.Context, taskID int64, title string, description string, actorID *int64) error {
+func (s *SQLiteStore) UpdateTaskFields(ctx context.Context, taskID int64, title string, description string, projectID *int64, priority int, dueAt *time.Time, actorID *int64) error {
 	var previousTitle, previousDescription string
-	if err := s.db.QueryRowContext(ctx, `SELECT title, description FROM tasks WHERE id=?`, taskID).Scan(&previousTitle, &previousDescription); err != nil {
+	var previousProjectID sql.NullInt64
+	var previousPriority int
+	var previousDueAt sql.NullString
+	if err := s.db.QueryRowContext(ctx, `SELECT title, description, project_id, priority, due_at FROM tasks WHERE id=?`, taskID).Scan(&previousTitle, &previousDescription, &previousProjectID, &previousPriority, &previousDueAt); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound
 		}
 		return err
 	}
-	if _, err := s.db.ExecContext(ctx, `UPDATE tasks SET title=?, description=?, updated_at=? WHERE id=?`, title, description, time.Now().UTC().Format(time.RFC3339), taskID); err != nil {
+	if projectID != nil {
+		var exists int
+		if err := s.db.QueryRowContext(ctx, `SELECT COUNT(1) FROM projects WHERE id=?`, *projectID).Scan(&exists); err != nil {
+			return err
+		}
+		if exists == 0 {
+			return fmt.Errorf("project does not exist")
+		}
+	}
+	if priority < 1 || priority > 5 {
+		return fmt.Errorf("priority must be between 1 and 5")
+	}
+
+	var dueAtValue any
+	if dueAt != nil {
+		dueAtValue = dueAt.UTC().Format(time.RFC3339)
+	}
+
+	if _, err := s.db.ExecContext(ctx, `UPDATE tasks SET title=?, description=?, project_id=?, priority=?, due_at=?, updated_at=? WHERE id=?`, title, description, projectID, priority, dueAtValue, time.Now().UTC().Format(time.RFC3339), taskID); err != nil {
 		return err
 	}
-	return s.appendEvent(ctx, taskID, actorID, "task.fields.updated", map[string]any{
-		"from": map[string]any{"title": previousTitle, "description": previousDescription},
-		"to":   map[string]any{"title": title, "description": description},
-	})
+
+	from := map[string]any{"title": previousTitle, "description": previousDescription, "priority": previousPriority}
+	if previousProjectID.Valid {
+		from["projectId"] = previousProjectID.Int64
+	} else {
+		from["projectId"] = nil
+	}
+	if previousDueAt.Valid {
+		from["dueAt"] = previousDueAt.String
+	} else {
+		from["dueAt"] = nil
+	}
+
+	to := map[string]any{"title": title, "description": description, "priority": priority}
+	if projectID != nil {
+		to["projectId"] = *projectID
+	} else {
+		to["projectId"] = nil
+	}
+	if dueAt != nil {
+		to["dueAt"] = dueAt.UTC().Format(time.RFC3339)
+	} else {
+		to["dueAt"] = nil
+	}
+
+	return s.appendEvent(ctx, taskID, actorID, "task.fields.updated", map[string]any{"from": from, "to": to})
 }
 
 func (s *SQLiteStore) DeleteTask(ctx context.Context, taskID int64) error {

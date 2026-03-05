@@ -771,10 +771,10 @@ func TestCreateTaskRejectsInvalidPriority(t *testing.T) {
 	projectID := mustInt64(t, project["id"])
 
 	status, body := h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{
-		"title":    "bad priority",
-		"state":    "next",
+		"title":     "bad priority",
+		"state":     "next",
 		"projectId": projectID,
-		"priority": 9,
+		"priority":  9,
 	})
 	if status != http.StatusBadRequest {
 		t.Fatalf("expected 400 for invalid priority, got %d", status)
@@ -833,6 +833,12 @@ func TestMetricsExposeWeeklyReviewAndBoardLaneFailureCounters(t *testing.T) {
 func TestTaskUpdateAndDeleteEndpoints(t *testing.T) {
 	h := newAPIHarness(t)
 
+	status, project := h.jsonRequest(http.MethodPost, "/api/projects", map[string]any{"name": "Planning"})
+	if status != http.StatusCreated {
+		t.Fatalf("create project: expected 201, got %d", status)
+	}
+	projectID := mustInt64(t, project["id"])
+
 	status, task := h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{"title": "Draft spec", "description": "v1"})
 	if status != http.StatusCreated {
 		t.Fatalf("create task: expected 201, got %d", status)
@@ -844,7 +850,9 @@ func TestTaskUpdateAndDeleteEndpoints(t *testing.T) {
 		t.Fatalf("expected 400 for empty title update, got %d", status)
 	}
 
-	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d", taskID), map[string]any{"title": "Draft spec updated", "description": "v2"})
+	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d", taskID), map[string]any{
+		"title": "Draft spec updated", "description": "v2", "projectId": projectID, "priority": 2, "dueAt": "2030-02-01T10:00:00Z",
+	})
 	if status != http.StatusOK {
 		t.Fatalf("expected 200 for task update, got %d", status)
 	}
@@ -861,6 +869,15 @@ func TestTaskUpdateAndDeleteEndpoints(t *testing.T) {
 	}
 	if got := strings.TrimSpace(fmt.Sprint(tasks[0]["description"])); got != "v2" {
 		t.Fatalf("expected updated description, got %q", got)
+	}
+	if got := mustInt64(t, tasks[0]["projectId"]); got != projectID {
+		t.Fatalf("expected updated projectId=%d, got %d", projectID, got)
+	}
+	if got := mustInt64(t, tasks[0]["priority"]); got != 2 {
+		t.Fatalf("expected updated priority=2, got %d", got)
+	}
+	if got := strings.TrimSpace(fmt.Sprint(tasks[0]["dueAt"])); got != "2030-02-01T10:00:00Z" {
+		t.Fatalf("expected updated dueAt, got %q", got)
 	}
 
 	events, err := h.store.ListTaskEvents(context.Background(), taskID)
