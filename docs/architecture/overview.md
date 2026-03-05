@@ -1,6 +1,18 @@
 # Architecture Overview
 
 
+## Architecture Delta (2026-03-05, autonomous loop 09:58 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #88 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped sticky toolbar scroll-depth cue in board workspace:
+  1. Added a lightweight client scroll sensor (`frontend/app/ui/board-scroll-shadow-cue.tsx`) that toggles `body[data-board-scrolled='true']` only while users are actively scrolling.
+  2. Updated board toolbar markup in `frontend/app/ui/board-lanes-section.tsx` with `board-filter-toolbar-shadow-cue` hook class to keep behavior localized to `/board` filtering controls.
+  3. Added gradient/top-shadow cue styles in `frontend/app/globals.css` so sticky filter controls maintain visual separation under the nav during long-lane scrolling without reintroducing dashboard clutter.
+- Added focused regression assertions in `frontend/tests/board-lanes-rendering.test.tsx` for the scroll-cue sensor and toolbar hook class rendering.
+- Added follow-up UI task #91 (`next`, priority 4) to keep top-3 UI strike depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 09:27 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #87 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

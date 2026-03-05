@@ -11,6 +11,7 @@ import {
   updateTaskAction
 } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
+import { BoardScrollShadowCue } from './board-scroll-shadow-cue';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
 
@@ -481,7 +482,9 @@ export function BoardLanesSection({
         </div>
       </div>
 
-      <section className="board-filter-toolbar" aria-label="Board filter toolbar">
+      <BoardScrollShadowCue />
+
+      <section className="board-filter-toolbar board-filter-toolbar-shadow-cue" aria-label="Board filter toolbar">
         {presetLinks.length > 0 && (
           <div className="badge-row board-preset-row" aria-label="Shareable board filter presets">
             <span className="muted">Shareable presets:</span>

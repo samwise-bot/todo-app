@@ -1,1 +1,12 @@
-{"id":90,"title":"Board UX: add lane-count badge contrast boost for quick scan","description":"Improve Trello-like readability by increasing count-pill contrast in lane headers while preserving current spacing.","state":"next","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":4,"createdAt":"0001-01-01T00:00:00Z","updatedAt":"0001-01-01T00:00:00Z"}
+{
+  "id": 91,
+  "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
+  "description": "Strengthen hierarchy by adding a subtle divider under sticky filter toolbar so lane content starts with clearer separation.",
+  "state": "next",
+  "projectId": 2,
+  "assigneeId": 2,
+  "boardColumnId": 2,
+  "priority": 4,
+  "createdAt": "0001-01-01T00:00:00Z",
+  "updatedAt": "0001-01-01T00:00:00Z"
+}

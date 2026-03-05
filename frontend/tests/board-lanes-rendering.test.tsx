@@ -134,7 +134,8 @@ describe('BoardLanesSection', () => {
     );
 
     expect(html).toContain('aria-label="Board filter toolbar"');
-    expect(html).toContain('class="board-filter-toolbar"');
+    expect(html).toContain('class="board-scroll-shadow-cue-sensor"');
+    expect(html).toContain('class="board-filter-toolbar board-filter-toolbar-shadow-cue"');
     expect(html).toContain('aria-label="Saved board views"');
     expect(html).toContain('Saved views:');
     expect(html).toContain('Assigned to me');

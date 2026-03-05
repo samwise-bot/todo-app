@@ -5,6 +5,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #88 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped sticky toolbar scroll-depth shadow cue on `/board` (adds subtle hierarchy under sticky nav only while scrolling).
+- [x] Added follow-up UI task #91 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #89 Board UX: add compact due-window legend chips beside filter selects (**next**, priority=4)
+- [ ] #90 Board UX: add lane-count badge contrast boost for quick scan (**next**, priority=4)
+- [ ] #91 Board UX: add compact sticky-toolbar divider line between filters and lanes (**next**, priority=4)
+
+## Verification
+- `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #87 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped mobile lane-edge discoverability labels on `/board` (compact `Scroll ↔` / `Swipe lanes` labels paired with existing edge fades on narrow viewports).
 - [x] Added follow-up UI task #90 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.

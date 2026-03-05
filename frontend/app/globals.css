@@ -277,6 +277,39 @@ a:hover {
   box-shadow: 0 3px 12px rgba(16, 24, 40, 0.08);
 }
 
+.board-scroll-shadow-cue-sensor {
+  display: block;
+  width: 0;
+  height: 0;
+}
+
+.board-filter-toolbar-shadow-cue {
+  position: sticky;
+}
+
+.board-filter-toolbar-shadow-cue::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: -8px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0) 100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+body[data-board-scrolled='true'] .board-filter-toolbar-shadow-cue {
+  box-shadow: 0 10px 22px -14px rgba(15, 23, 42, 0.42), 0 4px 10px rgba(16, 24, 40, 0.12);
+  border-color: rgba(148, 163, 184, 0.75);
+}
+
+body[data-board-scrolled='true'] .board-filter-toolbar-shadow-cue::before {
+  opacity: 1;
+}
+
 .board-preset-row,
 .board-saved-view-row,
 .board-filter-quick-clear,

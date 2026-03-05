@@ -1,6 +1,23 @@
 # Roadmap
 
 
+## Current Iteration Status (2026-03-05 09:58 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #88 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board visual polish increment shipped — sticky board filter toolbar now raises a subtle top shadow cue while scrolling to preserve hierarchy under the sticky nav.
+- ✅ Added follow-up UI task #91 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #89 Board UX: add compact due-window legend chips beside filter selects.
+  - #90 Board UX: add lane-count badge contrast boost for quick scan.
+  - #91 Board UX: add compact sticky-toolbar divider line between filters and lanes.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (scroll-depth shadow cue shipped).
+  - E) Advanced controls moved off board: **On track**.
+
 ## Current Iteration Status (2026-03-05 09:27 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
