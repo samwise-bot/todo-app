@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 11:23 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue and deferred non-UI inbox noise into `Blocked` under UI strike mode (#94, #95) so board UX work remains the active lane.
+- Re-ranked `Next` by (`priority`, `dueAt`, `id`) and executed highest-priority UI task #93 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped lane-header spacing harmonization for dense columns:
+  1. Added `lane-header-actions` wrapper in `frontend/app/ui/board-lanes-section.tsx` for consistent control-group layout.
+  2. Updated `frontend/app/globals.css` so `lane-count-pill` uses fixed min-width, tabular numerals, centered inline-flex layout, and stable padding across single/double-digit counts.
+  3. Extended rendering regression in `frontend/tests/board-lanes-rendering.test.tsx` to assert the new lane-header actions hook class.
+- Added follow-up UI task #97 (`next`, priority 4) to keep top-3 board UX queue depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 10:53 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #90 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

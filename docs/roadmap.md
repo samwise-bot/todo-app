@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 11:23 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue and explicitly deferred non-UI inbox items (#94, #95) to `Blocked` in strike mode.
+- ✅ Completed: task #93 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board visual polish increment shipped — lane header action-group spacing now remains consistent across dense columns via stable count-pill width/alignment.
+- ✅ Added follow-up UI task #97 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #91 Board UX: add compact sticky-toolbar divider line between filters and lanes.
+  - #92 Board UX: tighten due-window chip spacing and wrap behavior on mobile.
+  - #97 Board UX: improve lane header action-group spacing consistency on narrow columns.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (dense-column lane-header spacing harmonized).
+  - E) Advanced controls moved off board: **On track**.
+
 ## Current Iteration Status (2026-03-05 10:53 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

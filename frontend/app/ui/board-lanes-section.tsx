@@ -11,7 +11,6 @@ import {
   updateTaskAction
 } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
-import { BoardScrollShadowCue } from './board-scroll-shadow-cue';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
 
@@ -482,7 +481,6 @@ export function BoardLanesSection({
         </div>
       </div>
 
-      <BoardScrollShadowCue />
 
       <section className="board-filter-toolbar board-filter-toolbar-shadow-cue" aria-label="Board filter toolbar">
         {presetLinks.length > 0 && (
@@ -784,7 +782,7 @@ export function BoardLanesSection({
                     <div className="kanban-column-header">
                       <div className="column-header-row">
                         <h4>{column.name}</h4>
-                        <div className="form-row" style={{ gap: 6 }}>
+                        <div className="form-row lane-header-actions">
                           <MoveColumnForm
                             columnId={column.id}
                             columnName={column.name}

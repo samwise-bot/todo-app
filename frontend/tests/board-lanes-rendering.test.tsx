@@ -63,6 +63,7 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Delete column Doing');
     expect(html).toContain('Keyboard tip: use Tab to focus move buttons');
     expect(html).toContain('class="kanban-column-header"');
+    expect(html).toContain('class="form-row lane-header-actions"');
     expect(html).toContain('class="count-pill lane-count-pill"');
     expect(html).toContain('aria-label="0 tasks in Doing"');
     expect(html).toContain('class="kanban-scroll-wrap"');
@@ -136,7 +137,6 @@ describe('BoardLanesSection', () => {
     );
 
     expect(html).toContain('aria-label="Board filter toolbar"');
-    expect(html).toContain('class="board-scroll-shadow-cue-sensor"');
     expect(html).toContain('class="board-filter-toolbar board-filter-toolbar-shadow-cue"');
     expect(html).toContain('aria-label="Saved board views"');
     expect(html).toContain('Saved views:');
