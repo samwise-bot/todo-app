@@ -1,5 +1,4 @@
 import React from 'react';
-import { redirect } from 'next/navigation';
 import type { BoardLaneView } from '../../lib/board-lanes';
 import {
   assignTaskAction,
@@ -313,19 +312,7 @@ function MoveColumnForm({
     formData.set('columnId', String(columnId));
     formData.set('name', columnName);
     formData.set('position', String(toPosition));
-
-    const sep = boardHref.includes('?') ? '&' : '?';
-    const result = await updateColumnAction(INITIAL_ACTION_STATE, formData);
-    if (result.status === 'error') {
-      const message = encodeURIComponent(`Column move failed for "${columnName}". Optimistic reorder was rolled back.`);
-      redirect(`${boardHref}${sep}columnMoveNotice=${message}`);
-    }
-
-    const movedDirection = direction === 'left' ? 'left' : 'right';
-    const status = encodeURIComponent(
-      `Moved "${columnName}" ${movedDirection}. Keyboard tip: use Tab to focus move buttons, then press Enter or Space to reorder again.`
-    );
-    redirect(`${boardHref}${sep}columnMoveStatus=${status}`);
+    await updateColumnAction(INITIAL_ACTION_STATE, formData);
   }
 
   return (
