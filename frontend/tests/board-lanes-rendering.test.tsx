@@ -123,6 +123,8 @@ describe('BoardLanesSection', () => {
       />
     );
 
+    expect(html).toContain('aria-label="Board filter toolbar"');
+    expect(html).toContain('class="board-filter-toolbar"');
     expect(html).toContain('aria-label="Board filters"');
     expect(html).toContain('Filter board by assignee');
     expect(html).toContain('Search board cards');

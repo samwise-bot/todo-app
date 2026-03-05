@@ -210,11 +210,29 @@ a:hover {
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
 
+.board-filter-toolbar {
+  position: sticky;
+  top: 58px;
+  z-index: 12;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 3px 12px rgba(16, 24, 40, 0.08);
+}
+
+.board-preset-row,
+.board-filter-quick-clear {
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
 .board-filter-grid {
   display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  margin-bottom: 10px;
+  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  margin-bottom: 8px;
 }
 
 input,
@@ -408,6 +426,11 @@ button:hover,
 @media (max-width: 900px) {
   .app-shell {
     padding: 16px 12px 38px;
+  }
+
+  .board-filter-toolbar {
+    top: 50px;
+    padding: 8px;
   }
 
   .kanban-column {

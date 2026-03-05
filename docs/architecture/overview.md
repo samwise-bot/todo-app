@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 03:20 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), then executed task #69 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
+- Shipped board-filter toolbar compaction on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Wrapped presets + filters in a dedicated sticky toolbar container (`board-filter-toolbar`) below primary nav.
+  2. Tightened filter control grid sizing for higher information density while preserving all core controls.
+  3. Kept quick-clear chips inside the same compact toolbar for in-context reset flow.
+- Added focused rendering regression assertion:
+  - `frontend/tests/board-lanes-rendering.test.tsx` now asserts sticky toolbar wrapper rendering (`aria-label="Board filter toolbar"`, `.board-filter-toolbar`).
+
 ## Architecture Delta (2026-03-05, autonomous loop 03:05 PT)
 - Re-validated source-of-truth prerequisites idempotently via API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed highest-priority task #70 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).

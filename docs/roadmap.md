@@ -48,6 +48,16 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
+## Current Iteration Status (2026-03-05 03:20 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #69 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first UX increment shipped — board filters now live in a sticky compact toolbar on `/board` while preserving full filter/search/reset functionality.
+- ▶ Next milestone:
+  - #71 Board UX: add one-tap filter reset chip cluster with active count.
+  - #72 Board UX: tighten mobile column/card spacing and sticky toolbar wrapping under 900px.
+  - #73 Board UX: add board-header active-filter count pill beside reset controls.
+
 ## Current Iteration Status (2026-03-05 03:05 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked `Next` by (`priority`, `dueAt`, `id`).
