@@ -149,6 +149,41 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Clear Assignee: Samwise');
   });
 
+  test('marks saved-view chip active when current board filters match preset', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [],
+          tasksWithoutColumn: [],
+          fetchErrors: []
+        }}
+        boards={[]}
+        columns={[]}
+        principals={[]}
+        projects={[]}
+        boardFilter={{
+          assigneeId: '2',
+          projectId: '2',
+          state: 'next,scheduled',
+          priority: '',
+          dueWindow: '',
+          search: '',
+          assigneeOptions: [{ id: 2, label: 'Samwise' }],
+          projectOptions: [{ id: 2, label: 'TODO App' }],
+          resetHref: '/board',
+          hiddenParams: [],
+          assigneeLabel: 'Samwise',
+          assigneeClearHref: '/board?taskAssigneeId=',
+          projectLabel: 'TODO App',
+          projectClearHref: '/board?taskProjectId='
+        }}
+      />
+    );
+
+    expect(html).toContain('badge badge-saved-view badge-saved-view-active');
+    expect(html).toContain('aria-current="page"');
+  });
+
   test('renders column move rollback notice when provided', () => {
     const html = renderToStaticMarkup(
       <BoardLanesSection

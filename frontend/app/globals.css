@@ -240,6 +240,13 @@ a:hover {
   border: 1px solid #b7e1c5;
 }
 
+.badge-saved-view-active {
+  background: #cfe7d7;
+  border-color: #7dc296;
+  color: #184a29;
+  box-shadow: inset 0 0 0 1px rgba(24, 74, 41, 0.08);
+}
+
 .board-filter-reset-cluster {
   align-items: center;
 }

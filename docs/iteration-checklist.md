@@ -5,6 +5,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #77 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped saved-view active-state persistence on `/board` (active chip highlight + `aria-current="page"` semantics for matching saved view).
+- [x] Added follow-up board UX task #78 (`next`, priority 4) to keep UI-strike queue stocked.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #74 Settings: add board-to-settings advanced-controls shortcut card (**next**, priority=4)
+- [ ] #76 Navigation: add compact board quick-jump between /board and /settings (**next**, priority=4)
+- [ ] #78 Board UX: add active saved-view helper text + clear affordance in toolbar (**next**, priority=4)
+
+## Verification
+- `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #75 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped board saved-view chip row in `/board` sticky toolbar (`Assigned to me`, `Priority P1`, `Mobile sweep (3d)`) with deterministic filter-link composition.
 - [x] Synced architecture/roadmap/checklist docs.

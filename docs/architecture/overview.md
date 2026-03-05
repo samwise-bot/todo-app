@@ -1,5 +1,16 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 04:41 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #77 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped saved-view active-state persistence polish on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Saved-view chips now compute deterministic active state from current board filter params.
+  2. Active saved view now renders with `aria-current="page"` + highlighted styling for immediate orientation.
+  3. Added filter-shape helpers so active-state comparison is stable across partial query overrides.
+- Added focused rendering regression coverage in `frontend/tests/board-lanes-rendering.test.tsx` for active saved-view chip semantics.
+- Validation:
+  - `npm test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 04:23 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox items), ordered UI `Next` by (`priority`, `dueAt`, `id`), and executed task #75 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

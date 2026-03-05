@@ -23,6 +23,15 @@ type BoardFilterOverrides = {
   search?: string;
 };
 
+type BoardFilterComparable = {
+  assigneeId: string;
+  projectId: string;
+  state: string;
+  priority: string;
+  dueWindow: string;
+  search: string;
+};
+
 function buildBoardFilterHref(
   boardHref: string,
   hiddenParams: [string, string][],
@@ -57,6 +66,32 @@ function buildBoardFilterHref(
 
   const query = params.toString();
   return query ? `${basePath}?${query}` : basePath;
+}
+
+function normalizeBoardFilterValue(value?: string): string {
+  return (value ?? '').trim();
+}
+
+function resolveBoardFilterTarget(current: BoardFilterComparable, overrides: BoardFilterOverrides): BoardFilterComparable {
+  return {
+    assigneeId: normalizeBoardFilterValue(overrides.assigneeId ?? current.assigneeId),
+    projectId: normalizeBoardFilterValue(overrides.projectId ?? current.projectId),
+    state: normalizeBoardFilterValue(overrides.state ?? current.state),
+    priority: normalizeBoardFilterValue(overrides.priority ?? current.priority),
+    dueWindow: normalizeBoardFilterValue(overrides.dueWindow ?? current.dueWindow),
+    search: normalizeBoardFilterValue(overrides.search ?? current.search)
+  };
+}
+
+function isSavedViewActive(current: BoardFilterComparable, target: BoardFilterComparable): boolean {
+  return (
+    current.assigneeId === target.assigneeId &&
+    current.projectId === target.projectId &&
+    current.state === target.state &&
+    current.priority === target.priority &&
+    current.dueWindow === target.dueWindow &&
+    current.search === target.search
+  );
 }
 
 function TaskCard({
@@ -352,44 +387,65 @@ export function BoardLanesSection({
 }) {
   const activeFilterCount = activeFilterBadges.length;
   const boardSavedViewLinks = boardFilter
-    ? [
-        {
-          key: 'assigned',
-          label: 'Assigned to me',
-          href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, {
-            assigneeId: boardFilter.assigneeId || '2',
-            projectId: boardFilter.projectId,
-            state: 'next,scheduled',
-            priority: '',
-            dueWindow: '',
-            search: ''
-          })
-        },
-        {
-          key: 'priority',
-          label: 'Priority P1',
-          href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, {
-            assigneeId: boardFilter.assigneeId,
-            projectId: boardFilter.projectId,
-            state: 'next,scheduled',
-            priority: '1',
-            dueWindow: '',
-            search: ''
-          })
-        },
-        {
-          key: 'mobile',
-          label: 'Mobile sweep (3d)',
-          href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, {
-            assigneeId: boardFilter.assigneeId,
-            projectId: boardFilter.projectId,
-            state: 'next,scheduled',
-            priority: '',
-            dueWindow: '72',
-            search: ''
-          })
-        }
-      ]
+    ? (() => {
+        const currentFilter: BoardFilterComparable = {
+          assigneeId: normalizeBoardFilterValue(boardFilter.assigneeId),
+          projectId: normalizeBoardFilterValue(boardFilter.projectId),
+          state: normalizeBoardFilterValue(boardFilter.state),
+          priority: normalizeBoardFilterValue(boardFilter.priority),
+          dueWindow: normalizeBoardFilterValue(boardFilter.dueWindow),
+          search: normalizeBoardFilterValue(boardFilter.search)
+        };
+
+        const views: Array<{ key: string; label: string; overrides: BoardFilterOverrides }> = [
+          {
+            key: 'assigned',
+            label: 'Assigned to me',
+            overrides: {
+              assigneeId: boardFilter.assigneeId || '2',
+              projectId: boardFilter.projectId,
+              state: 'next,scheduled',
+              priority: '',
+              dueWindow: '',
+              search: ''
+            }
+          },
+          {
+            key: 'priority',
+            label: 'Priority P1',
+            overrides: {
+              assigneeId: boardFilter.assigneeId,
+              projectId: boardFilter.projectId,
+              state: 'next,scheduled',
+              priority: '1',
+              dueWindow: '',
+              search: ''
+            }
+          },
+          {
+            key: 'mobile',
+            label: 'Mobile sweep (3d)',
+            overrides: {
+              assigneeId: boardFilter.assigneeId,
+              projectId: boardFilter.projectId,
+              state: 'next,scheduled',
+              priority: '',
+              dueWindow: '72',
+              search: ''
+            }
+          }
+        ];
+
+        return views.map((view) => {
+          const target = resolveBoardFilterTarget(currentFilter, view.overrides);
+          return {
+            key: view.key,
+            label: view.label,
+            href: buildBoardFilterHref(boardHref, boardFilter.hiddenParams, view.overrides),
+            active: isSavedViewActive(currentFilter, target)
+          };
+        });
+      })()
     : [];
 
   const principalNames = new Map<number, string>();
@@ -435,7 +491,13 @@ export function BoardLanesSection({
           <div className="badge-row board-saved-view-row" aria-label="Saved board views">
             <span className="muted">Saved views:</span>
             {boardSavedViewLinks.map((view) => (
-              <a key={view.key} className="badge badge-saved-view" href={view.href} title={`Open ${view.label} board view`}>
+              <a
+                key={view.key}
+                className={`badge badge-saved-view${view.active ? ' badge-saved-view-active' : ''}`}
+                href={view.href}
+                title={`Open ${view.label} board view`}
+                aria-current={view.active ? 'page' : undefined}
+              >
                 {view.label}
               </a>
             ))}
