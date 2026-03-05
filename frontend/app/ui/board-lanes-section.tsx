@@ -1,6 +1,6 @@
 import React from 'react';
 import type { BoardLaneView } from '../../lib/board-lanes';
-import { createColumnAction, createTaskAction, deleteTaskAction, updateTaskAction } from '../actions';
+import { createColumnAction, createTaskAction, deleteTaskAction, updateColumnAction, updateTaskAction } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
@@ -107,6 +107,45 @@ function InlineCreateColumnForm({ boardId, nextPosition }: { boardId: number; ne
     <form action={inlineCreateColumn} className="form-row" style={{ marginTop: '0.5rem' }}>
       <input name="name" placeholder="Add column" aria-label="New column name" required />
       <button type="submit">Add column</button>
+    </form>
+  );
+}
+
+function MoveColumnForm({
+  columnId,
+  columnName,
+  boardId,
+  toPosition,
+  disabled,
+  direction
+}: {
+  columnId: number;
+  columnName: string;
+  boardId: number;
+  toPosition: number;
+  disabled: boolean;
+  direction: 'left' | 'right';
+}) {
+  async function moveColumn(formData: FormData) {
+    'use server';
+    formData.set('columnId', String(columnId));
+    formData.set('name', columnName);
+    formData.set('position', String(toPosition));
+    await updateColumnAction(INITIAL_ACTION_STATE, formData);
+  }
+
+  return (
+    <form action={moveColumn}>
+      <input type="hidden" name="boardId" value={boardId} />
+      <button
+        type="submit"
+        className="btn btn-secondary"
+        disabled={disabled}
+        aria-label={direction === 'left' ? `Move ${columnName} left` : `Move ${columnName} right`}
+        title={direction === 'left' ? 'Move column left' : 'Move column right'}
+      >
+        {direction === 'left' ? '←' : '→'}
+      </button>
     </form>
   );
 }
@@ -228,8 +267,10 @@ export function BoardLanesSection({
             <div className="empty-state">No columns defined for this board yet.</div>
           ) : (
             <div className="kanban-scroll" role="region" aria-label={`${board.name} columns`}>
-              {board.columns.map((column) => {
+              {board.columns.map((column, index) => {
                 const normalizedColumn = column.name.trim().toLowerCase();
+                const leftNeighbor = index > 0 ? board.columns[index - 1] : null;
+                const rightNeighbor = index < board.columns.length - 1 ? board.columns[index + 1] : null;
                 const defaultState =
                   normalizedColumn === 'inbox'
                     ? 'inbox'
@@ -247,7 +288,25 @@ export function BoardLanesSection({
                   <section key={column.id} className="kanban-column">
                     <div className="column-header-row">
                       <h4>{column.name}</h4>
-                      <span className="count-pill">{column.tasks.length}</span>
+                      <div className="form-row" style={{ gap: 6 }}>
+                        <MoveColumnForm
+                          columnId={column.id}
+                          columnName={column.name}
+                          boardId={board.id}
+                          toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
+                          disabled={!leftNeighbor}
+                          direction="left"
+                        />
+                        <MoveColumnForm
+                          columnId={column.id}
+                          columnName={column.name}
+                          boardId={board.id}
+                          toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
+                          disabled={!rightNeighbor}
+                          direction="right"
+                        />
+                        <span className="count-pill">{column.tasks.length}</span>
+                      </div>
                     </div>
                     <InlineCreateTaskForm
                       boardName={board.name}

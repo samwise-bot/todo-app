@@ -1,5 +1,14 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-04, autonomous loop 23:55 PT)
+- Re-validated source-of-truth board prerequisites idempotently in SQLite (`samwise`, `TODO App`, `TODO App Board`, columns: Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 `inbox` tasks for TODO App), then selected highest-priority `Next` by (`priority`, `dueAt`, `id`).
+- Completed task #62 through full state flow with assignment (`next -> scheduled -> done`) while moving board column (`Next -> In Progress -> Done`) under explicit `samwise` ownership.
+- Shipped board-first column reordering controls directly in `/board` (`frontend/app/ui/board-lanes-section.tsx`):
+  1. Added inline left/right column move actions that persist via `updateColumnAction` (no route hopping).
+  2. Extended lane model to carry `column.position` and sort board columns deterministically by position.
+  3. Preserved board-only operability for create/edit/delete/move workflows on the main board surface.
+
 ## Goals
 - Capture-first GTD workflow (Inbox -> Clarify -> Organize -> Reflect -> Engage)
 - Kanban execution views by project/context/assignee

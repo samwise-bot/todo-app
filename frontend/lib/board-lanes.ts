@@ -7,6 +7,7 @@ type Column = {
   id: number;
   boardId: number;
   name: string;
+  position: number;
 };
 
 type Task = {
@@ -24,6 +25,7 @@ type Task = {
 type BoardLaneColumn = {
   id: number;
   name: string;
+  position: number;
   tasks: Task[];
 };
 
@@ -92,11 +94,15 @@ export function buildBoardLaneView({
     return {
       id: board.id,
       name: board.name,
-      columns: boardColumns.map((column) => ({
-        id: column.id,
-        name: column.name,
-        tasks: sortLaneTasks(column.name, tasksByColumn.get(column.id) ?? [])
-      }))
+      columns: boardColumns
+        .slice()
+        .sort((a, b) => a.position - b.position || a.id - b.id)
+        .map((column) => ({
+          id: column.id,
+          name: column.name,
+          position: column.position,
+          tasks: sortLaneTasks(column.name, tasksByColumn.get(column.id) ?? [])
+        }))
     };
   });
 

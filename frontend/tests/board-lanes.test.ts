@@ -5,7 +5,7 @@ describe('buildBoardLaneView', () => {
   test('surfaces fetch errors and lane empty states explicitly', () => {
     const view = buildBoardLaneView({
       boards: [{ id: 1, name: 'Execution' }],
-      columns: [{ id: 11, boardId: 1, name: 'Doing' }],
+      columns: [{ id: 11, boardId: 1, name: 'Doing', position: 20 }],
       tasks: [],
       fetchErrors: ['Boards data is unavailable (HTTP 503).']
     });
@@ -20,7 +20,7 @@ describe('buildBoardLaneView', () => {
   test('routes tasks with missing/unknown board column into no-column lane', () => {
     const view = buildBoardLaneView({
       boards: [{ id: 1, name: 'Execution' }],
-      columns: [{ id: 11, boardId: 1, name: 'Doing' }],
+      columns: [{ id: 11, boardId: 1, name: 'Doing', position: 20 }],
       tasks: [
         { id: 101, title: 'No assignment', state: 'inbox' },
         { id: 102, title: 'Unknown lane', state: 'next', boardColumnId: 999 },
@@ -36,7 +36,7 @@ describe('buildBoardLaneView', () => {
   test('sorts Next column tasks by priority then due date', () => {
     const view = buildBoardLaneView({
       boards: [{ id: 1, name: 'Execution' }],
-      columns: [{ id: 11, boardId: 1, name: 'Next' }],
+      columns: [{ id: 11, boardId: 1, name: 'Next', position: 20 }],
       tasks: [
         { id: 203, title: 'P2', state: 'next', boardColumnId: 11, priority: 2, dueAt: '2030-01-01T00:00:00Z' },
         { id: 201, title: 'P1 later', state: 'next', boardColumnId: 11, priority: 1, dueAt: '2030-01-03T00:00:00Z' },
@@ -47,6 +47,21 @@ describe('buildBoardLaneView', () => {
     });
 
     expect(view.boards[0].columns[0].tasks.map((task) => task.id)).toEqual([202, 201, 204, 203]);
+  });
+
+  test('sorts board columns by position', () => {
+    const view = buildBoardLaneView({
+      boards: [{ id: 1, name: 'Execution' }],
+      columns: [
+        { id: 11, boardId: 1, name: 'Done', position: 50 },
+        { id: 12, boardId: 1, name: 'Inbox', position: 10 },
+        { id: 13, boardId: 1, name: 'Next', position: 20 }
+      ],
+      tasks: [],
+      fetchErrors: []
+    });
+
+    expect(view.boards[0].columns.map((column) => column.id)).toEqual([12, 13, 11]);
   });
 });
 
