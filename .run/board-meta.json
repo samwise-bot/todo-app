@@ -1,21 +1,58 @@
 {
   "principal": {
     "id": 2,
-    "name": "samwise"
+    "kind": "agent",
+    "handle": "samwise",
+    "displayName": "Samwise",
+    "createdAt": "2026-03-03T15:27:25Z"
   },
   "project": {
-    "id": 2,
-    "name": "TODO App"
+    "id": 9,
+    "name": "TODO App",
+    "description": "Primary roadmap for TODO app autonomous loop",
+    "createdAt": "2026-03-05T15:57:51Z"
   },
   "board": {
-    "id": 1,
-    "name": "TODO App Board"
+    "id": 8,
+    "projectId": 9,
+    "name": "TODO App Board",
+    "createdAt": "2026-03-05T18:25:34Z"
   },
   "columns": [
-    "Inbox",
-    "Next",
-    "In Progress",
-    "Blocked",
-    "Done"
+    {
+      "id": 13,
+      "boardId": 8,
+      "name": "Inbox",
+      "position": 10,
+      "createdAt": "2026-03-05T18:25:34Z"
+    },
+    {
+      "id": 14,
+      "boardId": 8,
+      "name": "Next",
+      "position": 20,
+      "createdAt": "2026-03-05T18:25:34Z"
+    },
+    {
+      "id": 15,
+      "boardId": 8,
+      "name": "In Progress",
+      "position": 30,
+      "createdAt": "2026-03-05T18:25:34Z"
+    },
+    {
+      "id": 16,
+      "boardId": 8,
+      "name": "Blocked",
+      "position": 40,
+      "createdAt": "2026-03-05T18:25:34Z"
+    },
+    {
+      "id": 17,
+      "boardId": 8,
+      "name": "Done",
+      "position": 50,
+      "createdAt": "2026-03-05T18:25:34Z"
+    }
   ]
 }

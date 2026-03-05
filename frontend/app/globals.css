@@ -357,6 +357,25 @@ body[data-board-scrolled='true'] .board-filter-toolbar-shadow-cue::before {
   margin-bottom: 8px;
 }
 
+.board-due-window-group {
+  display: grid;
+  gap: 4px;
+}
+
+.board-due-window-legend {
+  gap: 4px;
+  margin: 0;
+}
+
+.board-due-window-chip {
+  padding: 2px 7px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: #f0f5ff;
+  border-color: #c9d7f5;
+  color: #244a9a;
+}
+
 .board-filter-controls {
   display: flex;
   flex-wrap: wrap;

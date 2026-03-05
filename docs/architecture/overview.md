@@ -1,6 +1,17 @@
 # Architecture Overview
 
 
+## Architecture Delta (2026-03-05, autonomous loop 10:31 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #89 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped due-window legend chips beside board filter controls:
+  1. Grouped due-window select + compact chip legend (`24h`, `3d`, `7d`) in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Added compact visual styling for legend chips in `frontend/app/globals.css` to improve quick scanability without toolbar bloat.
+  3. Added focused rendering assertions in `frontend/tests/board-lanes-rendering.test.tsx` for legend wrapper and chips.
+- Added follow-up UI task #92 (`next`, priority 4) to keep top-3 board UX queue depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 09:58 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #88 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

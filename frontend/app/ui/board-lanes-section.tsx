@@ -558,12 +558,19 @@ export function BoardLanesSection({
                 <option value="4">P4</option>
                 <option value="5">P5</option>
               </select>
-              <select name="taskDueWindow" defaultValue={boardFilter.dueWindow} aria-label="Filter board by due window">
-                <option value="">Any due window</option>
-                <option value="24">Due in 24h</option>
-                <option value="72">Due in 3d</option>
-                <option value="168">Due in 7d</option>
-              </select>
+              <div className="board-due-window-group" aria-label="Due window quick legend">
+                <select name="taskDueWindow" defaultValue={boardFilter.dueWindow} aria-label="Filter board by due window">
+                  <option value="">Any due window</option>
+                  <option value="24">Due in 24h</option>
+                  <option value="72">Due in 3d</option>
+                  <option value="168">Due in 7d</option>
+                </select>
+                <div className="badge-row board-due-window-legend" aria-hidden="true">
+                  <span className="badge board-due-window-chip">24h</span>
+                  <span className="badge board-due-window-chip">3d</span>
+                  <span className="badge board-due-window-chip">7d</span>
+                </div>
+              </div>
               <input name="taskQ" defaultValue={boardFilter.search} placeholder="Search cards" aria-label="Search board cards" />
               <div className="board-filter-controls" aria-label="Board filter actions">
                 <button type="submit">Apply filters</button>

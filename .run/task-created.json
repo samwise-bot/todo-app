@@ -1,7 +1,7 @@
 {
-  "id": 91,
-  "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
-  "description": "Strengthen hierarchy by adding a subtle divider under sticky filter toolbar so lane content starts with clearer separation.",
+  "id": 92,
+  "title": "Board UX: tighten due-window chip spacing and wrap behavior on mobile",
+  "description": "Follow-up polish for due-window legend chips to keep toolbar compact and readable under narrow widths.",
   "state": "next",
   "projectId": 2,
   "assigneeId": 2,

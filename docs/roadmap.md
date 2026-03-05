@@ -1,6 +1,23 @@
 # Roadmap
 
 
+## Current Iteration Status (2026-03-05 10:31 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #89 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board filter UX polish increment shipped — due-window select now includes compact legend chips (`24h`, `3d`, `7d`) for faster scanability.
+- ✅ Added follow-up UI task #92 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #90 Board UX: add lane-count badge contrast boost for quick scan.
+  - #91 Board UX: add compact sticky-toolbar divider line between filters and lanes.
+  - #92 Board UX: tighten due-window chip spacing and wrap behavior on mobile.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track** (due-window legend now improves filter readability).
+  - D) Visual polish/mobile safety: **Improving**.
+  - E) Advanced controls moved off board: **On track**.
+
 ## Current Iteration Status (2026-03-05 09:58 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
