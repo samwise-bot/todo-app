@@ -628,7 +628,9 @@ export function BoardLanesSection({
           <p className="eyebrow">No cards match current filters</p>
           <h3>Reset filters or adjust advanced controls</h3>
           <p className="muted">
-            Your active board filters currently hide every card. Clear filters to resume execution, or tune advanced controls in Settings.
+            {activeFilterCount === 1
+              ? '1 active filter is hiding every card. Clear filters to resume execution, or tune advanced controls in Settings.'
+              : `${activeFilterCount} active filters are hiding every card. Clear filters to resume execution, or tune advanced controls in Settings.`}
           </p>
           <div className="form-row" style={{ gap: 8 }}>
             <a className="btn" href={boardFilter?.resetHref ?? '/board'}>

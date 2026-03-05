@@ -1,5 +1,16 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 06:53 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #82 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped board filtered-empty-state diagnostics polish on `/board` (`frontend/app/ui/board-lanes-section.tsx`):
+  1. Empty-state helper now reports active filter count inline for faster diagnosis when filters hide all cards.
+  2. Count-aware copy handles singular/plural grammar (`1 active filter` vs `N active filters`) while preserving concise CTA guidance.
+- Added focused regression coverage update in `frontend/tests/board-lanes-rendering.test.tsx` for active-filter count hint rendering in filtered-empty state.
+- Added follow-up UI task #85 (`next`, priority 4) to keep board-first pipeline at top-3 actionable items.
+- Validation:
+  - `npm --prefix frontend test -- board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 06:23 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #81 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

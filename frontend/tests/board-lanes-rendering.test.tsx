@@ -262,6 +262,7 @@ describe('BoardLanesSection', () => {
 
     expect(html).toContain('No cards match current filters');
     expect(html).toContain('Reset filters or adjust advanced controls');
+    expect(html).toContain('1 active filter is hiding every card.');
     expect(html).toContain('Clear filters');
     expect(html).toContain('Open advanced controls');
     expect(html).toContain('aria-label="Board filtered empty state"');

@@ -5,6 +5,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #82 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped board filtered-empty-state diagnostics copy so helper includes active-filter count for quick diagnosis (`1 active filter` / `N active filters`).
+- [x] Added follow-up UI task #85 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #83 Board UX: add compact settings header breadcrumb context for board workspace (**next**, priority=4)
+- [ ] #84 Board UX: add compact active-filter diagnostics in empty-state helper (**next**, priority=4)
+- [ ] #85 Board UX: add sticky lane-header shadow for horizontal scroll context (**next**, priority=4)
+
+## Verification
+- `npm --prefix frontend test -- board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #81 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped board saved-view helper copy polish so active helper explicitly advertises one-click reset (`Reset view ×`).
 - [x] Added follow-up UI task #84 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.

@@ -1,0 +1,12 @@
+{
+  "id": 82,
+  "title": "Board UX: add filter-empty-state count hint for quick diagnosis",
+  "description": "Show compact helper explaining how many active filters are narrowing board results when no cards match.",
+  "state": "next",
+  "projectId": 2,
+  "assigneeId": 2,
+  "boardColumnId": 2,
+  "priority": 4,
+  "createdAt": "2026-03-05T13:41:06Z",
+  "updatedAt": "2026-03-05T13:41:06Z"
+}
