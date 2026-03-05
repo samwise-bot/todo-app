@@ -390,8 +390,13 @@ export function BoardLanesSection({
                 <option value="168">Due in 7d</option>
               </select>
               <input name="taskQ" defaultValue={boardFilter.search} placeholder="Search cards" aria-label="Search board cards" />
-              <button type="submit">Apply filters</button>
-              <a className="btn btn-secondary" href={boardFilter.resetHref}>Clear all</a>
+              <div className="board-filter-controls" aria-label="Board filter actions">
+                <button type="submit">Apply filters</button>
+                <a className="btn btn-secondary" href={boardFilter.resetHref}>Clear all</a>
+                <span className="count-pill" aria-label={`${activeFilterCount} active filters in board toolbar`}>
+                  {activeFilterCount} active
+                </span>
+              </div>
             </form>
 
             {activeFilterCount > 0 && (

@@ -245,6 +245,13 @@ a:hover {
   margin-bottom: 8px;
 }
 
+.board-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
 input,
 select,
 button {
@@ -465,6 +472,18 @@ button:hover,
   .board-filter-grid .btn {
     min-width: 0;
     width: 100%;
+  }
+
+  .board-filter-controls {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .board-filter-controls .count-pill {
+    justify-self: stretch;
+    text-align: center;
   }
 
   .board-shell {

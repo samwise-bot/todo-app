@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 04:10 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox items), ordered UI `Next` by (`priority`, `dueAt`, `id`), and executed task #73 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped board-header filter action polish (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Added dedicated board filter actions row containing `Apply filters`, `Clear all`, and a persistent active-filter count pill.
+  2. Ensured the active-count pill sits beside reset controls in desktop and mobile layouts.
+  3. Tightened mobile wrapping behavior by promoting action controls to a resilient full-width 3-cell grid under 900px.
+- Validation:
+  - `npm test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 03:55 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), then executed task #72 through full lifecycle with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
