@@ -1,20 +1,38 @@
 # Roadmap
 
-## Current Iteration Status (2026-03-05 06:53 PT)
+
+## Current Iteration Status (2026-03-05 07:53 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
-- ✅ Completed: task #82 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
-- ✅ Completed: board filtered-empty-state helper now includes active-filter count diagnostics (`1 active filter` / `N active filters`) for faster on-board troubleshooting.
-- ✅ Added follow-up UI task #85 to keep board UX pipeline full (`next`, priority 4).
+- ✅ Completed: task #86 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board visual polish increment shipped — lane container now shows horizontal edge-fade indicators to signal scrollable overflow (desktop + mobile-safe sizing).
+- ✅ Added follow-up UI task #87 to keep board UX strike queue depth at 3.
 - ▶ Next milestone:
-  - #83 Board UX: add compact settings header breadcrumb context for board workspace.
+  - #87 Board UX: add subtle lane-edge fade labels for mobile scroll discoverability.
   - #84 Board UX: add compact active-filter diagnostics in empty-state helper.
-  - #85 Board UX: add sticky lane-header shadow for horizontal scroll context.
+  - #83 Board UX: add compact settings header breadcrumb context for board workspace.
 - Board-first criteria snapshot:
   - A) `/board` focused workspace: **On track**.
   - B) Core card/header actions: **On track**.
-  - C) Strong filtering + chips/reset: **Improving** (empty-state now includes explicit active-filter count).
-  - D) Visual polish/mobile safety: **Improving**.
+  - C) Strong filtering + chips/reset: **Improving**.
+  - D) Visual polish/mobile safety: **Improving** (edge-fade overflow cues shipped).
+  - E) Advanced controls moved off board: **On track**.
+
+## Current Iteration Status (2026-03-05 07:23 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #85 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board visual polish increment shipped — lane headers now use a sticky shadowed container for stronger horizontal scroll context and Trello-like readability.
+- ✅ Added follow-up UI task #86 to keep board UX pipeline full (`next`, priority 4).
+- ▶ Next milestone:
+  - #83 Board UX: add compact settings header breadcrumb context for board workspace.
+  - #84 Board UX: add compact active-filter diagnostics in empty-state helper.
+  - #86 Board UX: add horizontal scroll edge-fade indicators for lane container.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **Improving**.
+  - D) Visual polish/mobile safety: **Improving** (sticky lane-header context shipped).
   - E) Advanced controls moved off board: **On track**.
 
 ## Current Iteration Status (2026-03-05 06:23 PT)

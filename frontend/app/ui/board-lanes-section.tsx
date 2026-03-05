@@ -718,6 +718,13 @@ export function BoardLanesSection({
           {board.columns.length === 0 ? (
             <div className="empty-state">No columns defined for this board yet.</div>
           ) : (
+            <div className="kanban-scroll-wrap" aria-hidden="true">
+              <span className="kanban-scroll-fade kanban-scroll-fade-left" />
+              <span className="kanban-scroll-fade kanban-scroll-fade-right" />
+            </div>
+          )}
+
+          {board.columns.length > 0 && (
             <div className="kanban-scroll" role="region" aria-label={`${board.name} columns`}>
               {board.columns.map((column, index) => {
                 const normalizedColumn = column.name.trim().toLowerCase();
@@ -743,45 +750,47 @@ export function BoardLanesSection({
                     <p id={moveInstructionId} className="sr-only">
                       Keyboard tip: use Tab to focus move buttons, then press Enter or Space to reorder column {column.name}.
                     </p>
-                    <div className="column-header-row">
-                      <h4>{column.name}</h4>
-                      <div className="form-row" style={{ gap: 6 }}>
-                        <MoveColumnForm
-                          columnId={column.id}
-                          columnName={column.name}
-                          boardId={board.id}
-                          boardHref={boardHref}
-                          toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
-                          disabled={!leftNeighbor}
-                          direction="left"
-                          instructionId={moveInstructionId}
-                        />
-                        <MoveColumnForm
-                          columnId={column.id}
-                          columnName={column.name}
-                          boardId={board.id}
-                          boardHref={boardHref}
-                          toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
-                          disabled={!rightNeighbor}
-                          direction="right"
-                          instructionId={moveInstructionId}
-                        />
-                        <span className="count-pill">{column.tasks.length}</span>
+                    <div className="kanban-column-header">
+                      <div className="column-header-row">
+                        <h4>{column.name}</h4>
+                        <div className="form-row" style={{ gap: 6 }}>
+                          <MoveColumnForm
+                            columnId={column.id}
+                            columnName={column.name}
+                            boardId={board.id}
+                            boardHref={boardHref}
+                            toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
+                            disabled={!leftNeighbor}
+                            direction="left"
+                            instructionId={moveInstructionId}
+                          />
+                          <MoveColumnForm
+                            columnId={column.id}
+                            columnName={column.name}
+                            boardId={board.id}
+                            boardHref={boardHref}
+                            toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
+                            disabled={!rightNeighbor}
+                            direction="right"
+                            instructionId={moveInstructionId}
+                          />
+                          <span className="count-pill">{column.tasks.length}</span>
+                        </div>
                       </div>
+                      <InlineColumnControls
+                        columnId={column.id}
+                        columnName={column.name}
+                        columnPosition={column.position}
+                        taskCount={column.tasks.length}
+                      />
+                      <InlineCreateTaskForm
+                        boardName={board.name}
+                        columnId={column.id}
+                        columnName={column.name}
+                        projectId={boardProjectIDs.get(board.id)}
+                        defaultState={defaultState}
+                      />
                     </div>
-                    <InlineColumnControls
-                      columnId={column.id}
-                      columnName={column.name}
-                      columnPosition={column.position}
-                      taskCount={column.tasks.length}
-                    />
-                    <InlineCreateTaskForm
-                      boardName={board.name}
-                      columnId={column.id}
-                      columnName={column.name}
-                      projectId={boardProjectIDs.get(board.id)}
-                      defaultState={defaultState}
-                    />
                     {column.tasks.length === 0 ? (
                       <p className="muted">No tasks in this column.</p>
                     ) : (

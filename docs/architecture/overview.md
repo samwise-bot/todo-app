@@ -1,5 +1,30 @@
 # Architecture Overview
 
+
+## Architecture Delta (2026-03-05, autonomous loop 07:53 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #86 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped board visual polish for horizontal lane scanning on `/board`:
+  1. Added non-interactive lane-container edge-fade indicators (`.kanban-scroll-wrap`, `.kanban-scroll-fade-*`) in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Added Trello-like horizontal edge gradients + mobile-safe sizing in `frontend/app/globals.css` to improve overflow discoverability without adding clutter.
+  3. Kept lane controls/card actions unchanged so board-first IA remains focused and stable.
+- Added regression assertions in `frontend/tests/board-lanes-rendering.test.tsx` for edge-fade wrapper and both fade markers.
+- Added follow-up UI task #87 (`next`, priority 4) to keep top-3 strike queue full.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+## Architecture Delta (2026-03-05, autonomous loop 07:23 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox tasks) and re-ranked UI-strike `Next` tasks by (`priority`, `dueAt`, `id`).
+- Executed task #85 through full lifecycle with explicit assignment (`Next -> In Progress -> Done`, `samwise`).
+- Shipped board visual-polish increment for horizontal-scroll context:
+  1. Added sticky lane-header container (`.kanban-column-header`) wrapping lane title + controls in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Added subtle header gradient/shadow treatment in `frontend/app/globals.css` so lane context stays legible during horizontal board scanning.
+  3. Added mobile-safe spacing overrides for the new lane-header container under 900px.
+- Added focused regression assertion in `frontend/tests/board-lanes-rendering.test.tsx` for the new sticky lane-header wrapper class.
+- Added follow-up UI task #86 (`next`, priority 4) to preserve top-3 board UX strike queue depth.
+- Validation:
+  - `npm test -- tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 06:53 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #82 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
