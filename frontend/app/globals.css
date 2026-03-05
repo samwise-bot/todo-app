@@ -380,6 +380,7 @@ body[data-board-scrolled='true'] .board-toolbar-lanes-divider {
 .board-due-window-group {
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 .board-due-window-legend {
@@ -387,10 +388,17 @@ body[data-board-scrolled='true'] .board-toolbar-lanes-divider {
   margin: 0;
 }
 
+.board-due-window-legend-compact {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 3px;
+}
+
 .board-due-window-chip {
   padding: 2px 7px;
   font-size: 0.74rem;
   font-weight: 700;
+  line-height: 1.1;
   background: #f0f5ff;
   border-color: #c9d7f5;
   color: #244a9a;
@@ -759,6 +767,19 @@ button:hover,
   .board-filter-grid .btn {
     min-width: 0;
     width: 100%;
+  }
+
+  .board-due-window-group {
+    gap: 3px;
+  }
+
+  .board-due-window-legend-compact {
+    gap: 3px;
+  }
+
+  .board-due-window-chip {
+    padding: 1px 6px;
+    font-size: 0.68rem;
   }
 
   .board-filter-controls {

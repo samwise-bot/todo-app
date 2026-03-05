@@ -1,5 +1,18 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 13:23 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (no inbox UI tasks) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).
+- Executed UI task #92 through full workflow with explicit assignment (`Next -> In Progress -> Done`, `samwise`).
+- Shipped board due-window chip spacing/wrap polish:
+  1. Added compact due-window legend hook class + semantic titles in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Updated `frontend/app/globals.css` with `board-due-window-legend-compact` flex-wrap behavior and tighter chip metrics.
+  3. Added mobile-specific tightening under 900px (reduced chip padding/font and compact legend gaps).
+- Deferred non-UI strike-mode task #100 from `Next` to `Blocked` (`waiting`) to keep board UX delivery focused.
+- Added follow-up UI task #102 (`next`, priority 4) to keep top-3 strike queue depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 12:53 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (no `inbox` tasks) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).

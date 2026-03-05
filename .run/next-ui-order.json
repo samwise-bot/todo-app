@@ -1,60 +1,20 @@
-{
-  "ordered": [
-    {
-      "id": 90,
-      "title": "Board UX: add lane-count badge contrast boost for quick scan",
-      "description": "Improve Trello-like readability by increasing count-pill contrast in lane headers while preserving current spacing.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T17:26:39Z",
-      "updatedAt": "2026-03-05T17:26:39Z"
-    },
-    {
-      "id": 91,
-      "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
-      "description": "Strengthen hierarchy by adding a subtle divider under sticky filter toolbar so lane content starts with clearer separation.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T17:57:54Z",
-      "updatedAt": "2026-03-05T17:57:54Z"
-    },
-    {
-      "id": 92,
-      "title": "Board UX: tighten due-window chip spacing and wrap behavior on mobile",
-      "description": "Follow-up polish for due-window legend chips to keep toolbar compact and readable under narrow widths.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T18:27:22Z",
-      "updatedAt": "2026-03-05T18:27:22Z"
-    }
-  ],
-  "top3": [
-    {
-      "id": 90,
-      "title": "Board UX: add lane-count badge contrast boost for quick scan",
-      "priority": 4,
-      "dueAt": null
-    },
-    {
-      "id": 91,
-      "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
-      "priority": 4,
-      "dueAt": null
-    },
-    {
-      "id": 92,
-      "title": "Board UX: tighten due-window chip spacing and wrap behavior on mobile",
-      "priority": 4,
-      "dueAt": null
-    }
-  ]
-}
+[
+  {
+    "id": 91,
+    "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
+    "priority": 4,
+    "due_at": null
+  },
+  {
+    "id": 101,
+    "title": "Board UX: add regression test coverage for sticky-toolbar divider + touch hit-area classes",
+    "priority": 4,
+    "due_at": null
+  },
+  {
+    "id": 102,
+    "title": "Board UX: tighten saved-view helper spacing and wrap behavior on mobile",
+    "priority": 4,
+    "due_at": null
+  }
+]

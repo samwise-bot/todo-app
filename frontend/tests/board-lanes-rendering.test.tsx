@@ -149,8 +149,9 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Filter board by assignee');
     expect(html).toContain('Search board cards');
     expect(html).toContain('aria-label="Due window quick legend"');
-    expect(html).toContain('class="badge-row board-due-window-legend"');
+    expect(html).toContain('class="badge-row board-due-window-legend board-due-window-legend-compact"');
     expect(html).toContain('class="badge board-due-window-chip"');
+    expect(html).toContain('title="Due in 3 days"');
     expect(html).toContain('Apply filters');
     expect(html).toContain('Clear all');
     expect(html).toContain('aria-label="One-tap filter reset chips"');

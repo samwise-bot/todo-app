@@ -1,5 +1,23 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 13:23 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox UI tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #92 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board visual polish increment shipped — due-window legend chips now use tighter compact styling with improved wrap behavior on mobile (`.board-due-window-legend-compact`, tighter chip sizing under 900px).
+- ✅ Deferred strike-mode non-UI `Next` task #100 to `Blocked` (`waiting`) so board UX work remains the active lane.
+- ✅ Added follow-up UI task #102 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #91 Board UX: add compact sticky-toolbar divider line between filters and lanes.
+  - #101 Board UX: add regression test coverage for sticky-toolbar divider + touch hit-area classes.
+  - #102 Board UX: tighten saved-view helper spacing and wrap behavior on mobile.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (due-window chip spacing/wrap tightened for narrow viewports).
+  - E) Advanced controls moved off board: **On track**.
+
 ## Current Iteration Status (2026-03-05 12:53 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

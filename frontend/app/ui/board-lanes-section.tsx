@@ -550,10 +550,10 @@ export function BoardLanesSection({
                   <option value="72">Due in 3d</option>
                   <option value="168">Due in 7d</option>
                 </select>
-                <div className="badge-row board-due-window-legend" aria-hidden="true">
-                  <span className="badge board-due-window-chip">24h</span>
-                  <span className="badge board-due-window-chip">3d</span>
-                  <span className="badge board-due-window-chip">7d</span>
+                <div className="badge-row board-due-window-legend board-due-window-legend-compact" aria-hidden="true">
+                  <span className="badge board-due-window-chip" title="Due in 24h">24h</span>
+                  <span className="badge board-due-window-chip" title="Due in 3 days">3d</span>
+                  <span className="badge board-due-window-chip" title="Due in 7 days">7d</span>
                 </div>
               </div>
               <input name="taskQ" defaultValue={boardFilter.search} placeholder="Search cards" aria-label="Search board cards" />

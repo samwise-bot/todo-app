@@ -4,6 +4,23 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` UI tasks this cycle).
+- [x] Executed highest-priority eligible UI `Next` task #92 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped due-window legend mobile polish: compact legend class + tighter chip spacing/wrap behavior on narrow screens.
+- [x] Deferred non-UI strike-mode task #100 to `Blocked` (`waiting`) so board UX work remains active.
+- [x] Added follow-up UI task #102 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #91 Board UX: add compact sticky-toolbar divider line between filters and lanes (**next**, priority=4)
+- [ ] #101 Board UX: add regression test coverage for sticky-toolbar divider + touch hit-area classes (**next**, priority=4)
+- [ ] #102 Board UX: tighten saved-view helper spacing and wrap behavior on mobile (**next**, priority=4)
+
+## Verification
+- `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #99 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped sticky-toolbar/lane separation + touch ergonomics polish (compact divider line between filter toolbar and lane region; larger coarse-pointer hit area for lane move controls).
