@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 03:55 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), then executed task #72 through full lifecycle with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
+- Shipped mobile board readability + IA polish for sub-900px layouts (`frontend/app/globals.css`):
+  1. Tightened board/card paddings and lane spacing for denser, Trello-like scanability.
+  2. Forced filter-toolbar controls into a resilient 2-column mobile grid with full-width inputs/buttons.
+  3. Improved sticky toolbar wrapping and column-header control spacing to reduce overlap on narrow screens.
+- Validation:
+  - `npm test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 03:40 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), then executed task #71 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).

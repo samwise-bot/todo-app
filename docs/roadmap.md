@@ -1,5 +1,15 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 03:55 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #72 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first UX increment shipped — mobile `/board` spacing + toolbar wrapping tightened under 900px (compact columns/cards, resilient 2-column filter grid, improved sticky-toolbar wrap behavior).
+- ▶ Next milestone:
+  - #73 Board UX: add board-header active-filter count pill beside reset controls.
+  - #74 Settings: add board-to-settings advanced-controls shortcut card.
+  - UX IA: keep extracting non-board controls to dedicated `/settings` while preserving `/board` as primary workspace.
+
 ## Current Iteration Status (2026-03-05 03:40 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

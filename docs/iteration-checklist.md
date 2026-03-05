@@ -3,6 +3,20 @@
 _Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #72 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped mobile board UX tightening under 900px: denser lane/card spacing + robust sticky-toolbar filter wrapping.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #73 Board UX: add board-header active-filter count pill beside reset controls (**next**, priority=3)
+- [ ] #74 Settings: add board-to-settings advanced-controls shortcut card (**next**, priority=4)
+
+## Verification
+- `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #71 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
