@@ -3,20 +3,18 @@
 _Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration
-- [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
+- [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via API source-of-truth checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority Next task #63 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
-- [x] Shipped board-first board-card quick controls directly on `/board` (assignee/project/priority/due + edit/delete).
+- [x] Executed highest-priority Next task #64 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped board-first column-move rollback messaging on `/board` (`columnMoveNotice` inline alert when persistence fails).
 - [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #64 Board UX: add optimistic rollback messaging for column move failures (**next**, priority=2)
 - [ ] #65 Board UX: keyboard-accessible column reordering controls with aria-live feedback (**next**, priority=3)
 
 ## Verification
 - `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
-- `/home/bot/.nix-profile/bin/go test ./tests -run TestTaskUpdateAndDeleteEndpoints` ✅
-- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task #63 lifecycle transitions ... PY` ✅
+- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task #64 lifecycle transitions via API ... PY` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

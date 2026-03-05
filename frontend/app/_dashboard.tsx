@@ -78,6 +78,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   const taskDueWindow = readStringParam(currentParams, 'taskDueWindow', '');
   const taskPage = readPositiveIntParam(currentParams, 'taskPage', 1);
   const taskPageSize = readPositiveIntParam(currentParams, 'taskPageSize', 10);
+  const columnMoveNotice = readStringParam(currentParams, 'columnMoveNotice', '');
 
   const principalAPIQuery = new URLSearchParams({
     page: String(principalPage),
@@ -309,6 +310,8 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         projects={projects}
         activeFilterBadges={activeBoardFilterBadges}
         presetLinks={boardPresetLinks}
+        boardHref={withQueryString(currentParams)}
+        columnMoveNotice={columnMoveNotice}
       />
 
       <section className="panel" aria-label="Board inspector">

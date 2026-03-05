@@ -108,6 +108,25 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Clear Assignee: Samwise');
   });
 
+  test('renders column move rollback notice when provided', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [],
+          tasksWithoutColumn: [],
+          fetchErrors: []
+        }}
+        boards={[]}
+        columns={[]}
+        principals={[]}
+        projects={[]}
+        columnMoveNotice={'Column move failed for "Next". Optimistic reorder was rolled back.'}
+      />
+    );
+
+    expect(html).toContain('Column move failed for &quot;Next&quot;. Optimistic reorder was rolled back.');
+  });
+
   test('renders mixed assigned and unassigned tasks in their respective lanes', () => {
     const html = renderToStaticMarkup(
       <BoardLanesSection

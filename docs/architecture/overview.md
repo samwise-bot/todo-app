@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 00:33 PT)
+- Re-validated source-of-truth board prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #64 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.
+- Shipped board-first rollback messaging for column move failures on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/_dashboard.tsx`):
+  1. `MoveColumnForm` now checks `updateColumnAction` result and redirects with a one-shot failure notice when move persistence fails.
+  2. Board lane panel renders `columnMoveNotice` as an inline alert so operators see explicit optimistic-rollback feedback instead of silent failure.
+  3. Move actions preserve current board filter query context via `boardHref` propagation.
+- Added focused regression coverage update:
+  - `frontend/tests/board-lanes-rendering.test.tsx` (column move rollback notice rendering)
+
 ## Architecture Delta (2026-03-05, autonomous loop 00:29 PT)
 - Re-validated source-of-truth board prerequisites idempotently in SQLite (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #63 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.

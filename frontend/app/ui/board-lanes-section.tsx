@@ -1,4 +1,5 @@
 import React from 'react';
+import { redirect } from 'next/navigation';
 import type { BoardLaneView } from '../../lib/board-lanes';
 import { assignTaskAction, createColumnAction, createTaskAction, deleteTaskAction, updateColumnAction, updateTaskAction } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
@@ -161,6 +162,7 @@ function MoveColumnForm({
   columnId,
   columnName,
   boardId,
+  boardHref,
   toPosition,
   disabled,
   direction
@@ -168,6 +170,7 @@ function MoveColumnForm({
   columnId: number;
   columnName: string;
   boardId: number;
+  boardHref: string;
   toPosition: number;
   disabled: boolean;
   direction: 'left' | 'right';
@@ -177,7 +180,13 @@ function MoveColumnForm({
     formData.set('columnId', String(columnId));
     formData.set('name', columnName);
     formData.set('position', String(toPosition));
-    await updateColumnAction(INITIAL_ACTION_STATE, formData);
+
+    const result = await updateColumnAction(INITIAL_ACTION_STATE, formData);
+    if (result.status === 'error') {
+      const sep = boardHref.includes('?') ? '&' : '?';
+      const message = encodeURIComponent(`Column move failed for "${columnName}". Optimistic reorder was rolled back.`);
+      redirect(`${boardHref}${sep}columnMoveNotice=${message}`);
+    }
   }
 
   return (
@@ -203,7 +212,9 @@ export function BoardLanesSection({
   principals,
   projects,
   activeFilterBadges = [],
-  presetLinks = []
+  presetLinks = [],
+  boardHref = '/board',
+  columnMoveNotice = ''
 }: {
   laneView: BoardLaneView;
   boards: Entity[];
@@ -212,6 +223,8 @@ export function BoardLanesSection({
   projects: Entity[];
   activeFilterBadges?: { label: string; clearHref: string }[];
   presetLinks?: { key: string; label: string; href: string }[];
+  boardHref?: string;
+  columnMoveNotice?: string;
 }) {
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -259,6 +272,12 @@ export function BoardLanesSection({
               {badge.label} ×
             </a>
           ))}
+        </div>
+      )}
+
+      {columnMoveNotice && (
+        <div className="inline-alert" role="alert">
+          <strong>{columnMoveNotice}</strong>
         </div>
       )}
 
@@ -341,6 +360,7 @@ export function BoardLanesSection({
                           columnId={column.id}
                           columnName={column.name}
                           boardId={board.id}
+                          boardHref={boardHref}
                           toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
                           disabled={!leftNeighbor}
                           direction="left"
@@ -349,6 +369,7 @@ export function BoardLanesSection({
                           columnId={column.id}
                           columnName={column.name}
                           boardId={board.id}
+                          boardHref={boardHref}
                           toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
                           disabled={!rightNeighbor}
                           direction="right"
