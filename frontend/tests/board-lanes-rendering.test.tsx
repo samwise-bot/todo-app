@@ -201,7 +201,9 @@ describe('BoardLanesSection', () => {
 
     expect(html).toContain('badge badge-saved-view badge-saved-view-active');
     expect(html).toContain('aria-current="page"');
-    expect(html).toContain('Active: <strong>Assigned to me</strong> · One-click reset to all cards:');
+    expect(html).toContain('board-saved-view-row-active');
+    expect(html).toContain('Active: <strong>Assigned to me</strong>');
+    expect(html).toContain('One-click reset to all cards:');
     expect(html).toContain('Reset view ×');
     expect(html).toContain('Active saved view Assigned to me. One-click reset available');
   });

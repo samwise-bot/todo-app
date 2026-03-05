@@ -350,10 +350,23 @@ body[data-board-scrolled='true'] .board-toolbar-lanes-divider {
   align-items: center;
 }
 
+.board-saved-view-row-active {
+  margin-bottom: 6px;
+  row-gap: 5px;
+}
+
 .board-saved-view-helper {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+  line-height: 1.15;
+}
+
+.board-saved-view-helper-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .badge-saved-view {
@@ -768,6 +781,20 @@ button:hover,
   .board-filter-quick-clear,
   .board-filter-reset-cluster {
     gap: 6px;
+  }
+
+  .board-saved-view-row-active {
+    margin-bottom: 4px;
+    row-gap: 4px;
+  }
+
+  .board-saved-view-helper {
+    gap: 4px;
+    line-height: 1.05;
+  }
+
+  .board-saved-view-helper-copy {
+    font-size: 0.74rem;
   }
 
   .board-filter-grid {

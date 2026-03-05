@@ -1,4 +1,7 @@
 {
-  "id": 92,
-  "title": "Board UX: tighten due-window chip spacing and wrap behavior on mobile"
+  "id": 102,
+  "title": "Board UX: tighten saved-view helper spacing and wrap behavior on mobile",
+  "state": "done",
+  "startedAt": "2026-03-05T14:57:30-08:00",
+  "notes": "Compact active saved-view helper rhythm and wrap behavior; updated rendering test expectations."
 }

@@ -1,5 +1,21 @@
 # Todo-App Iteration Checklist (Mirror from App)
 
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App via source-of-truth DB/API checks (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- [x] Processed Inbox first (0 `inbox` UI tasks this cycle).
+- [x] Executed highest-priority eligible UI `Next` task #102 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped saved-view helper spacing/wrap polish + compact active-row rhythm in sticky toolbar (`board-saved-view-row-active`, `board-saved-view-helper-copy`).
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #103 Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy (**next**, priority=4)
+- [ ] #104 Board UX: reduce sticky toolbar vertical rhythm when saved-view helper is active (**next**, priority=4)
+- [ ] #100 Button works test (**waiting**, non-UI deferred in strike mode)
+
+## Verification
+- `npm --prefix frontend run test` ✅
+
+
 _Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration

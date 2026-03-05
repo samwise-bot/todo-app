@@ -1,5 +1,21 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 14:53 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (principal `samwise`; project `TODO App`; board `TODO App Board`; columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 eligible UI items) and re-ranked strike-mode `Next` by (`priority`, `dueAt`, `id`).
+- Executed highest-priority UI task #102 through full flow with assignment:
+  - assignee: `samwise` (`assigneeId=2`)
+  - board column: `Next -> In Progress -> Done`
+  - state: `next -> scheduled -> done`
+- Shipped saved-view helper compaction in board toolbar:
+  1. Active helper copy now uses split inline segments to wrap predictably on narrow widths.
+  2. Added active-row compact rhythm hooks (`board-saved-view-row-active`) to reduce sticky-toolbar vertical footprint.
+  3. Tightened helper gap/line-height defaults and mobile overrides for Trello-like scanability.
+- Updated rendering regression expectations in `frontend/tests/board-lanes-rendering.test.tsx` for the new helper structure.
+- Validation:
+  - `npm --prefix frontend run test`
+
+
 ## Architecture Delta (2026-03-05, autonomous loop 14:30 PT)
 - Re-validated source-of-truth entities idempotently against TODO DB/API using canonical records (`samwise`, project `TODO App` id=2, board `TODO App Board` id=1, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (`state=inbox` returned 0 UI items).

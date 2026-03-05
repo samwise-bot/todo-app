@@ -482,7 +482,7 @@ export function BoardLanesSection({
         )}
 
         {boardSavedViewLinks.length > 0 && (
-          <div className="badge-row board-saved-view-row" aria-label="Saved board views">
+          <div className={`badge-row board-saved-view-row${activeSavedView ? ' board-saved-view-row-active' : ''}`} aria-label="Saved board views">
             <span className="muted">Saved views:</span>
             {boardSavedViewLinks.map((view) => (
               <a
@@ -497,7 +497,10 @@ export function BoardLanesSection({
             ))}
             {activeSavedView && (
               <span className="muted board-saved-view-helper" aria-label={`Active saved view ${activeSavedView.label}. One-click reset available`}>
-                Active: <strong>{activeSavedView.label}</strong> · One-click reset to all cards:
+                <span className="board-saved-view-helper-copy">
+                  Active: <strong>{activeSavedView.label}</strong>
+                </span>
+                <span className="board-saved-view-helper-copy">One-click reset to all cards:</span>
                 <a className="badge badge-reset-all" href={boardFilter?.resetHref ?? '/board'}>
                   Reset view ×
                 </a>

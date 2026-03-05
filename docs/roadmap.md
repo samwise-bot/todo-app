@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 14:53 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API checks.
+- ✅ Completed: processed Inbox-first queue (0 UI inbox tasks), then ranked strike-mode `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #102 moved through full flow with explicit `samwise` assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`).
+- ✅ Completed: shipped saved-view helper spacing/wrap polish and active-row compaction in sticky board toolbar for improved mobile readability.
+- ▶ Next milestone:
+  - #103 Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy.
+  - #104 Board UX: reduce sticky toolbar vertical rhythm when saved-view helper is active.
+  - Navigation/Settings polish follow-ups only if they directly support board UX criteria.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (saved-view helper wrap + compact rhythm tightened).
+  - E) Advanced controls moved off board: **On track**.
+
+
 ## Current Iteration Status (2026-03-05 14:30 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, canonical `TODO App` project id=2, `TODO App Board` id=1, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox UI tasks), then ranked strike-mode `Next` by (`priority`, `dueAt`, `id`).

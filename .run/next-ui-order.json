@@ -1,17 +1,5 @@
 [
   {
-    "id": 102,
-    "title": "Board UX: tighten saved-view helper spacing and wrap behavior on mobile",
-    "description": "Refine saved-view helper row spacing and wrapping under narrow widths to preserve toolbar hierarchy.",
-    "state": "next",
-    "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 2,
-    "priority": 4,
-    "createdAt": "2026-03-05T21:26:20.306255Z",
-    "updatedAt": "2026-03-05T21:26:20.306255Z"
-  },
-  {
     "id": 103,
     "title": "Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy",
     "description": "",
