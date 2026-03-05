@@ -5,14 +5,14 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority UI `Next` task #67 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
-- [x] Shipped board-first column header controls on `/board` for direct rename/delete workflows without leaving lane context.
+- [x] Executed highest-priority UI `Next` task #68 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped board-first board-header filter controls on `/board` (assignee/project/state/priority/due/search + clear-all) with active quick-clear chips.
 - [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #68 Board UX: add assignee/project filter dropdown quick-clear chips in board header (**next**, priority=3)
-- [ ] #7 Mutation smoke task (**next**, priority=3)
-- [ ] #9 Mutation smoke task (**next**, priority=3)
+- [ ] #70 Roadmap: SPA extract board-only shell from monolithic dashboard (**next**, priority=1)
+- [ ] #69 Board UX: move board filters into sticky compact toolbar on /board (**next**, priority=2)
+- [ ] #71 Board UX: add one-tap filter reset chip cluster with active count (**next**, priority=2)
 
 ## Verification
 - `npm test -- tests/board-lanes-rendering.test.tsx` ✅

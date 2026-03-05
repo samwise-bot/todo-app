@@ -99,6 +99,18 @@ describe('BoardLanesSection', () => {
         columns={[]}
         principals={[]}
         projects={[]}
+        boardFilter={{
+          assigneeId: '2',
+          projectId: '2',
+          state: 'next,scheduled',
+          priority: '2',
+          dueWindow: '72',
+          search: 'chips',
+          assigneeOptions: [{ id: 2, label: 'Samwise' }],
+          projectOptions: [{ id: 2, label: 'TODO App' }],
+          resetHref: '/board',
+          hiddenParams: [['principalPage', '2']]
+        }}
         activeFilterBadges={[
           { label: 'Assignee: Samwise', clearHref: '/?taskAssigneeId=' },
           { label: 'Priority: P2', clearHref: '/?taskPriority=' },
@@ -107,6 +119,11 @@ describe('BoardLanesSection', () => {
       />
     );
 
+    expect(html).toContain('aria-label="Board filters"');
+    expect(html).toContain('Filter board by assignee');
+    expect(html).toContain('Search board cards');
+    expect(html).toContain('Apply filters');
+    expect(html).toContain('Clear all');
     expect(html).toContain('Active filters:');
     expect(html).toContain('Assignee: Samwise ×');
     expect(html).toContain('Priority: P2 ×');

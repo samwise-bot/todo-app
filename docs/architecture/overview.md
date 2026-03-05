@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 02:55 PT)
+- Re-validated source-of-truth prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), ordered `Next` by (`priority`, `dueAt`, `id`), and executed highest-priority UI task #68 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
+- Shipped board-first filtering controls directly in board header (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/_dashboard.tsx`):
+  1. Added assignee/project/state/priority/due/search dropdown+input controls in a dedicated `Board filters` toolbar above lanes.
+  2. Added fast `Clear all` reset action while preserving unrelated query params.
+  3. Kept active filter chips inline for one-click per-filter clear behavior.
+- Added focused regression coverage update:
+  - `frontend/tests/board-lanes-rendering.test.tsx` now asserts board-filter toolbar rendering + controls.
+
 ## Architecture Delta (2026-03-05, autonomous loop 02:35 PT)
 - Re-validated source-of-truth prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), then executed highest-ranked UI `Next` task #67 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.

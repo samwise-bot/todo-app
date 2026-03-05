@@ -251,6 +251,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
   }
 
   const principalHidden = hiddenParamEntries(currentParams, ['principalKind', 'principalQ', 'principalPage', 'principalPageSize']);
+  const boardFilterHidden = hiddenParamEntries(currentParams, ['taskState', 'taskQ', 'taskProjectId', 'taskAssigneeId', 'taskPriority', 'taskDueWindow', 'taskPage']);
   const taskHidden = hiddenParamEntries(currentParams, ['taskState', 'taskQ', 'taskProjectId', 'taskAssigneeId', 'taskBoardColumnId', 'taskPriority', 'taskDueWindow', 'taskPage', 'taskPageSize']);
 
   const principalPrevLink = withQueryString(updateSearchParams(currentParams, { principalPage: principalPage - 1 }));
@@ -311,6 +312,26 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         projects={projects}
         activeFilterBadges={activeBoardFilterBadges}
         presetLinks={boardPresetLinks}
+        boardFilter={{
+          assigneeId: taskAssigneeId,
+          projectId: taskProjectId,
+          state: taskState,
+          priority: taskPriority,
+          dueWindow: taskDueWindow,
+          search: taskQ,
+          assigneeOptions: principals.map((principal) => ({ id: principal.id, label: principal.displayName })),
+          projectOptions: projects.map((project) => ({ id: project.id, label: project.name })),
+          resetHref: withQueryString(updateSearchParams(currentParams, {
+            taskState: null,
+            taskQ: null,
+            taskProjectId: null,
+            taskAssigneeId: null,
+            taskPriority: null,
+            taskDueWindow: null,
+            taskPage: null
+          })),
+          hiddenParams: boardFilterHidden
+        }}
         boardHref={withQueryString(currentParams)}
         columnMoveNotice={columnMoveNotice}
         columnMoveStatus={columnMoveStatus}

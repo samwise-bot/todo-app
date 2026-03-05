@@ -210,6 +210,13 @@ a:hover {
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
 
+.board-filter-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  margin-bottom: 10px;
+}
+
 input,
 select,
 button {
