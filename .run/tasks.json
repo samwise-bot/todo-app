@@ -10,7 +10,8 @@
       "priority": 1,
       "createdAt": "2026-03-04T22:46:46Z",
       "updatedAt": "2026-03-04T22:46:46Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 57,
@@ -22,19 +23,21 @@
       "priority": 2,
       "createdAt": "2026-03-04T22:46:46Z",
       "updatedAt": "2026-03-04T22:46:46Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 56,
       "title": "Board UX: persist board filter presets as URL templates",
       "description": "Save/restore common board filter sets (assignee/project/state/priority/due-window/search).",
-      "state": "next",
+      "state": "done",
       "projectId": 2,
-      "boardColumnId": 2,
+      "boardColumnId": 5,
       "priority": 1,
       "createdAt": "2026-03-04T22:46:46Z",
-      "updatedAt": "2026-03-04T22:46:46Z",
-      "assigneeId": 2
+      "updatedAt": "2026-03-05T00:15:29Z",
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 55,
@@ -46,7 +49,8 @@
       "priority": 2,
       "createdAt": "2026-03-04T12:46:57Z",
       "updatedAt": "2026-03-04T12:48:04Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 54,
@@ -58,7 +62,8 @@
       "priority": 1,
       "createdAt": "2026-03-04T11:17:07Z",
       "updatedAt": "2026-03-04T11:17:50Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 53,
@@ -70,7 +75,8 @@
       "priority": 1,
       "createdAt": "2026-03-04T04:52:26Z",
       "updatedAt": "2026-03-04T06:02:40Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 52,
@@ -82,7 +88,8 @@
       "priority": 1,
       "createdAt": "2026-03-04T04:27:36Z",
       "updatedAt": "2026-03-04T04:52:26Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 51,
@@ -94,7 +101,8 @@
       "priority": 3,
       "createdAt": "2026-03-04T04:27:36Z",
       "updatedAt": "2026-03-04T09:16:00Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 50,
@@ -106,7 +114,8 @@
       "priority": 3,
       "createdAt": "2026-03-04T04:27:30Z",
       "updatedAt": "2026-03-04T07:38:44Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 49,
@@ -117,7 +126,9 @@
       "boardColumnId": 12,
       "priority": 3,
       "createdAt": "2026-03-03T20:15:20Z",
-      "updatedAt": "2026-03-03T20:15:20Z"
+      "updatedAt": "2026-03-03T20:15:20Z",
+      "assigneeId": null,
+      "dueAt": null
     },
     {
       "id": 48,
@@ -128,7 +139,9 @@
       "boardColumnId": 11,
       "priority": 3,
       "createdAt": "2026-03-03T19:29:51Z",
-      "updatedAt": "2026-03-03T19:29:51Z"
+      "updatedAt": "2026-03-03T19:29:51Z",
+      "assigneeId": null,
+      "dueAt": null
     },
     {
       "id": 47,
@@ -140,7 +153,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-04T02:22:47Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 46,
@@ -152,7 +166,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-04T04:25:56Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 45,
@@ -164,7 +179,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-04T03:23:22Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 44,
@@ -176,7 +192,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-04T01:53:22Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 43,
@@ -188,7 +205,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-04T01:16:00Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 42,
@@ -200,7 +218,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-03T21:16:10Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 41,
@@ -212,7 +231,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-03T21:00:42Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 40,
@@ -224,7 +244,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T19:00:50Z",
       "updatedAt": "2026-03-03T19:44:44Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 39,
@@ -236,7 +257,8 @@
       "priority": 1,
       "createdAt": "2026-03-03T18:18:32Z",
       "updatedAt": "2026-03-03T18:45:39Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 38,
@@ -248,7 +270,8 @@
       "priority": 1,
       "createdAt": "2026-03-03T18:02:18Z",
       "updatedAt": "2026-03-03T18:18:28Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 37,
@@ -260,7 +283,8 @@
       "priority": 2,
       "createdAt": "2026-03-03T17:47:46Z",
       "updatedAt": "2026-03-03T18:01:11Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 36,
@@ -272,7 +296,8 @@
       "priority": 2,
       "createdAt": "2026-03-03T17:33:45Z",
       "updatedAt": "2026-03-03T17:47:40Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 35,
@@ -284,7 +309,8 @@
       "priority": 1,
       "createdAt": "2026-03-03T17:18:44Z",
       "updatedAt": "2026-03-03T17:33:45Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 34,
@@ -296,7 +322,8 @@
       "priority": 1,
       "createdAt": "2026-03-03T17:18:44Z",
       "updatedAt": "2026-03-03T17:32:38Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 33,
@@ -308,7 +335,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T17:16:06Z",
       "updatedAt": "2026-03-03T20:15:23Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 32,
@@ -320,7 +348,8 @@
       "priority": 2,
       "createdAt": "2026-03-03T17:16:04Z",
       "updatedAt": "2026-03-03T18:59:47Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 31,
@@ -332,7 +361,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T17:14:52Z",
       "updatedAt": "2026-03-03T19:29:53Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 30,
@@ -344,7 +374,8 @@
       "priority": 1,
       "createdAt": "2026-03-03T16:49:48Z",
       "updatedAt": "2026-03-03T17:16:04Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 29,
@@ -369,7 +400,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:20:01Z",
       "updatedAt": "2026-03-03T16:36:26Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 27,
@@ -381,7 +413,8 @@
       "priority": 2,
       "createdAt": "2026-03-03T16:20:01Z",
       "updatedAt": "2026-03-03T20:31:13Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 26,
@@ -393,7 +426,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T22:45:52Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 25,
@@ -405,7 +439,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T21:15:18Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 24,
@@ -417,7 +452,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T19:45:42Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 23,
@@ -429,7 +465,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T18:45:09Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 22,
@@ -441,7 +478,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T17:45:18Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 21,
@@ -453,7 +491,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T16:46:15Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 20,
@@ -465,7 +504,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T15:45:43Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 19,
@@ -477,7 +517,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T13:37:18Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 18,
@@ -489,7 +530,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T13:04:17Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 17,
@@ -501,7 +543,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T12:02:30Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 16,
@@ -513,7 +556,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T10:34:06Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 15,
@@ -525,7 +569,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T10:01:10Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 14,
@@ -537,7 +582,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T03:52:48Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 13,
@@ -549,7 +595,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T02:52:23Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 12,
@@ -561,7 +608,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-04T00:46:08Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 11,
@@ -573,7 +621,8 @@
       "priority": 2,
       "createdAt": "2026-03-03T16:07:58Z",
       "updatedAt": "2026-03-03T19:14:48Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 10,
@@ -585,7 +634,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T16:04:40Z",
       "updatedAt": "2026-03-03T16:20:01Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 9,
@@ -596,7 +646,9 @@
       "boardColumnId": 8,
       "priority": 3,
       "createdAt": "2026-03-03T16:04:20Z",
-      "updatedAt": "2026-03-03T16:04:20Z"
+      "updatedAt": "2026-03-03T16:04:20Z",
+      "assigneeId": null,
+      "dueAt": null
     },
     {
       "id": 8,
@@ -608,7 +660,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T15:56:00Z",
       "updatedAt": "2026-03-03T16:04:32Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 7,
@@ -619,7 +672,9 @@
       "boardColumnId": 6,
       "priority": 3,
       "createdAt": "2026-03-03T15:55:51Z",
-      "updatedAt": "2026-03-03T15:55:51Z"
+      "updatedAt": "2026-03-03T15:55:51Z",
+      "assigneeId": null,
+      "dueAt": null
     },
     {
       "id": 6,
@@ -631,7 +686,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T15:28:37Z",
       "updatedAt": "2026-03-03T15:55:56Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 5,
@@ -643,7 +699,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
       "updatedAt": "2026-03-03T16:05:03Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 4,
@@ -655,7 +712,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
       "updatedAt": "2026-03-03T20:45:26Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 3,
@@ -667,7 +725,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
       "updatedAt": "2026-03-03T16:36:26Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 2,
@@ -679,7 +738,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T15:27:25Z",
       "updatedAt": "2026-03-03T15:28:37Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     },
     {
       "id": 1,
@@ -691,11 +751,8 @@
       "priority": 3,
       "createdAt": "2026-03-03T08:38:41Z",
       "updatedAt": "2026-03-03T23:15:45Z",
-      "assigneeId": 2
+      "assigneeId": 2,
+      "dueAt": null
     }
-  ],
-  "page": 1,
-  "pageSize": 100,
-  "totalItems": 58,
-  "totalPages": 1
+  ]
 }

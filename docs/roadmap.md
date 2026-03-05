@@ -48,6 +48,15 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
+## Current Iteration Status (2026-03-05)
+- ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns).
+- ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.
+- ✅ Completed: task #56 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
+- ✅ Completed: board-first filter preset templates shipped in `/board` (`My active`, `Due in 24h`, `P1 focus`) with URL-backed query persistence.
+- ▶ Next milestone:
+  - #58 Unblock #52: capture live worker-outcome artifact and set timeout threshold.
+  - #57 Board UX: show active filter summary badges above lanes.
+
 ## Current Iteration Status (2026-03-03)
 - ✅ Completed: task #14 moved `Next -> In Progress -> Done`; expanded unified client-state snapshot to emit deterministic `Next` task groupings by assignee (`nextTaskIdsByAssignee`) with regression coverage.
 - ✅ Completed: task #27 moved `Next -> In Progress -> Done` via frontend intake upgrade for `priority` + `dueAt` fields in task create flow.

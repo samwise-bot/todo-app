@@ -281,3 +281,12 @@ sequenceDiagram
 - Extended `/board` filter-first behavior in `frontend/app/_dashboard.tsx` so board lanes and task explorer now use the same in-memory filter matcher.
 - Added first-class board filters for `priority` and `due window` (`24h`, `3d`, `7d`) while preserving existing assignee/project/state/search controls.
 - Updated board health inspector to compute metrics from the active filtered set, keeping triage stats aligned with the visible board slice.
+
+## Architecture Delta (2026-03-05, autonomous loop 16:15 PT)
+- Completed TODO task #56 lifecycle (`Next -> In Progress -> Done`) in source-of-truth DB with explicit `samwise` assignment retained.
+- Added reusable board filter preset model in `frontend/lib/board-filter-presets.ts`:
+  1. `my-active` (`assignee=2`, active states),
+  2. `due-24h` (due-window + active states),
+  3. `p1-work` (priority-1 active queue).
+- Wired `/board` Task explorer to expose preset links that persist filter sets in URL query templates without route-hopping.
+- Added focused regression coverage in `frontend/tests/board-filter-presets.test.ts` for preset stability and query-reset semantics.

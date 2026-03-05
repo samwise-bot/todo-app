@@ -5,19 +5,18 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Mainline execution completed on highest-priority Next task #50; moved `Next -> In Progress -> Done` assigned to `samwise`.
-- [x] Hardened top-nav regression expectations so each non-board route render has exactly one active nav link and preserves quick-create affordance.
+- [x] Mainline execution completed on highest-priority Next task #56; moved `Next -> In Progress -> Done` assigned to `samwise`.
+- [x] Shipped board filter preset URL templates directly in `/board` task explorer (`My active`, `Due in 24h`, `P1 focus`).
 - [x] Synced architecture + roadmap notes (`docs/architecture/overview.md`, `docs/roadmap.md`) for this increment.
 
 ## Current App Task Board (Project: TODO App)
+- [ ] #58 Unblock #52: capture live worker-outcome artifact and set timeout threshold (**next**, priority=1)
+- [ ] #57 Board UX: show active filter summary badges above lanes (**next**, priority=2)
 - [ ] #52 Unblock #34: run worker outcome sweep and set timeout threshold (**waiting/blocked**, priority=1)
-- [ ] #51 Benchmark: define TODO App performance SLA (p50/p95 load, interaction latency, API throughput) (**next**, priority=3)
-- [ ] #17 Benchmark: build repeatable backend load test harness for task/board endpoints (**next**, priority=3)
-- [ ] #16 Benchmark: define performance SLA (p50/p95 load, interaction latency, API throughput) (**next**, priority=3)
 - [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**waiting/blocked**, priority=1)
 
 ## Verification
-- `npm test -- --run tests/top-nav.test.tsx` ✅
+- `npm test -- --run tests/board-filter-presets.test.ts tests/board-page-defaults.test.tsx` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

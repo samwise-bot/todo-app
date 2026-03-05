@@ -6,6 +6,7 @@ import { TASK_STATES } from '../lib/task-states';
 import { buildBoardLaneView } from '../lib/board-lanes';
 import { buildBoardInspectorMetrics } from '../lib/board-inspector';
 import { fetchCollection, fetchPagedCollection } from '../lib/api-client';
+import { boardFilterPresets, buildPresetHref } from '../lib/board-filter-presets';
 import {
   hiddenParamEntries,
   readPositiveIntParam,
@@ -230,6 +231,10 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
     taskPage: null,
     taskPageSize: null
   }));
+  const boardPresetLinks = boardFilterPresets().map((preset) => ({
+    ...preset,
+    href: buildPresetHref(currentParams, preset)
+  }));
 
   return (
     <main className="app-shell">
@@ -281,6 +286,13 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
           </div>
         </div>
         <SectionError error={tasksListResult.error} />
+
+        <div className="badge-row" style={{ marginBottom: 10, gap: 8 }}>
+          <span className="muted">Filter presets:</span>
+          {boardPresetLinks.map((preset) => (
+            <Link key={preset.key} className="btn btn-secondary" href={preset.href}>{preset.label}</Link>
+          ))}
+        </div>
 
         <form method="GET" className="filters-grid">
           {taskHidden.map(([key, value]) => <input key={`${key}-${value}`} type="hidden" name={key} value={value} />)}
