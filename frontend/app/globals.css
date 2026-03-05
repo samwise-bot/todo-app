@@ -240,6 +240,12 @@ a:hover {
   align-items: center;
 }
 
+.board-saved-view-helper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .badge-saved-view {
   background: #e6f5ea;
   color: #1f5e34;

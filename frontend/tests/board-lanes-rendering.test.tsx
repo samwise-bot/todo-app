@@ -184,6 +184,9 @@ describe('BoardLanesSection', () => {
 
     expect(html).toContain('badge badge-saved-view badge-saved-view-active');
     expect(html).toContain('aria-current="page"');
+    expect(html).toContain('Active: <strong>Assigned to me</strong>');
+    expect(html).toContain('Clear view ×');
+    expect(html).toContain('Active saved view Assigned to me');
   });
 
   test('renders column move rollback notice when provided', () => {

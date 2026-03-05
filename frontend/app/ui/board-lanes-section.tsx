@@ -447,6 +447,7 @@ export function BoardLanesSection({
         });
       })()
     : [];
+  const activeSavedView = boardSavedViewLinks.find((view) => view.active);
 
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -501,6 +502,14 @@ export function BoardLanesSection({
                 {view.label}
               </a>
             ))}
+            {activeSavedView && (
+              <span className="muted board-saved-view-helper" aria-label={`Active saved view ${activeSavedView.label}`}>
+                Active: <strong>{activeSavedView.label}</strong>
+                <a className="badge badge-reset-all" href={boardFilter?.resetHref ?? '/board'}>
+                  Clear view ×
+                </a>
+              </span>
+            )}
           </div>
         )}
 

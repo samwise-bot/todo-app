@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 05:23 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #78 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped saved-view toolbar clarity increment on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Added active saved-view helper text (`Active: <view>`) in the sticky toolbar.
+  2. Added one-click `Clear view ×` affordance beside active helper text to reset back to base board filters.
+  3. Added compact helper styling to preserve Trello-like scanability without expanding toolbar height.
+- Added focused regression coverage in `frontend/tests/board-lanes-rendering.test.tsx` for active-helper + clear affordance rendering.
+- Added follow-up UI task #81 (`next`, priority 4) to keep top-3 strike queue stocked.
+- Validation:
+  - `npm test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 05:10 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #76 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
