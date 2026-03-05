@@ -1,4 +1,5 @@
 {
+  "timestamp": "2026-03-05T20:26:10.613196+00:00",
   "principal": {
     "id": 2,
     "kind": "agent",
@@ -18,41 +19,75 @@
     "name": "TODO App Board",
     "createdAt": "2026-03-03T15:27:25Z"
   },
-  "columns": [
-    {
+  "columns": {
+    "Inbox": {
       "id": 1,
       "boardId": 1,
       "name": "Inbox",
       "position": 10,
       "createdAt": "2026-03-03T15:27:25Z"
     },
-    {
+    "Next": {
       "id": 2,
       "boardId": 1,
       "name": "Next",
       "position": 20,
       "createdAt": "2026-03-03T15:27:25Z"
     },
-    {
+    "In Progress": {
       "id": 3,
       "boardId": 1,
       "name": "In Progress",
       "position": 30,
       "createdAt": "2026-03-03T15:27:25Z"
     },
-    {
+    "Blocked": {
       "id": 7,
       "boardId": 1,
       "name": "Blocked",
       "position": 40,
       "createdAt": "2026-03-03T16:03:43Z"
     },
-    {
+    "Done": {
       "id": 5,
       "boardId": 1,
       "name": "Done",
       "position": 50,
       "createdAt": "2026-03-03T15:27:25Z"
     }
-  ]
+  },
+  "inboxCount": 0,
+  "nextOrdered": [
+    {
+      "id": 99,
+      "title": "Board UX: normalize lane header control hit-area on touch devices",
+      "priority": 4,
+      "dueAt": "2026-03-09T20:26:10Z"
+    },
+    {
+      "id": 91,
+      "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
+      "priority": 4,
+      "dueAt": null
+    },
+    {
+      "id": 92,
+      "title": "Board UX: tighten due-window chip spacing and wrap behavior on mobile",
+      "priority": 4,
+      "dueAt": null
+    }
+  ],
+  "currentTask": {
+    "id": 98,
+    "title": "Board UX: align lane move-button heights with count-pill baseline",
+    "description": "Polish narrow-column lane headers by ensuring move buttons and task-count pill share a consistent visual baseline on desktop/mobile.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "dueAt": "2026-03-09T18:30:00Z",
+    "createdAt": "2026-03-05T19:55:00Z",
+    "updatedAt": "2026-03-05T19:55:00Z"
+  }
 }

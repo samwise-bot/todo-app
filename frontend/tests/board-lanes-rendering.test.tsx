@@ -64,6 +64,7 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Keyboard tip: use Tab to focus move buttons');
     expect(html).toContain('class="kanban-column-header"');
     expect(html).toContain('class="form-row lane-header-actions"');
+    expect(html).toContain('class="btn btn-secondary lane-move-btn"');
     expect(html).toContain('class="count-pill lane-count-pill"');
     expect(html).toContain('aria-label="0 tasks in Doing"');
     expect(html).toContain('class="kanban-scroll-wrap"');

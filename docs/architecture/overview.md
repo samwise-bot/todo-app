@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 12:23 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (no `inbox` tasks) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).
+- Executed highest-priority UI task #98 through full workflow with explicit assignment (`Next -> In Progress -> Done`, `samwise`).
+- Shipped lane-header baseline alignment polish:
+  1. Added explicit `lane-move-btn` hook in `frontend/app/ui/board-lanes-section.tsx` for move controls.
+  2. Updated `frontend/app/globals.css` so lane header actions align on baseline and move buttons use fixed-height dimensions tuned to the lane count-pill.
+  3. Updated mobile override sizing for the new move-button class to keep touch ergonomics consistent.
+- Added follow-up strike-mode task #99 (`next`, priority 4) to preserve top-3 UI queue depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 11:53 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (no `inbox` items) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).

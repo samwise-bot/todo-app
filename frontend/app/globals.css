@@ -611,22 +611,25 @@ button:hover,
 .lane-header-actions {
   margin-left: auto;
   gap: 6px;
-  align-items: center;
+  align-items: baseline;
   justify-content: flex-end;
   flex-wrap: nowrap;
 }
 
 .lane-move-controls {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   flex-wrap: nowrap;
 }
 
-.lane-move-controls .btn {
+.lane-move-btn {
   min-width: 5.65rem;
+  min-height: 1.82rem;
+  height: 1.82rem;
   justify-content: center;
-  padding-inline: 0.55rem;
+  padding: 0.25rem 0.55rem;
+  line-height: 1;
 }
 
 .lane-count-pill {
@@ -796,8 +799,10 @@ button:hover,
     gap: 4px;
   }
 
-  .lane-move-controls .btn {
+  .lane-move-btn {
     min-width: 4.8rem;
+    height: 1.72rem;
+    min-height: 1.72rem;
     padding-inline: 0.42rem;
     font-size: 0.74rem;
   }
