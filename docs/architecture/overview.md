@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 05:38 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #79 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped compact filtered-empty-state CTA on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Added board-level empty-state card when active filters hide all cards.
+  2. Added one-tap `Clear filters` action and direct `Open advanced controls` link to `/settings#advanced-controls`.
+  3. Kept CTA styling compact and Trello-like to preserve board scanability.
+- Added focused regression coverage in `frontend/tests/board-lanes-rendering.test.tsx` for filtered-empty CTA visibility and action links.
+- Added follow-up UI task #82 (`next`, priority 4) to keep top-3 strike queue stocked.
+- Validation:
+  - `npm test -- board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 05:23 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #78 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

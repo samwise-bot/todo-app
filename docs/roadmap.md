@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 05:38 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #79 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board filtered-empty-state UX increment shipped — `/board` now shows a compact CTA card with one-tap `Clear filters` + `Open advanced controls` when active filters hide all cards.
+- ✅ Added follow-up UI task #82 to keep board UX pipeline full (`next`, priority 4).
+- ▶ Next milestone:
+  - #80 Navigation: add settings header return-to-board chip.
+  - #81 Board UX: clarify saved-view helper with one-click reset hint.
+  - #82 Board UX: add filter-empty-state count hint for quick diagnosis.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **Improving** (new zero-results CTA closes discoverability gap).
+  - D) Visual polish/mobile safety: **Improving**.
+  - E) Advanced controls moved off board: **Improving** (filtered-empty state now points to `/settings` instead of adding board clutter).
+
 ## Current Iteration Status (2026-03-05 05:23 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

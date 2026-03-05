@@ -1,41 +1,39 @@
 {
-  "count": 3,
   "items": [
     {
-      "id": 76,
-      "title": "Navigation: add compact board quick-jump between /board and /settings",
-      "description": "Keep board primary while making advanced controls reachable with one tap.",
+      "id": 80,
+      "title": "Navigation: add settings header return-to-board chip",
+      "description": "Add a compact 'Back to board' quick-jump chip in /settings header to complete bidirectional board/settings navigation.",
       "state": "next",
       "projectId": 2,
       "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 4,
-      "createdAt": "2026-03-05T12:07:52Z",
-      "updatedAt": "2026-03-05T12:07:52Z"
+      "createdAt": "2026-03-05T13:09:41Z",
+      "updatedAt": "2026-03-05T13:09:41Z"
     },
     {
-      "id": 78,
-      "title": "Board UX: add active saved-view helper text + clear affordance in toolbar",
-      "description": "Clarify why a saved view is active and provide one-click reset to all views from the saved-views row.",
+      "id": 81,
+      "title": "Board UX: clarify saved-view helper with one-click reset hint",
+      "description": "Keep board toolbar affordances explicit after active view helper rollout.",
       "state": "next",
       "projectId": 2,
-      "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 4,
-      "createdAt": "2026-03-05T12:40:34Z",
-      "updatedAt": "2026-03-05T12:40:34Z"
+      "createdAt": "2026-03-05T13:26:11Z",
+      "updatedAt": "2026-03-05T13:26:11Z"
     },
     {
-      "id": 79,
-      "title": "Board UX: add compact board empty-state CTA linking to /settings advanced controls",
-      "description": "When board has no matching cards after filters, show one-tap CTA to clear filters or open settings advanced controls.",
+      "id": 82,
+      "title": "Board UX: add filter-empty-state count hint for quick diagnosis",
+      "description": "Show compact helper explaining how many active filters are narrowing board results when no cards match.",
       "state": "next",
       "projectId": 2,
       "assigneeId": 2,
       "boardColumnId": 2,
       "priority": 4,
-      "createdAt": "2026-03-05T12:56:08Z",
-      "updatedAt": "2026-03-05T12:56:08Z"
+      "createdAt": "2026-03-05T13:41:06Z",
+      "updatedAt": "2026-03-05T13:41:06Z"
     }
   ]
 }

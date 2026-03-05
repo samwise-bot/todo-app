@@ -467,6 +467,11 @@ export function BoardLanesSection({
     }
   }
 
+  const hasVisibleBoardTasks =
+    laneView.tasksWithoutColumn.length > 0 ||
+    laneView.boards.some((board) => board.columns.some((column) => column.tasks.length > 0));
+  const showFilteredEmptyState = activeFilterCount > 0 && !hasVisibleBoardTasks;
+
   return (
     <section className="panel board-panel">
       <div className="panel-header-row">
@@ -617,6 +622,24 @@ export function BoardLanesSection({
           Open advanced controls in Settings
         </a>
       </section>
+
+      {showFilteredEmptyState && (
+        <section className="board-empty-cta" aria-label="Board filtered empty state">
+          <p className="eyebrow">No cards match current filters</p>
+          <h3>Reset filters or adjust advanced controls</h3>
+          <p className="muted">
+            Your active board filters currently hide every card. Clear filters to resume execution, or tune advanced controls in Settings.
+          </p>
+          <div className="form-row" style={{ gap: 8 }}>
+            <a className="btn" href={boardFilter?.resetHref ?? '/board'}>
+              Clear filters
+            </a>
+            <a className="btn btn-secondary" href="/settings#advanced-controls">
+              Open advanced controls
+            </a>
+          </div>
+        </section>
+      )}
 
       {activeFilterBadges.length > 0 && (
         <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Active board filters">

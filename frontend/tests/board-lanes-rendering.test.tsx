@@ -228,6 +228,45 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('role="status"');
   });
 
+  test('shows filtered empty-state CTA when active filters hide all board cards', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [{ id: 1, name: 'TODO App Board', columns: [{ id: 2, name: 'Next', tasks: [] }] }],
+          tasksWithoutColumn: [],
+          fetchErrors: []
+        }}
+        boards={[{ id: 1, name: 'TODO App Board' }]}
+        columns={[{ id: 2, boardId: 1, name: 'Next' }]}
+        principals={[]}
+        projects={[]}
+        boardFilter={{
+          assigneeId: '2',
+          projectId: '',
+          state: 'next,scheduled',
+          priority: '',
+          dueWindow: '',
+          search: '',
+          assigneeOptions: [{ id: 2, label: 'Samwise' }],
+          projectOptions: [],
+          resetHref: '/board',
+          hiddenParams: [],
+          assigneeLabel: 'Samwise',
+          assigneeClearHref: '/board?taskAssigneeId=',
+          projectLabel: '',
+          projectClearHref: '/board?taskProjectId='
+        }}
+        activeFilterBadges={[{ label: 'Assignee: Samwise', clearHref: '/board?taskAssigneeId=' }]}
+      />
+    );
+
+    expect(html).toContain('No cards match current filters');
+    expect(html).toContain('Reset filters or adjust advanced controls');
+    expect(html).toContain('Clear filters');
+    expect(html).toContain('Open advanced controls');
+    expect(html).toContain('aria-label="Board filtered empty state"');
+  });
+
   test('renders mixed assigned and unassigned tasks in their respective lanes', () => {
     const html = renderToStaticMarkup(
       <BoardLanesSection
