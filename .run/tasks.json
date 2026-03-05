@@ -1,39 +1,99 @@
 [
   {
-    "id": 85,
-    "title": "Board UX: add sticky lane-header shadow for horizontal scroll context",
-    "description": "Improve Trello-like readability by adding subtle sticky-lane header shadow while board columns scroll horizontally.",
+    "id": 90,
+    "title": "Board UX: add lane-count badge contrast boost for quick scan",
+    "description": "Improve Trello-like readability by increasing count-pill contrast in lane headers while preserving current spacing.",
     "state": "next",
     "projectId": 2,
     "assigneeId": 2,
     "boardColumnId": 2,
     "priority": 4,
+    "createdAt": "2026-03-05T17:26:39Z",
+    "updatedAt": "2026-03-05T17:26:39Z"
+  },
+  {
+    "id": 89,
+    "title": "Board UX: add compact due-window legend chips beside filter selects",
+    "description": "Show tiny legend chips (24h/3d/7d) near due-window filter to improve scanability and clarify meaning at a glance.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T16:56:44Z",
+    "updatedAt": "2026-03-05T16:56:44Z"
+  },
+  {
+    "id": 88,
+    "title": "Board UX: add sticky board-filter shadow cue beneath top nav on scroll",
+    "description": "Subtle shadow cue improves filter-toolbar depth hierarchy and keeps board controls discoverable during long-lane scroll.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T16:26:55Z",
+    "updatedAt": "2026-03-05T16:26:55Z"
+  },
+  {
+    "id": 87,
+    "title": "Board UX: add subtle lane-edge fade labels for mobile scroll discoverability",
+    "description": "Improve horizontal lane scanability by pairing edge-fade affordances with compact edge labels on narrow viewports.",
+    "state": "done",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 5,
+    "priority": 4,
+    "createdAt": "2026-03-05T15:58:15Z",
+    "updatedAt": "2026-03-05T17:26:39Z"
+  },
+  {
+    "id": 86,
+    "title": "Board UX: add horizontal scroll edge-fade indicators for lane container",
+    "description": "Add subtle left/right edge fades on kanban scroll area so users immediately see horizontal overflow on board.",
+    "state": "done",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 5,
+    "priority": 4,
+    "createdAt": "2026-03-05T15:32:26Z",
+    "updatedAt": "2026-03-05T15:57:51Z"
+  },
+  {
+    "id": 85,
+    "title": "Board UX: add sticky lane-header shadow for horizontal scroll context",
+    "description": "Improve Trello-like readability by adding subtle sticky-lane header shadow while board columns scroll horizontally.",
+    "state": "done",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 5,
+    "priority": 4,
     "createdAt": "2026-03-05T14:55:10Z",
-    "updatedAt": "2026-03-05T14:55:10Z"
+    "updatedAt": "2026-03-05T15:31:56Z"
   },
   {
     "id": 84,
     "title": "Board UX: add compact active-filter diagnostics in empty-state helper",
     "description": "When board is empty due to filters, show active filter count and quick link to clear all in one tap.",
-    "state": "next",
+    "state": "done",
     "projectId": 2,
     "assigneeId": 2,
-    "boardColumnId": 2,
+    "boardColumnId": 5,
     "priority": 4,
     "createdAt": "2026-03-05T14:25:59Z",
-    "updatedAt": "2026-03-05T14:25:59Z"
+    "updatedAt": "2026-03-05T16:56:44Z"
   },
   {
     "id": 83,
     "title": "Board UX: add compact settings header breadcrumb context for board workspace",
     "description": "Show board workspace context in settings header so users can return to board without nav scanning.",
-    "state": "next",
+    "state": "done",
     "projectId": 2,
     "assigneeId": 2,
-    "boardColumnId": 2,
+    "boardColumnId": 5,
     "priority": 4,
     "createdAt": "2026-03-05T13:54:00Z",
-    "updatedAt": "2026-03-05T13:54:00Z"
+    "updatedAt": "2026-03-05T16:26:55Z"
   },
   {
     "id": 82,
@@ -178,65 +238,5 @@
     "priority": 2,
     "createdAt": "2026-03-05T10:53:43Z",
     "updatedAt": "2026-03-05T11:37:00Z"
-  },
-  {
-    "id": 70,
-    "title": "Roadmap: SPA extract board-only shell from monolithic dashboard",
-    "description": "Make /board render focused workspace only; move inspector/explorer/admin to dedicated routes.",
-    "state": "done",
-    "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 5,
-    "priority": 1,
-    "createdAt": "2026-03-05T10:53:43Z",
-    "updatedAt": "2026-03-05T11:08:53Z"
-  },
-  {
-    "id": 69,
-    "title": "Board UX: move board filters into sticky compact toolbar on /board",
-    "description": "Reduce vertical clutter while keeping quick-clear chips visible.",
-    "state": "done",
-    "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 5,
-    "priority": 2,
-    "createdAt": "2026-03-05T10:53:43Z",
-    "updatedAt": "2026-03-05T11:23:16Z"
-  },
-  {
-    "id": 68,
-    "title": "Board UX: add assignee/project filter dropdown quick-clear chips in board header",
-    "description": "",
-    "state": "done",
-    "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 5,
-    "priority": 3,
-    "createdAt": "2026-03-05T10:03:04Z",
-    "updatedAt": "2026-03-05T10:53:37Z"
-  },
-  {
-    "id": 67,
-    "title": "Board UX: add direct column rename/delete controls on board headers",
-    "description": "",
-    "state": "done",
-    "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 5,
-    "priority": 2,
-    "createdAt": "2026-03-05T10:03:04Z",
-    "updatedAt": "2026-03-05T10:37:59Z"
-  },
-  {
-    "id": 66,
-    "title": "Board UX: keyboard shortcut hints persist after column reorder submit",
-    "description": "",
-    "state": "done",
-    "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 5,
-    "priority": 2,
-    "createdAt": "2026-03-05T10:03:04Z",
-    "updatedAt": "2026-03-05T10:23:21Z"
   }
 ]

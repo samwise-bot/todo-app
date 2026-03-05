@@ -740,6 +740,8 @@ export function BoardLanesSection({
             <div className="kanban-scroll-wrap" aria-hidden="true">
               <span className="kanban-scroll-fade kanban-scroll-fade-left" />
               <span className="kanban-scroll-fade kanban-scroll-fade-right" />
+              <span className="kanban-scroll-edge-label kanban-scroll-edge-label-left">Scroll ↔</span>
+              <span className="kanban-scroll-edge-label kanban-scroll-edge-label-right">Swipe lanes</span>
             </div>
           )}
 

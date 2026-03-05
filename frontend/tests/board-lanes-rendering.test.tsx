@@ -66,6 +66,10 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('class="kanban-scroll-wrap"');
     expect(html).toContain('class="kanban-scroll-fade kanban-scroll-fade-left"');
     expect(html).toContain('class="kanban-scroll-fade kanban-scroll-fade-right"');
+    expect(html).toContain('class="kanban-scroll-edge-label kanban-scroll-edge-label-left"');
+    expect(html).toContain('class="kanban-scroll-edge-label kanban-scroll-edge-label-right"');
+    expect(html).toContain('Scroll ↔');
+    expect(html).toContain('Swipe lanes');
   });
 
   test('renders shareable preset links on the board panel', () => {

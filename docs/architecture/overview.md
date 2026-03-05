@@ -1,6 +1,18 @@
 # Architecture Overview
 
 
+## Architecture Delta (2026-03-05, autonomous loop 09:27 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #87 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped mobile lane-edge discoverability labels in board workspace:
+  1. Added compact edge labels (`Scroll ↔`, `Swipe lanes`) alongside existing fade overlays in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Added subtle pill styling and mobile-only visibility rules for `.kanban-scroll-edge-label*` in `frontend/app/globals.css`.
+  3. Preserved board-first IA by keeping all core card/header actions unchanged and in place.
+- Added focused regression assertions in `frontend/tests/board-lanes-rendering.test.tsx` for both edge-label markers + label copy.
+- Added follow-up UI task #90 (`next`, priority 4) to keep top-3 UI strike depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 08:58 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #84 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
