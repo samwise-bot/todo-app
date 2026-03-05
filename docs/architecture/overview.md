@@ -1,5 +1,20 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 14:30 PT)
+- Re-validated source-of-truth entities idempotently against TODO DB/API using canonical records (`samwise`, project `TODO App` id=2, board `TODO App Board` id=1, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (`state=inbox` returned 0 UI items).
+- Re-ranked eligible UI-strike `Next` tasks by (`priority`, `dueAt`, `id`) and executed task #91 through full assignment flow under `samwise`:
+  - assignee: `2` (confirmed)
+  - board column: `In Progress -> Done`
+  - state: `next -> scheduled -> done`
+- Shipped compact divider polish between sticky toolbar and lanes:
+  1. Added dedicated compact modifier class `board-toolbar-lanes-divider-compact` in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Added constrained width + tighter vertical rhythm styling for desktop/mobile in `frontend/app/globals.css`.
+  3. Updated rendering assertion in `frontend/tests/board-lanes-rendering.test.tsx` for the compact divider class.
+- Added follow-up UI task #104 (`next`, priority 4) to keep top-3 strike queue depth.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 13:57 PT)
 - Re-validated source-of-truth entities idempotently against TODO DB/API using canonical records (`samwise`, project `TODO App` id=2, board `TODO App Board` id=1, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (`state=inbox` returned 0 items).

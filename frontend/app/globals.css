@@ -317,6 +317,13 @@ body[data-board-scrolled='true'] .board-filter-toolbar-shadow-cue::before {
   background: linear-gradient(90deg, rgba(148, 163, 184, 0) 0%, rgba(148, 163, 184, 0.72) 16%, rgba(148, 163, 184, 0.72) 84%, rgba(148, 163, 184, 0) 100%);
 }
 
+.board-toolbar-lanes-divider-compact {
+  width: min(100%, 56rem);
+  margin-inline: auto;
+  margin-block: 2px 10px;
+  opacity: 0.92;
+}
+
 body[data-board-scrolled='true'] .board-toolbar-lanes-divider {
   background: linear-gradient(90deg, rgba(99, 102, 241, 0) 0%, rgba(99, 102, 241, 0.55) 16%, rgba(99, 102, 241, 0.55) 84%, rgba(99, 102, 241, 0) 100%);
 }
@@ -748,6 +755,12 @@ button:hover,
     top: 48px;
     padding: 8px;
     margin-bottom: 10px;
+  }
+
+  .board-toolbar-lanes-divider-compact {
+    width: min(100%, 42rem);
+    margin-block: 2px 8px;
+    opacity: 0.95;
   }
 
   .board-preset-row,

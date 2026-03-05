@@ -1,5 +1,17 @@
 [
   {
+    "id": 104,
+    "title": "Board UX: reduce sticky toolbar vertical rhythm when saved-view helper is active",
+    "description": "Trim helper row line-height and gap when an active saved view is shown so toolbar stays compact before lanes.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T22:27:08Z",
+    "updatedAt": "2026-03-05T22:27:08Z"
+  },
+  {
     "id": 103,
     "title": "Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy",
     "description": "",
@@ -147,13 +159,13 @@
     "id": 91,
     "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
     "description": "Strengthen hierarchy by adding a subtle divider under sticky filter toolbar so lane content starts with clearer separation.",
-    "state": "next",
+    "state": "done",
     "projectId": 2,
     "assigneeId": 2,
-    "boardColumnId": 2,
+    "boardColumnId": 5,
     "priority": 4,
     "createdAt": "2026-03-05T17:57:54Z",
-    "updatedAt": "2026-03-05T17:57:54Z"
+    "updatedAt": "2026-03-05T22:26:58Z"
   },
   {
     "id": 90,

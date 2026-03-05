@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 14:30 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, canonical `TODO App` project id=2, `TODO App Board` id=1, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox UI tasks), then ranked strike-mode `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #91 moved through full flow with explicit `samwise` assignment (`next -> scheduled -> done`, board column `In Progress -> Done`).
+- ✅ Completed: shipped compact divider polish between sticky board toolbar and lanes (`board-toolbar-lanes-divider-compact`) with constrained width and tighter vertical rhythm (desktop + mobile).
+- ✅ Added follow-up UI task #104 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #102 Board UX: tighten saved-view helper spacing and wrap behavior on mobile.
+  - #103 Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy.
+  - #104 Board UX: reduce sticky toolbar vertical rhythm when saved-view helper is active.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (compact divider spacing is now tighter and mobile-safe).
+  - E) Advanced controls moved off board: **On track**.
+
 ## Current Iteration Status (2026-03-05 13:57 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, canonical `TODO App` project id=2, `TODO App Board` id=1, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

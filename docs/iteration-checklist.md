@@ -5,6 +5,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, canonical `TODO App` id=2, `TODO App Board` id=1, Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` UI tasks this cycle).
+- [x] Executed highest-priority eligible UI `Next` task #91 through full flow with assignment (`next -> scheduled -> done`, board column `In Progress -> Done`) under `samwise`.
+- [x] Shipped compact sticky-toolbar divider polish (`board-toolbar-lanes-divider-compact`) with constrained width and tighter spacing for desktop/mobile.
+- [x] Added follow-up UI task #104 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #102 Board UX: tighten saved-view helper spacing and wrap behavior on mobile (**next**, priority=4)
+- [ ] #103 Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy (**next**, priority=4)
+- [ ] #104 Board UX: reduce sticky toolbar vertical rhythm when saved-view helper is active (**next**, priority=4)
+
+## Verification
+- `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, canonical `TODO App` id=2, `TODO App Board` id=1, Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` UI tasks this cycle).
 - [x] Executed highest-priority eligible UI `Next` task #101 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped regression hardening for sticky-toolbar divider + touch hit-area classes (`lane-move-btn-touch-target` hook + rendering assertions).
 - [x] Added follow-up UI task #103 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.

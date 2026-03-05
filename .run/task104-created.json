@@ -1,0 +1,1 @@
+{"id":104,"title":"Board UX: reduce sticky toolbar vertical rhythm when saved-view helper is active","description":"Trim helper row line-height and gap when an active saved view is shown so toolbar stays compact before lanes.","state":"next","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":4,"createdAt":"0001-01-01T00:00:00Z","updatedAt":"0001-01-01T00:00:00Z"}

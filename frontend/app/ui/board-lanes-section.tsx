@@ -607,7 +607,7 @@ export function BoardLanesSection({
         )}
       </section>
 
-      <div className="board-toolbar-lanes-divider" aria-hidden="true" />
+      <div className="board-toolbar-lanes-divider board-toolbar-lanes-divider-compact" aria-hidden="true" />
 
       <section className="board-shortcut-card" aria-label="Board advanced controls shortcut">
         <p className="eyebrow">Advanced controls</p>
