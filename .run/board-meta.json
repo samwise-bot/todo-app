@@ -53,13 +53,6 @@
       "name": "Done",
       "position": 50,
       "createdAt": "2026-03-03T15:27:25Z"
-    },
-    {
-      "id": 4,
-      "boardId": 1,
-      "name": "Review",
-      "position": 99,
-      "createdAt": "2026-03-03T15:27:25Z"
     }
   ]
 }

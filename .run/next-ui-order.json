@@ -2,19 +2,37 @@
   {
     "id": 91,
     "title": "Board UX: add compact sticky-toolbar divider line between filters and lanes",
+    "description": "Strengthen hierarchy by adding a subtle divider under sticky filter toolbar so lane content starts with clearer separation.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
     "priority": 4,
-    "due_at": null
-  },
-  {
-    "id": 101,
-    "title": "Board UX: add regression test coverage for sticky-toolbar divider + touch hit-area classes",
-    "priority": 4,
-    "due_at": null
+    "createdAt": "2026-03-05T17:57:54Z",
+    "updatedAt": "2026-03-05T17:57:54Z"
   },
   {
     "id": 102,
     "title": "Board UX: tighten saved-view helper spacing and wrap behavior on mobile",
+    "description": "Refine saved-view helper row spacing and wrapping under narrow widths to preserve toolbar hierarchy.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
     "priority": 4,
-    "due_at": null
+    "createdAt": "2026-03-05T21:26:20.306255Z",
+    "updatedAt": "2026-03-05T21:26:20.306255Z"
+  },
+  {
+    "id": 103,
+    "title": "Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy",
+    "description": "",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T21:57:04Z",
+    "updatedAt": "2026-03-05T21:57:04Z"
   }
 ]

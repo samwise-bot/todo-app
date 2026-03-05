@@ -322,7 +322,8 @@ body[data-board-scrolled='true'] .board-toolbar-lanes-divider {
 }
 
 @media (pointer: coarse) {
-  .lane-move-btn {
+  .lane-move-btn,
+  .lane-move-btn-touch-target {
     min-height: 2.25rem;
     height: 2.25rem;
     min-width: 6.2rem;

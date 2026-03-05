@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 13:57 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, canonical `TODO App` project id=2, `TODO App Board` id=1, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #101 moved through full flow with explicit `samwise` assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`).
+- ✅ Completed: shipped regression hardening for divider + touch hit-area classes (new `lane-move-btn-touch-target` hook + rendering test coverage for divider and touch-target class).
+- ✅ Added follow-up UI task #103 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #91 Board UX: add compact sticky-toolbar divider line between filters and lanes.
+  - #102 Board UX: tighten saved-view helper spacing and wrap behavior on mobile.
+  - #103 Board UX: add regression coverage for saved-view helper mobile wrap + active-state copy.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (touch-target regression hooks/tests now locked in).
+  - E) Advanced controls moved off board: **On track**.
+
 ## Current Iteration Status (2026-03-05 13:23 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox UI tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

@@ -15,8 +15,7 @@
     "Inbox": 1,
     "Next": 2,
     "In Progress": 3,
-    "Review": 4,
-    "Done": 5,
-    "Blocked": 7
+    "Blocked": 7,
+    "Done": 5
   }
 }

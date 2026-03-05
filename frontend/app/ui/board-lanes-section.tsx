@@ -320,7 +320,7 @@ function MoveColumnForm({
       <input type="hidden" name="boardId" value={boardId} />
       <button
         type="submit"
-        className="btn btn-secondary lane-move-btn"
+        className="btn btn-secondary lane-move-btn lane-move-btn-touch-target"
         disabled={disabled}
         aria-label={direction === 'left' ? `Move ${columnName} left` : `Move ${columnName} right`}
         aria-describedby={instructionId}

@@ -1,5 +1,20 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 13:57 PT)
+- Re-validated source-of-truth entities idempotently against TODO DB/API using canonical records (`samwise`, project `TODO App` id=2, board `TODO App Board` id=1, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (`state=inbox` returned 0 items).
+- Re-ranked eligible UI-strike `Next` tasks by (`priority`, `dueAt`, `id`) and executed task #101 through full assignment flow under `samwise`:
+  - assignee: `null -> 2`
+  - board column: `Next -> In Progress -> Done`
+  - state: `next -> scheduled -> done`
+- Shipped regression hardening for board divider + touch hit-area hooks:
+  1. Added explicit `lane-move-btn-touch-target` class hook on column move controls in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Extended coarse-pointer sizing rule to cover both `.lane-move-btn` and `.lane-move-btn-touch-target` in `frontend/app/globals.css`.
+  3. Added rendering assertions for `board-toolbar-lanes-divider` and touch-target class in `frontend/tests/board-lanes-rendering.test.tsx`.
+- Added follow-up UI task #103 (`next`, priority 4) to keep top-3 strike queue depth.
+- Validation:
+  - `npx vitest run tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 13:23 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (no inbox UI tasks) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).
