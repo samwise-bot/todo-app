@@ -5,14 +5,12 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority Next task #52 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
-- [x] Unblocked #34 by moving it from `waiting` to `next` and writing an explicit unblock note event after threshold evidence verification.
-- [x] Completed task #57 (`Next -> In Progress -> Done`) and shipped board-lane active-filter summary badges above `/board` lanes.
+- [x] Executed board-first Next task #59 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
+- [x] Shipped inline-removable active filter badges on `/board` (`label ×` clears the specific filter in one click).
 - [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
 - [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**next**, priority=1)
-- [ ] #59 Board UX: make active filter badges removable inline from /board (**next**, priority=2)
 - [ ] #60 Board UX: persist /board filter presets as shareable URL templates (**next**, priority=3)
 
 ## Verification

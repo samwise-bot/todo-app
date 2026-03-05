@@ -292,6 +292,14 @@ sequenceDiagram
 - Extended `ops/run/validate_subagent_fanout_sweep.py` to include threshold evaluation in report output (`timeoutThreshold.withinThreshold`).
 - Added focused regression coverage for live-capture helper in `ops/tests/test_capture_worker_outcomes.py`.
 
+## Architecture Delta (2026-03-05, autonomous loop 20:45 PT)
+- Completed task #59 lifecycle (`Next -> In Progress -> Done`) with explicit `samwise` assignment in source-of-truth DB.
+- Upgraded board filter badges from passive labels to inline-removable controls in `frontend/app/ui/board-lanes-section.tsx`:
+  1. Active filters now render as clear links (`{label} ×`) with accessible `aria-label`/`title` text.
+  2. `_dashboard.tsx` now builds structured badge metadata (`label`, `clearHref`) with per-filter query-param removal.
+  3. Clearing a badge also resets `taskPage` to avoid stale pagination state after filter changes.
+- Added focused regression coverage in `frontend/tests/board-lanes-rendering.test.tsx` for removable badge rendering semantics.
+
 ## Architecture Delta (2026-03-05, autonomous loop 19:20 PT)
 - Completed highest-priority operational Next task #52 (`Next -> In Progress -> Done`) with explicit `samwise` assignment.
 - Unblocked #34 by moving it from `waiting` to `next` and recording an explicit unblock note in task events after threshold evidence validation.

@@ -68,14 +68,19 @@ describe('BoardLanesSection', () => {
         columns={[]}
         principals={[]}
         projects={[]}
-        activeFilterBadges={['Assignee: Samwise', 'Priority: P2', 'Due: 3d']}
+        activeFilterBadges={[
+          { label: 'Assignee: Samwise', clearHref: '/?taskAssigneeId=' },
+          { label: 'Priority: P2', clearHref: '/?taskPriority=' },
+          { label: 'Due: 3d', clearHref: '/?taskDueWindow=' }
+        ]}
       />
     );
 
     expect(html).toContain('Active filters:');
-    expect(html).toContain('Assignee: Samwise');
-    expect(html).toContain('Priority: P2');
-    expect(html).toContain('Due: 3d');
+    expect(html).toContain('Assignee: Samwise ×');
+    expect(html).toContain('Priority: P2 ×');
+    expect(html).toContain('Due: 3d ×');
+    expect(html).toContain('Clear Assignee: Samwise');
   });
 
   test('renders mixed assigned and unassigned tasks in their respective lanes', () => {

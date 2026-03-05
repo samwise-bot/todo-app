@@ -49,7 +49,7 @@ type Task = {
 
 function withQueryString(params: URLSearchParams): string {
   const query = params.toString();
-  return query ? `/?${query}` : '/';
+  return query ? `/board?${query}` : '/board';
 }
 
 function SectionError({ error }: { error: string | null }) {
@@ -206,28 +206,46 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
     principalByID.set(principal.id, principal);
   }
 
-  const activeBoardFilterBadges: string[] = [];
+  const activeBoardFilterBadges: { label: string; clearHref: string }[] = [];
   if (taskAssigneeId) {
     const principal = principalByID.get(Number(taskAssigneeId));
-    activeBoardFilterBadges.push(`Assignee: ${principal?.displayName ?? `#${taskAssigneeId}`}`);
+    activeBoardFilterBadges.push({
+      label: `Assignee: ${principal?.displayName ?? `#${taskAssigneeId}`}`,
+      clearHref: withQueryString(updateSearchParams(currentParams, { taskAssigneeId: null, taskPage: null }))
+    });
   }
   if (taskProjectId) {
     const project = projectByID.get(Number(taskProjectId));
-    activeBoardFilterBadges.push(`Project: ${project?.name ?? `#${taskProjectId}`}`);
+    activeBoardFilterBadges.push({
+      label: `Project: ${project?.name ?? `#${taskProjectId}`}`,
+      clearHref: withQueryString(updateSearchParams(currentParams, { taskProjectId: null, taskPage: null }))
+    });
   }
   if (taskState) {
-    activeBoardFilterBadges.push(`State: ${taskState}`);
+    activeBoardFilterBadges.push({
+      label: `State: ${taskState}`,
+      clearHref: withQueryString(updateSearchParams(currentParams, { taskState: null, taskPage: null }))
+    });
   }
   if (taskPriority) {
-    activeBoardFilterBadges.push(`Priority: P${taskPriority}`);
+    activeBoardFilterBadges.push({
+      label: `Priority: P${taskPriority}`,
+      clearHref: withQueryString(updateSearchParams(currentParams, { taskPriority: null, taskPage: null }))
+    });
   }
   if (taskDueWindow) {
     const dueWindowLabel =
       taskDueWindow === '24' ? '24h' : taskDueWindow === '72' ? '3d' : taskDueWindow === '168' ? '7d' : `${taskDueWindow}h`;
-    activeBoardFilterBadges.push(`Due: ${dueWindowLabel}`);
+    activeBoardFilterBadges.push({
+      label: `Due: ${dueWindowLabel}`,
+      clearHref: withQueryString(updateSearchParams(currentParams, { taskDueWindow: null, taskPage: null }))
+    });
   }
   if (taskQ) {
-    activeBoardFilterBadges.push(`Search: ${taskQ}`);
+    activeBoardFilterBadges.push({
+      label: `Search: ${taskQ}`,
+      clearHref: withQueryString(updateSearchParams(currentParams, { taskQ: null, taskPage: null }))
+    });
   }
 
   const principalHidden = hiddenParamEntries(currentParams, ['principalKind', 'principalQ', 'principalPage', 'principalPageSize']);

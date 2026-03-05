@@ -51,6 +51,15 @@
 ## Current Iteration Status (2026-03-05)
 - ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns).
 - ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.
+- ✅ Completed: task #59 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
+- ✅ Completed: board-first UX increment shipped — active board filter badges are now removable inline on `/board` (single-click clear per badge).
+- ▶ Next milestone:
+  - #34 Ops: close fanout timeout/cap issue with an explicit cap/timeout mitigation and evidence run.
+  - #60 Board UX: persist `/board` filter presets as shareable URL templates.
+
+## Current Iteration Status (2026-03-05)
+- ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns).
+- ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.
 - ✅ Completed: task #52 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB; task #34 was unblocked back to `Next` with blocker-note event evidence.
 - ✅ Completed: task #57 moved `Next -> In Progress -> Done` with explicit `samwise` assignment after shipping board-lane active-filter summary badges.
 - ✅ Completed: board-first UX increment shipped — `/board` now shows first-class active filter badges (assignee/project/state/priority/due-window/search) directly above lanes.

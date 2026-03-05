@@ -99,7 +99,7 @@ export function BoardLanesSection({
   columns: Entity[];
   principals: Entity[];
   projects: Entity[];
-  activeFilterBadges?: string[];
+  activeFilterBadges?: { label: string; clearHref: string }[];
 }) {
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -132,7 +132,9 @@ export function BoardLanesSection({
         <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Active board filters">
           <span className="muted">Active filters:</span>
           {activeFilterBadges.map((badge) => (
-            <span key={badge} className="badge">{badge}</span>
+            <a key={badge.label} className="badge" href={badge.clearHref} aria-label={`Clear ${badge.label}`} title={`Clear ${badge.label}`}>
+              {badge.label} ×
+            </a>
           ))}
         </div>
       )}
