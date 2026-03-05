@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 05:54 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #80 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped settings-header return chip (`frontend/app/settings/page.tsx`, `frontend/app/globals.css`):
+  1. Added a dedicated `← Board workspace` chip in settings header for direct return path without scanning nav.
+  2. Kept control compact and mobile-safe with responsive header stacking.
+  3. Preserved board-first IA by keeping advanced controls on `/settings` while shortening return path to `/board`.
+- Added focused regression coverage update in `frontend/tests/settings-page.test.tsx` for settings-header board return affordance.
+- Added follow-up UI task #83 (`next`, priority 4) to keep top-3 strike queue stocked.
+- Validation:
+  - `npm test -- --run tests/settings-page.test.tsx tests/top-nav.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 05:38 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #79 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

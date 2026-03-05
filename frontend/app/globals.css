@@ -114,6 +114,32 @@ a:hover {
   color: var(--muted);
 }
 
+.settings-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.settings-return-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #bfd0ee;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #edf3ff;
+  color: #1f4da8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.settings-return-chip:hover {
+  text-decoration: none;
+  border-color: #9fb8e3;
+  background: #e4edff;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -497,6 +523,11 @@ button:hover,
 
   .board-panel {
     padding: 12px;
+  }
+
+  .settings-header-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .board-filter-toolbar {

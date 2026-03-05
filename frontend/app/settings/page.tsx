@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 type SettingControl = {
   id: string;
@@ -41,9 +42,16 @@ export default function SettingsPage() {
   return (
     <main className="app-shell">
       <section className="panel" id="advanced-controls">
-        <p className="eyebrow">Settings</p>
-        <h1>Advanced settings</h1>
-        <p className="muted">Operational controls and current runtime defaults for TODO App power users.</p>
+        <div className="settings-header-row">
+          <div>
+            <p className="eyebrow">Settings</p>
+            <h1>Advanced settings</h1>
+            <p className="muted">Operational controls and current runtime defaults for TODO App power users.</p>
+          </div>
+          <Link href="/board" className="settings-return-chip" aria-label="Return to board workspace">
+            ← Board workspace
+          </Link>
+        </div>
         <ul className="stack" aria-label="Advanced configuration controls">
           {controls.map((control) => (
             <li key={control.id} className="panel" style={{ padding: '0.75rem' }}>
