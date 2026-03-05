@@ -76,6 +76,12 @@ a:hover {
   color: #113ba9;
 }
 
+.top-nav-link-jump {
+  border-style: dashed;
+  color: #25477f;
+  background: #f2f6ff;
+}
+
 .top-nav-link-quick-create {
   margin-left: auto;
   background: var(--primary);

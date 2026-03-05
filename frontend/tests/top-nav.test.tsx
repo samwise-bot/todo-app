@@ -14,8 +14,7 @@ describe('top nav', () => {
   test.each([
     ['/tasks', 'Tasks'],
     ['/projects', 'Projects'],
-    ['/people', 'People'],
-    ['/settings', 'Settings']
+    ['/people', 'People']
   ])(
     'marks non-board route %s as the only active nav item and keeps quick-create action',
     (route, label) => {
@@ -30,4 +29,22 @@ describe('top nav', () => {
       expect(html).toContain('+ Quick create');
     }
   );
+
+  test('shows compact quick-jump from board to settings advanced controls', () => {
+    usePathnameMock.mockReturnValue('/board');
+    const html = renderToStaticMarkup(<TopNav />);
+
+    expect(html).toContain('href="/settings#advanced-controls"');
+    expect(html).toContain('⚙ Advanced controls');
+    expect(html).toContain('Board and settings quick jump');
+  });
+
+  test('shows compact quick-jump from settings back to board', () => {
+    usePathnameMock.mockReturnValue('/settings');
+    const html = renderToStaticMarkup(<TopNav />);
+
+    expect(html).toContain('href="/board"');
+    expect(html).toContain('← Back to board');
+    expect(html).toContain('Board and settings quick jump');
+  });
 });

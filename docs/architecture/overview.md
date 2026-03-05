@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 05:10 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #76 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped compact board/settings quick-jump navigation in the primary header (`frontend/app/ui/top-nav.tsx`, `frontend/app/globals.css`):
+  1. `/board` now exposes a compact `⚙ Advanced controls` jump directly to `/settings#advanced-controls`.
+  2. `/settings` now exposes a compact `← Back to board` return jump for zero-friction workflow pivots.
+  3. Added dedicated quick-jump styling (`.top-nav-link-jump`) to keep the control discoverable without visual clutter.
+- Added focused regression coverage for both directional quick-jumps in `frontend/tests/top-nav.test.tsx`.
+- Added follow-up UI task #80 (`next`, priority 4) to keep board-first queue stocked at three top `Next` tasks.
+- Validation:
+  - `npm test -- --run tests/top-nav.test.tsx tests/board-lanes-rendering.test.tsx tests/settings-page.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 04:56 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #74 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

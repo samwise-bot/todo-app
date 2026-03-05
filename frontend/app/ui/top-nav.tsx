@@ -14,6 +14,12 @@ const NAV_ITEMS = [
 
 export function TopNav() {
   const pathname = usePathname();
+  const quickJump =
+    pathname === '/settings'
+      ? { href: '/board', label: '← Back to board' }
+      : pathname === '/board'
+        ? { href: '/settings#advanced-controls', label: '⚙ Advanced controls' }
+        : null;
 
   return (
     <nav className="top-nav" aria-label="Primary">
@@ -30,6 +36,11 @@ export function TopNav() {
           </Link>
         );
       })}
+      {quickJump && (
+        <Link href={quickJump.href} className="top-nav-link top-nav-link-jump" aria-label="Board and settings quick jump">
+          {quickJump.label}
+        </Link>
+      )}
       <Link href="/board#quick-create-task" className="top-nav-link top-nav-link-quick-create">
         + Quick create
       </Link>

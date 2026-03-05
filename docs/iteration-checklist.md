@@ -5,6 +5,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #76 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped compact board/settings top-nav quick-jumps (`⚙ Advanced controls` from `/board`, `← Back to board` from `/settings`).
+- [x] Added follow-up UI task #80 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #78 Board UX: add active saved-view helper text + clear affordance in toolbar (**next**, priority=4)
+- [ ] #79 Board UX: add compact board empty-state CTA linking to /settings advanced controls (**next**, priority=4)
+- [ ] #80 Navigation: add settings header return-to-board chip (**next**, priority=4)
+
+## Verification
+- `npm test -- --run tests/top-nav.test.tsx tests/board-lanes-rendering.test.tsx tests/settings-page.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #74 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped board IA shortcut card from `/board` to `/settings#advanced-controls` to keep advanced controls off-board but immediately accessible.
 - [x] Added follow-up UI task #79 (`next`, priority 4) so top-3 Next queue stays populated for strike mode.
