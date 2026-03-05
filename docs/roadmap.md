@@ -1,22 +1,22 @@
 # Roadmap
 
 
-## Current Iteration Status (2026-03-05 08:28 PT)
+## Current Iteration Status (2026-03-05 08:58 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
-- ✅ Completed: task #83 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
-- ✅ Completed: navigation IA polish shipped — `/settings` now includes compact breadcrumb context (`Board workspace / Advanced settings`) while preserving the direct return chip.
-- ✅ Added follow-up UI task #88 to keep board UX strike queue depth at 3.
+- ✅ Completed: task #84 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board filtering diagnostics polish shipped — filtered-empty helper now renders compact active-filter chips for one-tap clear/remediation in context.
+- ✅ Added follow-up UI task #89 to keep board UX strike queue depth at 3.
 - ▶ Next milestone:
-  - #84 Board UX: add compact active-filter diagnostics in empty-state helper.
   - #87 Board UX: add subtle lane-edge fade labels for mobile scroll discoverability.
   - #88 Board UX: add sticky board-filter shadow cue beneath top nav on scroll.
+  - #89 Board UX: add compact due-window legend chips beside filter selects.
 - Board-first criteria snapshot:
   - A) `/board` focused workspace: **On track**.
   - B) Core card/header actions: **On track**.
-  - C) Strong filtering + chips/reset: **Improving**.
+  - C) Strong filtering + chips/reset: **On track** (empty-state diagnostics now include direct filter-clear chips).
   - D) Visual polish/mobile safety: **Improving**.
-  - E) Advanced controls moved off board: **On track** (settings breadcrumb + return cue reinforces board-primary flow).
+  - E) Advanced controls moved off board: **On track**.
 
 ## Current Iteration Status (2026-03-05 07:53 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).

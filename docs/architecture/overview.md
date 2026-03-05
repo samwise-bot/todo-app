@@ -1,17 +1,17 @@
 # Architecture Overview
 
 
-## Architecture Delta (2026-03-05, autonomous loop 08:28 PT)
+## Architecture Delta (2026-03-05, autonomous loop 08:58 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
-- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #83 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
-- Shipped settings IA breadcrumb context for board-primary navigation:
-  1. Added compact breadcrumb row (`Board workspace / Advanced settings`) in `frontend/app/settings/page.tsx`.
-  2. Added dedicated breadcrumb styling in `frontend/app/globals.css` to keep the cue subtle and mobile-safe.
-  3. Preserved existing quick-return chip (`← Board workspace`) so board re-entry remains one tap.
-- Added focused regression assertions in `frontend/tests/settings-page.test.tsx` for breadcrumb semantics and board link presence.
-- Added follow-up UI task #88 (`next`, priority 4) to maintain top-3 UI strike depth.
+- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #84 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped compact filtered-empty diagnostics in board workspace:
+  1. Updated `frontend/app/ui/board-lanes-section.tsx` filtered-empty helper to render `Active diagnostics` chips using active filters, each with one-tap clear links.
+  2. Added capped display (`slice(0,4)`) with `+N more` overflow indicator to keep helper compact and mobile-safe.
+  3. Added dedicated style hooks in `frontend/app/globals.css` for empty-state diagnostic row readability.
+- Added focused regression assertions in `frontend/tests/board-lanes-rendering.test.tsx` for diagnostics labeling and clear-chip accessibility text.
+- Added follow-up UI task #89 (`next`, priority 4) to maintain top-3 UI strike depth.
 - Validation:
-  - `npm --prefix frontend test -- --run tests/settings-page.test.tsx tests/top-nav.test.tsx`
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
 
 ## Architecture Delta (2026-03-05, autonomous loop 07:53 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).

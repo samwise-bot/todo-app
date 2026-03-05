@@ -351,6 +351,15 @@ a:hover {
   gap: 8px;
 }
 
+.board-empty-diagnostics {
+  align-items: center;
+  gap: 6px;
+}
+
+.board-empty-diagnostics .badge {
+  background: #ffffff;
+}
+
 input,
 select,
 button {

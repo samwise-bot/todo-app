@@ -632,6 +632,25 @@ export function BoardLanesSection({
               ? '1 active filter is hiding every card. Clear filters to resume execution, or tune advanced controls in Settings.'
               : `${activeFilterCount} active filters are hiding every card. Clear filters to resume execution, or tune advanced controls in Settings.`}
           </p>
+          <div className="badge-row board-empty-diagnostics" aria-label="Filtered empty-state diagnostics">
+            <span className="muted">Active diagnostics:</span>
+            {activeFilterBadges.slice(0, 4).map((badge) => (
+              <a
+                key={`empty-${badge.label}`}
+                className="badge"
+                href={badge.clearHref}
+                aria-label={`Clear ${badge.label} from empty-state diagnostics`}
+                title={`Clear ${badge.label}`}
+              >
+                {badge.label} ×
+              </a>
+            ))}
+            {activeFilterBadges.length > 4 && (
+              <span className="badge" aria-label={`${activeFilterBadges.length - 4} more active filters`}>
+                +{activeFilterBadges.length - 4} more
+              </span>
+            )}
+          </div>
           <div className="form-row" style={{ gap: 8 }}>
             <a className="btn" href={boardFilter?.resetHref ?? '/board'}>
               Clear filters
