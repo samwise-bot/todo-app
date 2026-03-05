@@ -130,7 +130,7 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Column move failed for &quot;Next&quot;. Optimistic reorder was rolled back.');
   });
 
-  test('renders column move status announcement when provided', () => {
+  test('renders column move status announcement with persistent keyboard hint when provided', () => {
     const html = renderToStaticMarkup(
       <BoardLanesSection
         laneView={{
@@ -142,11 +142,11 @@ describe('BoardLanesSection', () => {
         columns={[]}
         principals={[]}
         projects={[]}
-        columnMoveStatus={'Moved "Next" right.'}
+        columnMoveStatus={'Moved "Next" right. Keyboard tip: use Tab to focus move buttons, then press Enter or Space to reorder again.'}
       />
     );
 
-    expect(html).toContain('Moved &quot;Next&quot; right.');
+    expect(html).toContain('Moved &quot;Next&quot; right. Keyboard tip: use Tab to focus move buttons, then press Enter or Space to reorder again.');
     expect(html).toContain('role="status"');
   });
 

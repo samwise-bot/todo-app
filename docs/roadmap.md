@@ -48,6 +48,16 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
+## Current Iteration Status (2026-03-05 02:20 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently in source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #66 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first UX increment shipped — post-reorder success announcement now includes persistent keyboard guidance so reorder hints remain available immediately after submit.
+- ▶ Next milestone:
+  - #67 Board UX: add direct column rename/delete controls on board headers.
+  - #68 Board UX: add assignee/project filter dropdown quick-clear chips in board header.
+  - Board UX hardening: clear one-shot status/notice query params after first successful render.
+
 ## Current Iteration Status (2026-03-05 01:59 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via API source of truth (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked `Next` by (`priority`, `dueAt`, `id`).

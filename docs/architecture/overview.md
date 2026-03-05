@@ -1,5 +1,14 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 02:20 PT)
+- Re-validated source-of-truth prerequisites idempotently in SQLite/API data (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #66 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.
+- Shipped board-first keyboard-hint persistence on column reorder submit (`frontend/app/ui/board-lanes-section.tsx`):
+  1. Column move success announcements now append a reusable keyboard reorder tip to the post-submit `columnMoveStatus` message.
+  2. The status remains rendered in `role="status"`/`aria-live` so operators get immediate success + next-action guidance without route hopping.
+- Added focused regression coverage update:
+  - `frontend/tests/board-lanes-rendering.test.tsx` (status announcement now asserts keyboard tip persistence text)
+
 ## Architecture Delta (2026-03-05, autonomous loop 01:59 PT)
 - Re-validated source-of-truth prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #65 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.

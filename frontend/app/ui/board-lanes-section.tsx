@@ -191,7 +191,9 @@ function MoveColumnForm({
     }
 
     const movedDirection = direction === 'left' ? 'left' : 'right';
-    const status = encodeURIComponent(`Moved "${columnName}" ${movedDirection}.`);
+    const status = encodeURIComponent(
+      `Moved "${columnName}" ${movedDirection}. Keyboard tip: use Tab to focus move buttons, then press Enter or Space to reorder again.`
+    );
     redirect(`${boardHref}${sep}columnMoveStatus=${status}`);
   }
 
