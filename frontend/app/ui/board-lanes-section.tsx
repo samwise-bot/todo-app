@@ -296,6 +296,10 @@ export function BoardLanesSection({
     projectOptions: { id: number; label: string }[];
     resetHref: string;
     hiddenParams: [string, string][];
+    assigneeLabel: string;
+    assigneeClearHref: string;
+    projectLabel: string;
+    projectClearHref: string;
   } | null;
   boardHref?: string;
   columnMoveNotice?: string;
@@ -340,51 +344,69 @@ export function BoardLanesSection({
       )}
 
       {boardFilter && (
-        <form method="GET" className="board-filter-grid" aria-label="Board filters">
-          {boardFilter.hiddenParams.map(([key, value]) => (
-            <input key={`${key}-${value}`} type="hidden" name={key} value={value} />
-          ))}
-          <input type="hidden" name="taskPage" value="1" />
-          <select name="taskAssigneeId" defaultValue={boardFilter.assigneeId} aria-label="Filter board by assignee">
-            <option value="">All assignees</option>
-            {boardFilter.assigneeOptions.map((option) => (
-              <option key={option.id} value={String(option.id)}>{option.label}</option>
+        <>
+          <form method="GET" className="board-filter-grid" aria-label="Board filters">
+            {boardFilter.hiddenParams.map(([key, value]) => (
+              <input key={`${key}-${value}`} type="hidden" name={key} value={value} />
             ))}
-          </select>
-          <select name="taskProjectId" defaultValue={boardFilter.projectId} aria-label="Filter board by project">
-            <option value="">All projects</option>
-            {boardFilter.projectOptions.map((option) => (
-              <option key={option.id} value={String(option.id)}>{option.label}</option>
-            ))}
-          </select>
-          <select name="taskState" defaultValue={boardFilter.state} aria-label="Filter board by state">
-            <option value="">All states</option>
-            <option value="inbox">inbox</option>
-            <option value="next">next</option>
-            <option value="scheduled">scheduled</option>
-            <option value="waiting">waiting</option>
-            <option value="done">done</option>
-            <option value="cancelled">cancelled</option>
-            <option value="next,scheduled">next + scheduled</option>
-          </select>
-          <select name="taskPriority" defaultValue={boardFilter.priority} aria-label="Filter board by priority">
-            <option value="">Any priority</option>
-            <option value="1">P1</option>
-            <option value="2">P2</option>
-            <option value="3">P3</option>
-            <option value="4">P4</option>
-            <option value="5">P5</option>
-          </select>
-          <select name="taskDueWindow" defaultValue={boardFilter.dueWindow} aria-label="Filter board by due window">
-            <option value="">Any due window</option>
-            <option value="24">Due in 24h</option>
-            <option value="72">Due in 3d</option>
-            <option value="168">Due in 7d</option>
-          </select>
-          <input name="taskQ" defaultValue={boardFilter.search} placeholder="Search cards" aria-label="Search board cards" />
-          <button type="submit">Apply filters</button>
-          <a className="btn btn-secondary" href={boardFilter.resetHref}>Clear all</a>
-        </form>
+            <input type="hidden" name="taskPage" value="1" />
+            <select name="taskAssigneeId" defaultValue={boardFilter.assigneeId} aria-label="Filter board by assignee">
+              <option value="">All assignees</option>
+              {boardFilter.assigneeOptions.map((option) => (
+                <option key={option.id} value={String(option.id)}>{option.label}</option>
+              ))}
+            </select>
+            <select name="taskProjectId" defaultValue={boardFilter.projectId} aria-label="Filter board by project">
+              <option value="">All projects</option>
+              {boardFilter.projectOptions.map((option) => (
+                <option key={option.id} value={String(option.id)}>{option.label}</option>
+              ))}
+            </select>
+            <select name="taskState" defaultValue={boardFilter.state} aria-label="Filter board by state">
+              <option value="">All states</option>
+              <option value="inbox">inbox</option>
+              <option value="next">next</option>
+              <option value="scheduled">scheduled</option>
+              <option value="waiting">waiting</option>
+              <option value="done">done</option>
+              <option value="cancelled">cancelled</option>
+              <option value="next,scheduled">next + scheduled</option>
+            </select>
+            <select name="taskPriority" defaultValue={boardFilter.priority} aria-label="Filter board by priority">
+              <option value="">Any priority</option>
+              <option value="1">P1</option>
+              <option value="2">P2</option>
+              <option value="3">P3</option>
+              <option value="4">P4</option>
+              <option value="5">P5</option>
+            </select>
+            <select name="taskDueWindow" defaultValue={boardFilter.dueWindow} aria-label="Filter board by due window">
+              <option value="">Any due window</option>
+              <option value="24">Due in 24h</option>
+              <option value="72">Due in 3d</option>
+              <option value="168">Due in 7d</option>
+            </select>
+            <input name="taskQ" defaultValue={boardFilter.search} placeholder="Search cards" aria-label="Search board cards" />
+            <button type="submit">Apply filters</button>
+            <a className="btn btn-secondary" href={boardFilter.resetHref}>Clear all</a>
+          </form>
+
+          {(boardFilter.assigneeId || boardFilter.projectId) && (
+            <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Quick clear board filters">
+              <span className="muted">Quick clear:</span>
+              {boardFilter.assigneeId && (
+                <a className="badge" href={boardFilter.assigneeClearHref} aria-label="Clear assignee filter">
+                  Assignee: {boardFilter.assigneeLabel} ×
+                </a>
+              )}
+              {boardFilter.projectId && (
+                <a className="badge" href={boardFilter.projectClearHref} aria-label="Clear project filter">
+                  Project: {boardFilter.projectLabel} ×
+                </a>
+              )}
+            </div>
+          )}
+        </>
       )}
 
       {activeFilterBadges.length > 0 && (

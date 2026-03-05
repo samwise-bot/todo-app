@@ -5,18 +5,17 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority UI `Next` task #68 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
-- [x] Shipped board-first board-header filter controls on `/board` (assignee/project/state/priority/due/search + clear-all) with active quick-clear chips.
-- [x] Synced architecture/roadmap/checklist docs for this cycle.
+- [x] Executed highest-priority UI `Next` task #70 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped board-first IA extraction on `/board`: removed monolithic dashboard clutter and kept board-focused controls/workspace.
+- [x] Added assignee/project quick-clear chips in board filter header and synced architecture/roadmap/checklist docs.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #70 Roadmap: SPA extract board-only shell from monolithic dashboard (**next**, priority=1)
 - [ ] #69 Board UX: move board filters into sticky compact toolbar on /board (**next**, priority=2)
 - [ ] #71 Board UX: add one-tap filter reset chip cluster with active count (**next**, priority=2)
 
 ## Verification
-- `npm test -- tests/board-lanes-rendering.test.tsx` ✅
-- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task #67 lifecycle transitions + refresh .run/tasks.json ... PY` ✅
+- `npm test -- --run tests/board-lanes-rendering.test.tsx tests/board-page-defaults.test.tsx tests/home-page-routing.test.tsx` ✅
+- `curl -sS 'http://127.0.0.1:8080/api/tasks?page=1&pageSize=20' > .run/tasks.json` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

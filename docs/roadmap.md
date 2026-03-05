@@ -48,6 +48,16 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
+## Current Iteration Status (2026-03-05 03:05 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #70 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first IA increment shipped — `/board` now renders a focused board workspace only (removed monolithic dashboard sections), while preserving in-lane core controls and adding assignee/project quick-clear chips in the filter header.
+- ▶ Next milestone:
+  - #69 Board UX: move board filters into sticky compact toolbar on `/board`.
+  - #71 Board UX: add one-tap filter reset chip cluster with active count.
+  - UX IA: migrate remaining advanced controls to dedicated `/settings` modules with API-backed controls.
+
 ## Current Iteration Status (2026-03-05 02:55 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked `Next` by (`priority`, `dueAt`, `id`).

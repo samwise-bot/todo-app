@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 03:05 PT)
+- Re-validated source-of-truth prerequisites idempotently via API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed highest-priority task #70 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
+- Shipped board-first IA extraction for `/board` (`frontend/app/_dashboard.tsx`):
+  1. Removed monolithic dashboard sections (inspector/task explorer/board admin/people/projects/GTD) from board route rendering.
+  2. Kept `/board` focused on board workspace controls + lane operations only (filters, presets, in-lane task/column actions).
+  3. Added assignee/project quick-clear chips directly in board filter header (`frontend/app/ui/board-lanes-section.tsx`) to reduce reset friction.
+- Added focused regression coverage update:
+  - `frontend/tests/board-lanes-rendering.test.tsx` asserts quick-clear chip rendering for assignee/project filter selections.
+
 ## Architecture Delta (2026-03-05, autonomous loop 02:55 PT)
 - Re-validated source-of-truth prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), ordered `Next` by (`priority`, `dueAt`, `id`), and executed highest-priority UI task #68 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).

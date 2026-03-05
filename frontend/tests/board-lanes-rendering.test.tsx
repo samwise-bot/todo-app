@@ -109,7 +109,11 @@ describe('BoardLanesSection', () => {
           assigneeOptions: [{ id: 2, label: 'Samwise' }],
           projectOptions: [{ id: 2, label: 'TODO App' }],
           resetHref: '/board',
-          hiddenParams: [['principalPage', '2']]
+          hiddenParams: [['principalPage', '2']],
+          assigneeLabel: 'Samwise',
+          assigneeClearHref: '/board?taskAssigneeId=',
+          projectLabel: 'TODO App',
+          projectClearHref: '/board?taskProjectId='
         }}
         activeFilterBadges={[
           { label: 'Assignee: Samwise', clearHref: '/?taskAssigneeId=' },
@@ -124,6 +128,9 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Search board cards');
     expect(html).toContain('Apply filters');
     expect(html).toContain('Clear all');
+    expect(html).toContain('Quick clear:');
+    expect(html).toContain('Assignee: Samwise ×');
+    expect(html).toContain('Project: TODO App ×');
     expect(html).toContain('Active filters:');
     expect(html).toContain('Assignee: Samwise ×');
     expect(html).toContain('Priority: P2 ×');
