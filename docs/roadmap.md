@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 10:53 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #90 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board visual polish increment shipped — lane header count badges now use higher-contrast styling for quicker Trello-like column scanability.
+- ✅ Added follow-up UI task #93 to keep board UX strike queue depth at 3.
+- ▶ Next milestone:
+  - #93 Board UX: harmonize lane header count-pill spacing across dense columns.
+  - #91 Board UX: add compact sticky-toolbar divider line between filters and lanes.
+  - #92 Board UX: tighten due-window chip spacing and wrap behavior on mobile.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving** (lane-count contrast boost shipped).
+  - E) Advanced controls moved off board: **On track**.
+
 
 ## Current Iteration Status (2026-03-05 10:31 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).

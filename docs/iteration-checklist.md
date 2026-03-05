@@ -5,6 +5,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #90 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped higher-contrast lane count badges in board column headers for faster scanability.
+- [x] Added follow-up UI task #93 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #93 Board UX: harmonize lane header count-pill spacing across dense columns (**next**, priority=4)
+- [ ] #91 Board UX: add compact sticky-toolbar divider line between filters and lanes (**next**, priority=4)
+- [ ] #92 Board UX: tighten due-window chip spacing and wrap behavior on mobile (**next**, priority=4)
+
+## Verification
+- `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #89 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped compact due-window legend chips beside board due-window select (`24h`, `3d`, `7d`) for faster filter scanning.
 - [x] Added follow-up UI task #92 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.

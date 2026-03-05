@@ -1,5 +1,16 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 10:53 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox tasks), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #90 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped board lane-count badge contrast boost for faster scanability:
+  1. Updated lane header count markup in `frontend/app/ui/board-lanes-section.tsx` to use dedicated `lane-count-pill` styling hook and accessibility label (`N tasks in <column>`).
+  2. Added stronger contrast treatment in `frontend/app/globals.css` (darker text, bordered gradient pill, heavier weight) to improve visual hierarchy against sticky lane headers.
+  3. Extended rendering coverage in `frontend/tests/board-lanes-rendering.test.tsx` for lane count-pill class + aria label.
+- Added follow-up UI task #93 (`next`, priority 4) to keep top-3 board UX queue depth in strike mode.
+- Validation:
+  - `npm --prefix frontend test -- --run tests/board-lanes-rendering.test.tsx`
+
 
 ## Architecture Delta (2026-03-05, autonomous loop 10:31 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).

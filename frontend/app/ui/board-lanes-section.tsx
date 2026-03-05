@@ -805,7 +805,9 @@ export function BoardLanesSection({
                             direction="right"
                             instructionId={moveInstructionId}
                           />
-                          <span className="count-pill">{column.tasks.length}</span>
+                          <span className="count-pill lane-count-pill" aria-label={`${column.tasks.length} tasks in ${column.name}`}>
+                            {column.tasks.length}
+                          </span>
                         </div>
                       </div>
                       <InlineColumnControls
