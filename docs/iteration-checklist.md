@@ -5,14 +5,14 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority UI `Next` task #69 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
-- [x] Shipped sticky compact board-filter toolbar on `/board` while preserving complete filter/search/reset actions.
+- [x] Executed highest-priority UI `Next` task #71 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped one-tap filter reset chip cluster with active-count pill + reset-all affordance in the `/board` sticky toolbar.
 - [x] Synced architecture/roadmap/checklist docs.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #71 Board UX: add one-tap filter reset chip cluster with active count (**next**, priority=2)
 - [ ] #72 Board UX: tighten mobile column/card spacing and sticky toolbar wrapping under 900px (**next**, priority=3)
 - [ ] #73 Board UX: add board-header active-filter count pill beside reset controls (**next**, priority=3)
+- [ ] #74 Settings: add board-to-settings advanced-controls shortcut card (**next**, priority=4)
 
 ## Verification
 - `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅

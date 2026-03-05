@@ -1,5 +1,15 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 03:40 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #71 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board-first UX increment shipped — `/board` now exposes one-tap filter reset chip cluster with active-count pill and reset-all affordance in the sticky toolbar.
+- ▶ Next milestone:
+  - #72 Board UX: tighten mobile column/card spacing and sticky toolbar wrapping under 900px.
+  - #73 Board UX: add board-header active-filter count pill beside reset controls.
+  - #74 Settings: add board-to-settings advanced-controls shortcut card.
+
 ## Phase 0 - Foundations
 - Repo scaffold, docs, CI baseline
 - Acceptance: clean lint/test skeleton passes

@@ -1,0 +1,20 @@
+{
+  "inboxCount": 0,
+  "orderedNextUi": [
+    {
+      "id": 72,
+      "title": "Board UX: tighten mobile column/card spacing and sticky toolbar wrapping under 900px",
+      "priority": 3
+    },
+    {
+      "id": 73,
+      "title": "Board UX: add board-header active-filter count pill beside reset controls",
+      "priority": 3
+    },
+    {
+      "id": 74,
+      "title": "Settings: add board-to-settings advanced-controls shortcut card",
+      "priority": 4
+    }
+  ]
+}

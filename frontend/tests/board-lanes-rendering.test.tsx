@@ -130,6 +130,9 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Search board cards');
     expect(html).toContain('Apply filters');
     expect(html).toContain('Clear all');
+    expect(html).toContain('aria-label="One-tap filter reset chips"');
+    expect(html).toContain('3 active');
+    expect(html).toContain('Reset all ×');
     expect(html).toContain('Quick clear:');
     expect(html).toContain('Assignee: Samwise ×');
     expect(html).toContain('Project: TODO App ×');

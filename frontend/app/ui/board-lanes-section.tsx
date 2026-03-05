@@ -305,6 +305,8 @@ export function BoardLanesSection({
   columnMoveNotice?: string;
   columnMoveStatus?: string;
 }) {
+  const activeFilterCount = activeFilterBadges.length;
+
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
     principalNames.set(principal.id, principal.displayName ?? `Principal ${principal.id}`);
@@ -391,6 +393,28 @@ export function BoardLanesSection({
               <button type="submit">Apply filters</button>
               <a className="btn btn-secondary" href={boardFilter.resetHref}>Clear all</a>
             </form>
+
+            {activeFilterCount > 0 && (
+              <div className="badge-row board-filter-reset-cluster" aria-label="One-tap filter reset chips">
+                <span className="count-pill" aria-label={`${activeFilterCount} active filters`}>
+                  {activeFilterCount} active
+                </span>
+                <a className="badge badge-reset-all" href={boardFilter.resetHref} aria-label="Clear all active board filters">
+                  Reset all ×
+                </a>
+                {activeFilterBadges.map((badge) => (
+                  <a
+                    key={`cluster-${badge.label}`}
+                    className="badge"
+                    href={badge.clearHref}
+                    aria-label={`Clear ${badge.label}`}
+                    title={`Clear ${badge.label}`}
+                  >
+                    {badge.label} ×
+                  </a>
+                ))}
+              </div>
+            )}
 
             {(boardFilter.assigneeId || boardFilter.projectId) && (
               <div className="badge-row board-filter-quick-clear" aria-label="Quick clear board filters">

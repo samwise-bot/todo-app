@@ -223,9 +223,19 @@ a:hover {
 }
 
 .board-preset-row,
-.board-filter-quick-clear {
+.board-filter-quick-clear,
+.board-filter-reset-cluster {
   margin-bottom: 8px;
   gap: 8px;
+}
+
+.board-filter-reset-cluster {
+  align-items: center;
+}
+
+.badge-reset-all {
+  background: #dce8ff;
+  color: #153a87;
 }
 
 .board-filter-grid {

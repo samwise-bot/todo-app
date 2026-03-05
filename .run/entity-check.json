@@ -1,61 +1,58 @@
 {
-  "principalId": 2,
-  "projectId": 2,
-  "boardId": 1,
-  "columnIds": {
-    "Inbox": 1,
-    "Next": 2,
-    "In Progress": 3,
-    "Blocked": 7,
-    "Done": 5
+  "principal": {
+    "id": 2,
+    "kind": "agent",
+    "handle": "samwise",
+    "displayName": "Samwise",
+    "createdAt": "2026-03-03T15:27:25Z"
   },
-  "inboxCount": 0,
-  "selectedTask": {
-    "id": 67,
-    "title": "Board UX: add direct column rename/delete controls on board headers",
-    "description": "",
-    "state": "next",
+  "project": {
+    "id": 2,
+    "name": "TODO App",
+    "description": "Primary roadmap for TODO app autonomous loop",
+    "createdAt": "2026-03-03T15:27:25Z"
+  },
+  "board": {
+    "id": 1,
     "projectId": 2,
-    "assigneeId": 2,
-    "boardColumnId": 2,
-    "priority": 2,
-    "createdAt": "2026-03-05T10:03:04Z",
-    "updatedAt": "2026-03-05T10:03:04Z"
+    "name": "TODO App Board",
+    "createdAt": "2026-03-03T15:27:25Z"
   },
-  "transitions": [
-    [
-      67,
-      "assign",
-      2
-    ],
-    [
-      67,
-      "next->scheduled",
-      null
-    ],
-    [
-      67,
-      "column->In Progress",
-      3
-    ],
-    [
-      67,
-      "scheduled->done",
-      null
-    ],
-    [
-      67,
-      "column->Done",
-      5
-    ]
-  ],
-  "topNext": [
-    {
-      "id": 68,
-      "title": "Board UX: add assignee/project filter dropdown quick-clear chips in board header",
-      "priority": 3,
-      "dueAt": null,
-      "state": "next"
+  "columns": {
+    "Inbox": {
+      "id": 1,
+      "boardId": 1,
+      "name": "Inbox",
+      "position": 10,
+      "createdAt": "2026-03-03T15:27:25Z"
+    },
+    "Next": {
+      "id": 2,
+      "boardId": 1,
+      "name": "Next",
+      "position": 20,
+      "createdAt": "2026-03-03T15:27:25Z"
+    },
+    "In Progress": {
+      "id": 3,
+      "boardId": 1,
+      "name": "In Progress",
+      "position": 30,
+      "createdAt": "2026-03-03T15:27:25Z"
+    },
+    "Blocked": {
+      "id": 7,
+      "boardId": 1,
+      "name": "Blocked",
+      "position": 40,
+      "createdAt": "2026-03-03T16:03:43Z"
+    },
+    "Done": {
+      "id": 5,
+      "boardId": 1,
+      "name": "Done",
+      "position": 50,
+      "createdAt": "2026-03-03T15:27:25Z"
     }
-  ]
+  }
 }

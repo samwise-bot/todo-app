@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 03:40 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), then executed task #71 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
+- Shipped one-tap filter reset chip cluster on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Added inline active-filter counter pill (`N active`) directly in toolbar context.
+  2. Added `Reset all ×` plus per-filter one-tap reset chips inside a dedicated cluster (`aria-label="One-tap filter reset chips"`).
+  3. Kept existing quick-clear and active-badge behavior for backward-compatible board flows.
+- Added focused rendering regression assertion:
+  - `frontend/tests/board-lanes-rendering.test.tsx` now validates reset-cluster label, active-count pill, and reset-all chip rendering.
+
 ## Architecture Delta (2026-03-05, autonomous loop 03:20 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), then executed task #69 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment and board-column transitions (`Next -> In Progress -> Done`).
