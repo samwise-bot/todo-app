@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TASK_STATES } from '../lib/task-states';
 import { buildBoardLaneView } from '../lib/board-lanes';
-import { fetchCollection, fetchPagedCollection } from '../lib/api-client';
+import { fetchCollection, fetchPagedCollection, type PagedListFetchResult } from '../lib/api-client';
 import { boardFilterPresets, buildPresetHref } from '../lib/board-filter-presets';
 import {
   hiddenParamEntries,
@@ -35,6 +35,47 @@ function withQueryString(params: URLSearchParams): string {
   return query ? `/board?${query}` : '/board';
 }
 
+function buildPagedPath(basePath: string, page: number, pageSize: number): string {
+  const url = new URL(basePath, 'http://localhost');
+  url.searchParams.set('page', String(page));
+  url.searchParams.set('pageSize', String(pageSize));
+  return `${url.pathname}?${url.searchParams.toString()}`;
+}
+
+async function fetchAllPages<T>(basePath: string, label: string, pageSize = 100, maxPages = 50): Promise<PagedListFetchResult<T>> {
+  const first = await fetchPagedCollection<T>(buildPagedPath(basePath, 1, pageSize), label);
+  if (first.error || first.totalPages <= 1) {
+    return first;
+  }
+
+  const targetPages = Math.min(first.totalPages, maxPages);
+  const items = [...first.items];
+
+  for (let page = 2; page <= targetPages; page += 1) {
+    const next = await fetchPagedCollection<T>(buildPagedPath(basePath, page, pageSize), label);
+    if (next.error) {
+      return {
+        ...first,
+        items,
+        totalItems: items.length,
+        totalPages: targetPages,
+        error: next.error
+      };
+    }
+    items.push(...next.items);
+  }
+
+  return {
+    ...first,
+    items,
+    page: 1,
+    pageSize,
+    totalItems: items.length,
+    totalPages: targetPages,
+    error: null
+  };
+}
+
 export default async function HomePage({ searchParams }: { searchParams?: SearchParamsInput }) {
   const currentParams = toURLSearchParams(searchParams);
 
@@ -56,10 +97,10 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
 
   const [projectsResult, principalsResult, boardsResult, columnsResult, tasksResult] = await Promise.all([
     fetchCollection<Project>('/api/projects', 'Projects'),
-    fetchPagedCollection<Principal>('/api/principals?page=1&pageSize=1000', 'Principals'),
+    fetchAllPages<Principal>('/api/principals', 'Principals', 100, 10),
     fetchCollection<Board>('/api/boards', 'Boards'),
     fetchCollection<Column>('/api/columns', 'Columns'),
-    fetchPagedCollection<Task>('/api/tasks?page=1&pageSize=1000', 'Tasks')
+    fetchAllPages<Task>('/api/tasks', 'Tasks', 100, 50)
   ]);
 
   const projects = projectsResult.items;
