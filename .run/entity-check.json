@@ -21,23 +21,38 @@
   "columns": [
     {
       "id": 1,
-      "name": "Inbox"
+      "boardId": 1,
+      "name": "Inbox",
+      "position": 10,
+      "createdAt": "2026-03-03T15:27:25Z"
     },
     {
       "id": 2,
-      "name": "Next"
+      "boardId": 1,
+      "name": "Next",
+      "position": 20,
+      "createdAt": "2026-03-03T15:27:25Z"
     },
     {
       "id": 3,
-      "name": "In Progress"
+      "boardId": 1,
+      "name": "In Progress",
+      "position": 30,
+      "createdAt": "2026-03-03T15:27:25Z"
     },
     {
       "id": 7,
-      "name": "Blocked"
+      "boardId": 1,
+      "name": "Blocked",
+      "position": 40,
+      "createdAt": "2026-03-03T16:03:43Z"
     },
     {
       "id": 5,
-      "name": "Done"
+      "boardId": 1,
+      "name": "Done",
+      "position": 50,
+      "createdAt": "2026-03-03T15:27:25Z"
     }
   ]
 }

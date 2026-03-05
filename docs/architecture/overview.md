@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 06:23 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #81 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped saved-view helper clarity pass on `/board` (`frontend/app/ui/board-lanes-section.tsx`):
+  1. Upgraded active saved-view helper copy to explicitly call out a one-click reset path.
+  2. Renamed reset affordance to `Reset view ×` to reduce ambiguity with global filter reset.
+  3. Added explicit helper aria-label context (`One-click reset available`) for assistive scanability.
+- Added focused regression coverage update in `frontend/tests/board-lanes-rendering.test.tsx` for refreshed helper copy + reset affordance text.
+- Added follow-up UI task #84 (`next`, priority 4) to keep top-3 strike queue stocked.
+- Validation:
+  - `npm --prefix frontend test -- board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 05:54 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 UI inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #80 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

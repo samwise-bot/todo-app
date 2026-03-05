@@ -508,10 +508,10 @@ export function BoardLanesSection({
               </a>
             ))}
             {activeSavedView && (
-              <span className="muted board-saved-view-helper" aria-label={`Active saved view ${activeSavedView.label}`}>
-                Active: <strong>{activeSavedView.label}</strong>
+              <span className="muted board-saved-view-helper" aria-label={`Active saved view ${activeSavedView.label}. One-click reset available`}>
+                Active: <strong>{activeSavedView.label}</strong> · One-click reset to all cards:
                 <a className="badge badge-reset-all" href={boardFilter?.resetHref ?? '/board'}>
-                  Clear view ×
+                  Reset view ×
                 </a>
               </span>
             )}

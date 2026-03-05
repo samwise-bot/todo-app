@@ -1,39 +1,38 @@
-{
-  "items": [
-    {
-      "id": 80,
-      "title": "Navigation: add settings header return-to-board chip",
-      "description": "Add a compact 'Back to board' quick-jump chip in /settings header to complete bidirectional board/settings navigation.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T13:09:41Z",
-      "updatedAt": "2026-03-05T13:09:41Z"
-    },
-    {
-      "id": 81,
-      "title": "Board UX: clarify saved-view helper with one-click reset hint",
-      "description": "Keep board toolbar affordances explicit after active view helper rollout.",
-      "state": "next",
-      "projectId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T13:26:11Z",
-      "updatedAt": "2026-03-05T13:26:11Z"
-    },
-    {
-      "id": 82,
-      "title": "Board UX: add filter-empty-state count hint for quick diagnosis",
-      "description": "Show compact helper explaining how many active filters are narrowing board results when no cards match.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T13:41:06Z",
-      "updatedAt": "2026-03-05T13:41:06Z"
-    }
-  ]
-}
+[
+  {
+    "id": 82,
+    "title": "Board UX: add filter-empty-state count hint for quick diagnosis",
+    "description": "Show compact helper explaining how many active filters are narrowing board results when no cards match.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T13:41:06Z",
+    "updatedAt": "2026-03-05T13:41:06Z"
+  },
+  {
+    "id": 83,
+    "title": "Board UX: add compact settings header breadcrumb context for board workspace",
+    "description": "Show board workspace context in settings header so users can return to board without nav scanning.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T13:54:00Z",
+    "updatedAt": "2026-03-05T13:54:00Z"
+  },
+  {
+    "id": 84,
+    "title": "Board UX: add compact active-filter diagnostics in empty-state helper",
+    "description": "When board is empty due to filters, show active filter count and quick link to clear all in one tap.",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 4,
+    "createdAt": "2026-03-05T14:25:59Z",
+    "updatedAt": "2026-03-05T14:25:59Z"
+  }
+]
