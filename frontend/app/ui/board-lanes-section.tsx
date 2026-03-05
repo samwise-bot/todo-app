@@ -783,26 +783,28 @@ export function BoardLanesSection({
                       <div className="column-header-row">
                         <h4>{column.name}</h4>
                         <div className="form-row lane-header-actions">
-                          <MoveColumnForm
-                            columnId={column.id}
-                            columnName={column.name}
-                            boardId={board.id}
-                            boardHref={boardHref}
-                            toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
-                            disabled={!leftNeighbor}
-                            direction="left"
-                            instructionId={moveInstructionId}
-                          />
-                          <MoveColumnForm
-                            columnId={column.id}
-                            columnName={column.name}
-                            boardId={board.id}
-                            boardHref={boardHref}
-                            toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
-                            disabled={!rightNeighbor}
-                            direction="right"
-                            instructionId={moveInstructionId}
-                          />
+                          <div className="lane-move-controls" aria-label={`Reorder controls for ${column.name}`}>
+                            <MoveColumnForm
+                              columnId={column.id}
+                              columnName={column.name}
+                              boardId={board.id}
+                              boardHref={boardHref}
+                              toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
+                              disabled={!leftNeighbor}
+                              direction="left"
+                              instructionId={moveInstructionId}
+                            />
+                            <MoveColumnForm
+                              columnId={column.id}
+                              columnName={column.name}
+                              boardId={board.id}
+                              boardHref={boardHref}
+                              toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
+                              disabled={!rightNeighbor}
+                              direction="right"
+                              instructionId={moveInstructionId}
+                            />
+                          </div>
                           <span className="count-pill lane-count-pill" aria-label={`${column.tasks.length} tasks in ${column.name}`}>
                             {column.tasks.length}
                           </span>

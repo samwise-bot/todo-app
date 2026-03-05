@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 11:53 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (no `inbox` items) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).
+- Executed highest-priority UI task #97 through full workflow with explicit assignment (`Next -> In Progress -> Done`, `samwise`).
+- Shipped narrow-column lane header spacing consistency improvements:
+  1. Wrapped move controls in dedicated `lane-move-controls` grouping in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Tightened action-group spacing and fixed move-button minimum widths in `frontend/app/globals.css` so lane controls keep stable alignment.
+  3. Tuned `lane-count-pill` sizing/margin and mobile overrides for consistent baseline across dense columns.
+- Added follow-up strike-mode task #98 (`next`, priority 4) to keep top-3 UI queue populated.
+- Validation:
+  - `npm run lint` (frontend)
+
 ## Architecture Delta (2026-03-05, autonomous loop 11:23 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue and deferred non-UI inbox noise into `Blocked` under UI strike mode (#94, #95) so board UX work remains the active lane.
