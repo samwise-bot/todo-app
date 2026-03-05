@@ -300,6 +300,17 @@ sequenceDiagram
   3. Clearing a badge also resets `taskPage` to avoid stale pagination state after filter changes.
 - Added focused regression coverage in `frontend/tests/board-lanes-rendering.test.tsx` for removable badge rendering semantics.
 
+## Architecture Delta (2026-03-04, autonomous loop 22:20 PT)
+- Re-validated idempotent board prerequisites directly in DB source-of-truth (`samwise` principal, `TODO App` project, `TODO App Board`, canonical GTD columns).
+- Completed task lifecycles #34 and #60 (`Next -> In Progress -> Done`) with explicit `samwise` assignment and task-event audit entries.
+- Shipped board-first shareable filter preset templates:
+  1. `frontend/lib/board-filter-presets.ts` now generates canonical `/board?...` preset URLs.
+  2. `frontend/app/_dashboard.tsx` passes preset links into board-lane rendering so presets are usable from board itself.
+  3. `frontend/app/ui/board-lanes-section.tsx` now renders a first-class `Shareable presets` action row above lanes.
+- Added focused regression coverage for preset behavior:
+  - `frontend/tests/board-filter-presets.test.ts`
+  - `frontend/tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 19:20 PT)
 - Completed highest-priority operational Next task #52 (`Next -> In Progress -> Done`) with explicit `samwise` assignment.
 - Unblocked #34 by moving it from `waiting` to `next` and recording an explicit unblock note in task events after threshold evidence validation.

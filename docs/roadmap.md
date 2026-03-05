@@ -48,14 +48,16 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
-## Current Iteration Status (2026-03-05)
-- ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns).
+## Current Iteration Status (2026-03-04 22:20 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.
-- ✅ Completed: task #59 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
-- ✅ Completed: board-first UX increment shipped — active board filter badges are now removable inline on `/board` (single-click clear per badge).
+- ✅ Completed: task #34 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
+- ✅ Completed: task #60 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
+- ✅ Completed: board-first filter increment shipped — shareable preset links now resolve to `/board?...` URLs and are rendered directly in the board panel.
 - ▶ Next milestone:
-  - #34 Ops: close fanout timeout/cap issue with an explicit cap/timeout mitigation and evidence run.
-  - #60 Board UX: persist `/board` filter presets as shareable URL templates.
+  - #61 Board UX: inline task edit/delete controls directly on board cards.
+  - #62 Board UX: drag-drop column moves with optimistic persistence + rollback.
+  - #63 Board UX: board-card quick controls for assignee/project/priority/due.
 
 ## Current Iteration Status (2026-03-05)
 - ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns).

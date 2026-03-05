@@ -92,7 +92,8 @@ export function BoardLanesSection({
   columns,
   principals,
   projects,
-  activeFilterBadges = []
+  activeFilterBadges = [],
+  presetLinks = []
 }: {
   laneView: BoardLaneView;
   boards: Entity[];
@@ -100,6 +101,7 @@ export function BoardLanesSection({
   principals: Entity[];
   projects: Entity[];
   activeFilterBadges?: { label: string; clearHref: string }[];
+  presetLinks?: { key: string; label: string; href: string }[];
 }) {
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -127,6 +129,17 @@ export function BoardLanesSection({
           <h2>Board workflow</h2>
         </div>
       </div>
+
+      {presetLinks.length > 0 && (
+        <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Shareable board filter presets">
+          <span className="muted">Shareable presets:</span>
+          {presetLinks.map((preset) => (
+            <a key={preset.key} className="btn btn-secondary" href={preset.href} title={`Open ${preset.label} preset`}>
+              {preset.label}
+            </a>
+          ))}
+        </div>
+      )}
 
       {activeFilterBadges.length > 0 && (
         <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Active board filters">

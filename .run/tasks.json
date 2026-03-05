@@ -1,1 +1,635 @@
-{"items":[{"id":58,"title":"Unblock #52: capture live worker-outcome artifact and set timeout threshold","description":"Run one live worker-outcome capture and document threshold decision for #34/#52.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":1,"createdAt":"2026-03-04T22:46:46Z","updatedAt":"2026-03-05T01:45:55Z"},{"id":57,"title":"Board UX: show active filter summary badges above lanes","description":"Display compact chips for active board filters to avoid hidden constraints during triage.","state":"next","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":2,"createdAt":"2026-03-04T22:46:46Z","updatedAt":"2026-03-04T22:46:46Z"},{"id":56,"title":"Board UX: persist board filter presets as URL templates","description":"Save/restore common board filter sets (assignee/project/state/priority/due-window/search).","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":1,"createdAt":"2026-03-04T22:46:46Z","updatedAt":"2026-03-05T00:15:29Z"},{"id":55,"title":"Benchmark UX: add optional endpoint filter for focused load checks","description":"Allow benchmark_task_board.py to run a subset of endpoints via CLI so operators can isolate regressions quickly.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":2,"createdAt":"2026-03-04T12:46:57Z","updatedAt":"2026-03-04T12:48:04Z"},{"id":54,"title":"Board lanes: sort Next column cards by priority then due date","description":"Keep Next lane deterministic for autonomous planning and operator triage.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":1,"createdAt":"2026-03-04T11:17:07Z","updatedAt":"2026-03-04T11:17:50Z"},{"id":53,"title":"Unblock #52: capture one worker outcome sample via non-subagent runner or fixture import","description":"Need one concrete worker outcome dataset (completed vs timed_out) to set timeout threshold for #34/#52 while autonomous loop remains subagent-disabled.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":1,"createdAt":"2026-03-04T04:52:26Z","updatedAt":"2026-03-04T06:02:40Z"},{"id":52,"title":"Unblock #34: run worker outcome sweep and set timeout threshold","description":"Execute one real fanout cycle, capture completion/timeout ratio, and document unblock threshold for #34.","state":"next","projectId":2,"assigneeId":2,"boardColumnId":7,"priority":1,"createdAt":"2026-03-04T04:27:36Z","updatedAt":"2026-03-05T01:46:31Z"},{"id":51,"title":"Benchmark: define TODO App performance SLA (p50/p95 load, interaction latency, API throughput)","description":"Produce measurable SLA targets and acceptance checks for board/task workflows.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-04T04:27:36Z","updatedAt":"2026-03-04T09:16:00Z"},{"id":50,"title":"Reliability: add regression coverage for nav active-state styling on non-board routes","description":"Assert active-route highlighting across /tasks,/projects,/people,/settings to prevent navigation orientation regressions.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":3,"createdAt":"2026-03-04T04:27:30Z","updatedAt":"2026-03-04T07:38:44Z"},{"id":47,"title":"Board UX: Focus active view defaults to Next/In Progress + assignee Samwise","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-04T02:22:47Z"},{"id":46,"title":"Navigation: Add persistent top nav/sidebar with clear active page and quick-create","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-04T04:25:56Z"},{"id":45,"title":"Settings: Create Advanced Settings page for configuration and power-user controls","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-04T03:23:22Z"},{"id":44,"title":"Board UX: Implement drag-and-drop task movement across columns with optimistic updates","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-04T01:53:22Z"},{"id":43,"title":"Board UX: Add inline column creation and column management on board page","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-04T01:16:00Z"},{"id":42,"title":"Board UX: Add inline task creation within board/column context","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-03T21:16:10Z"},{"id":41,"title":"UX IA: Split current monolithic dashboard into route-based pages (Board, Tasks, Projects, People, Settings)","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":2,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-03T21:00:42Z"},{"id":40,"title":"UX IA: Make Board the primary default page (kanban-first)","description":"Requested by Ian: board-first multi-page UX architecture.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":3,"createdAt":"2026-03-03T19:00:50Z","updatedAt":"2026-03-03T19:44:44Z"},{"id":39,"title":"Unblock #34: measure spawned-worker completion/timeout ratio and define exit threshold","description":"Run one full Next sweep with actual sessions_spawn workers using compact prompts + 180s timeout. Capture done/timeout ratios and propose quantitative unblock threshold for #34.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":1,"createdAt":"2026-03-03T18:18:32Z","updatedAt":"2026-03-03T18:45:39Z"},{"id":38,"title":"Unblock #34: validate 180s worker timeout + compact prompt success rate over one full Next sweep","description":"Run one complete deterministic fanout cycle using emit-spawn-spec payloads and record completion/timeout metrics by task.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":1,"createdAt":"2026-03-03T18:02:18Z","updatedAt":"2026-03-03T18:18:28Z"},{"id":37,"title":"Unblock #34: tune subagent worker timeout + prompt budget for higher completion rate","description":"Raise runTimeoutSeconds policy for analysis workers and shrink prompt payload so batched fanout returns actionable notes instead of timeouts.","state":"done","projectId":2,"assigneeId":2,"boardColumnId":5,"priority":2,"createdAt":"2026-03-03T17:47:46Z","updatedAt":"2026-03-03T18:01:11Z"}],"page":1,"pageSize":20,"totalItems":51,"totalPages":3}
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "Set up GTD workflow endpoints",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 1,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 2,
+      "title": "Add CI assertion for backend contract drift artifacts (mutation+read)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 3,
+      "title": "Add frontend malformed payload telemetry marker by endpoint",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 4,
+      "title": "Expand board-lane regression tests for columns/tasks mixed envelope fallbacks",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 5,
+      "title": "Document backend contract generator troubleshooting in docs/backend-testing.md",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 6,
+      "title": "Investigate PATCH /api/tasks/:id/board-column returning 404 on running service",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 7,
+      "title": "Mutation smoke task",
+      "state": "next",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 3,
+      "assigneeId": null,
+      "boardColumnId": 6
+    },
+    {
+      "id": 8,
+      "title": "Add backend restart target to reduce stale-binary API drift during loops",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 9,
+      "title": "Mutation smoke task",
+      "state": "next",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 4,
+      "assigneeId": null,
+      "boardColumnId": 8
+    },
+    {
+      "id": 10,
+      "title": "Add task priority + due date fields for deterministic Next ordering",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 11,
+      "title": "Roadmap: SPA architecture decision record (routing, state, data fetching)",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 12,
+      "title": "Roadmap: SPA migration plan from current server-rendered flows to client-driven UX",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 13,
+      "title": "Roadmap: Implement SPA shell with persistent board + inspector panels",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 14,
+      "title": "Roadmap: Unified client state store for tasks/boards/columns/principals",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 15,
+      "title": "Roadmap: Offline-first cache strategy for SPA (stale-while-revalidate)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 16,
+      "title": "Benchmark: Define performance SLA (p50/p95 load, interaction latency, API throughput)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 17,
+      "title": "Benchmark: Build repeatable backend load test harness for task/board endpoints",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 18,
+      "title": "Benchmark: Frontend interaction benchmark suite (board drag/move/filter/search)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 19,
+      "title": "Benchmark: CI performance regression gate with historical trend tracking",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 20,
+      "title": "Auth: Identity model ADR (single-user now, multi-user migration path)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 21,
+      "title": "Auth: Implement account + session schema and migration plan",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 22,
+      "title": "Auth: Add login/logout flow with secure session cookies",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 23,
+      "title": "Auth: Add role/permission model (owner, agent, collaborator)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 24,
+      "title": "Auth: Agent principal linking to user identity + audit trail",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 25,
+      "title": "Auth: Security hardening checklist (password policy, CSRF, rate limits)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 26,
+      "title": "Auth: End-to-end auth test matrix (happy path, invalid creds, expired sessions)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 27,
+      "title": "Frontend: expose priority selector + due date in task create/edit flows",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 28,
+      "title": "Docs/API: update OpenAPI + examples for task priority field",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 29,
+      "title": "DevEx: make openapi generation script honor configured GO binary in non-interactive shells",
+      "state": "done",
+      "priority": 2,
+      "dueAt": "2026-03-04T16:35:56Z",
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 30,
+      "title": "DevEx: apply GO binary fallback to generate-backend-contract-tests script",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 31,
+      "title": "Mutation smoke task",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 5,
+      "assigneeId": 2,
+      "boardColumnId": 9
+    },
+    {
+      "id": 32,
+      "title": "DevEx: document GO binary fallback strategy for local/CI test scripts",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 33,
+      "title": "Mutation smoke task",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 6,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 34,
+      "title": "Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 35,
+      "title": "Unblock: implement batched subagent orchestration with retry + shorter prompts",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 36,
+      "title": "Unblock #34: integrate batched fanout planner into cron execution path",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 37,
+      "title": "Unblock #34: tune subagent worker timeout + prompt budget for higher completion rate",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 38,
+      "title": "Unblock #34: validate 180s worker timeout + compact prompt success rate over one full Next sweep",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 39,
+      "title": "Unblock #34: measure spawned-worker completion/timeout ratio and define exit threshold",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 40,
+      "title": "UX IA: Make Board the primary default page (kanban-first)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 41,
+      "title": "UX IA: Split current monolithic dashboard into route-based pages (Board, Tasks, Projects, People, Settings)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 42,
+      "title": "Board UX: Add inline task creation within board/column context",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 43,
+      "title": "Board UX: Add inline column creation and column management on board page",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 44,
+      "title": "Board UX: Implement drag-and-drop task movement across columns with optimistic updates",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 45,
+      "title": "Settings: Create Advanced Settings page for configuration and power-user controls",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 46,
+      "title": "Navigation: Add persistent top nav/sidebar with clear active page and quick-create",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 47,
+      "title": "Board UX: Focus active view defaults to Next/In Progress + assignee Samwise",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 48,
+      "title": "Mutation smoke task",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 7,
+      "assigneeId": null,
+      "boardColumnId": 11
+    },
+    {
+      "id": 49,
+      "title": "Mutation smoke task",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 8,
+      "assigneeId": null,
+      "boardColumnId": 12
+    },
+    {
+      "id": 50,
+      "title": "Reliability: add regression coverage for nav active-state styling on non-board routes",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 51,
+      "title": "Benchmark: define TODO App performance SLA (p50/p95 load, interaction latency, API throughput)",
+      "state": "done",
+      "priority": 3,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 52,
+      "title": "Unblock #34: run worker outcome sweep and set timeout threshold",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 53,
+      "title": "Unblock #52: capture one worker outcome sample via non-subagent runner or fixture import",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 54,
+      "title": "Board lanes: sort Next column cards by priority then due date",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 55,
+      "title": "Benchmark UX: add optional endpoint filter for focused load checks",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 56,
+      "title": "Board UX: persist board filter presets as URL templates",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 57,
+      "title": "Board UX: show active filter summary badges above lanes",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 58,
+      "title": "Unblock #52: capture live worker-outcome artifact and set timeout threshold",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 59,
+      "title": "Board UX: make active filter badges removable inline from /board",
+      "state": "done",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 60,
+      "title": "Board UX: persist /board filter presets as shareable URL templates",
+      "state": "done",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 5
+    },
+    {
+      "id": 61,
+      "title": "Board UX: inline task edit/delete controls directly on board cards",
+      "state": "next",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 62,
+      "title": "Board UX: drag-drop column moves with optimistic persistence + rollback",
+      "state": "next",
+      "priority": 1,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    },
+    {
+      "id": 63,
+      "title": "Board UX: board-card quick controls for assignee/project/priority/due",
+      "state": "next",
+      "priority": 2,
+      "dueAt": null,
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2
+    }
+  ],
+  "count": 63
+}

@@ -308,6 +308,7 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         principals={principals}
         projects={projects}
         activeFilterBadges={activeBoardFilterBadges}
+        presetLinks={boardPresetLinks}
       />
 
       <section className="panel" aria-label="Board inspector">

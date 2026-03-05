@@ -56,6 +56,31 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('No tasks in this column.');
   });
 
+  test('renders shareable preset links on the board panel', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [],
+          tasksWithoutColumn: [],
+          fetchErrors: []
+        }}
+        boards={[]}
+        columns={[]}
+        principals={[]}
+        projects={[]}
+        presetLinks={[
+          { key: 'my-active', label: 'My active', href: '/board?taskAssigneeId=2&taskState=next,scheduled' },
+          { key: 'p1-work', label: 'P1 focus', href: '/board?taskPriority=1' }
+        ]}
+      />
+    );
+
+    expect(html).toContain('Shareable presets:');
+    expect(html).toContain('My active');
+    expect(html).toContain('/board?taskAssigneeId=2&amp;taskState=next,scheduled');
+    expect(html).toContain('P1 focus');
+  });
+
   test('renders active filter summary badges when board filters are applied', () => {
     const html = renderToStaticMarkup(
       <BoardLanesSection

@@ -5,17 +5,19 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed board-first Next task #59 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
-- [x] Shipped inline-removable active filter badges on `/board` (`label ×` clears the specific filter in one click).
+- [x] Executed highest-priority Next task #34 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
+- [x] Executed board-first task #60 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
+- [x] Shipped board-first shareable `/board` filter preset templates in-board (no route hop required).
 - [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**next**, priority=1)
-- [ ] #60 Board UX: persist /board filter presets as shareable URL templates (**next**, priority=3)
+- [ ] #61 Board UX: inline task edit/delete controls directly on board cards (**next**, priority=1)
+- [ ] #62 Board UX: drag-drop column moves with optimistic persistence + rollback (**next**, priority=1)
+- [ ] #63 Board UX: board-card quick controls for assignee/project/priority/due (**next**, priority=2)
 
 ## Verification
-- `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
-- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task state transition checks ... PY` ✅
+- `npm test -- --run tests/board-filter-presets.test.ts tests/board-lanes-rendering.test.tsx` ✅
+- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task state transitions (#34/#60) ... PY` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

@@ -51,5 +51,5 @@ export function boardFilterPresets(defaultAssigneeId = '2'): BoardFilterPreset[]
 
 export function buildPresetHref(currentParams: URLSearchParams, preset: BoardFilterPreset): string {
   const query = updateSearchParams(currentParams, preset.query).toString();
-  return query ? `/?${query}` : '/';
+  return query ? `/board?${query}` : '/board';
 }

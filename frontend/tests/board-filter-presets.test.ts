@@ -18,7 +18,8 @@ describe('board filter presets', () => {
     expect(dueSoon).toBeTruthy();
 
     const href = buildPresetHref(current, dueSoon!);
-    const query = new URLSearchParams(href.replace('/?', ''));
+    expect(href.startsWith('/board?')).toBe(true);
+    const query = new URLSearchParams(href.replace('/board?', ''));
 
     expect(query.get('principalPage')).toBe('2');
     expect(query.get('taskDueWindow')).toBe('24');
