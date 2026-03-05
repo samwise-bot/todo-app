@@ -193,12 +193,23 @@ func (s *Server) handleTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleTaskMutation(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPatch {
-		writeJSON(w, 405, map[string]string{"error": "method not allowed"})
+	parts, id, ok := splitResourceID(r.URL.Path, "/api/tasks/")
+	if !ok {
+		writeJSON(w, 404, map[string]string{"error": "not found"})
 		return
 	}
-	parts, id, ok := splitResourceID(r.URL.Path, "/api/tasks/")
-	if !ok || len(parts) != 2 {
+	if len(parts) == 1 {
+		switch r.Method {
+		case http.MethodPatch:
+			s.handleTaskUpdate(w, r, id)
+		case http.MethodDelete:
+			s.handleTaskDelete(w, r, id)
+		default:
+			writeJSON(w, 405, map[string]string{"error": "method not allowed"})
+		}
+		return
+	}
+	if r.Method != http.MethodPatch || len(parts) != 2 {
 		writeJSON(w, 404, map[string]string{"error": "not found"})
 		return
 	}
@@ -275,6 +286,52 @@ func (s *Server) handleTaskBoardColumn(w http.ResponseWriter, r *http.Request, i
 		default:
 			writeErr(w, 400, err)
 		}
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleTaskUpdate(w http.ResponseWriter, r *http.Request, id int64) {
+	var body struct {
+		Title       *string `json:"title"`
+		Description *string `json:"description"`
+		ActorID     *int64  `json:"actorId"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if body.Title == nil {
+		writeJSON(w, 400, map[string]string{"error": "title is required"})
+		return
+	}
+	title := strings.TrimSpace(*body.Title)
+	if title == "" {
+		writeJSON(w, 400, map[string]string{"error": "title is required"})
+		return
+	}
+	description := ""
+	if body.Description != nil {
+		description = strings.TrimSpace(*body.Description)
+	}
+	if err := s.store.UpdateTaskFields(r.Context(), id, title, description, body.ActorID); err != nil {
+		if errors.Is(err, store.ErrNotFound) {
+			writeJSON(w, 404, map[string]string{"error": "task not found"})
+			return
+		}
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleTaskDelete(w http.ResponseWriter, r *http.Request, id int64) {
+	if err := s.store.DeleteTask(r.Context(), id); err != nil {
+		if errors.Is(err, store.ErrNotFound) {
+			writeJSON(w, 404, map[string]string{"error": "task not found"})
+			return
+		}
+		writeErr(w, 400, err)
 		return
 	}
 	writeJSON(w, 200, map[string]any{"ok": true})

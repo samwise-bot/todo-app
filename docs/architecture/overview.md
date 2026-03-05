@@ -40,6 +40,16 @@ flowchart TB
 - **Audit Service**: append-only activity/event log
 - **Review Service**: weekly review snapshots + stale detection
 
+## Architecture Delta (2026-03-04, autonomous loop 22:26 PT)
+- Completed TODO task #61 lifecycle (`Next -> In Progress -> Done`) with explicit `samwise` assignment persisted in source-of-truth DB.
+- Added board-card inline task management on `/board`:
+  1. New task mutation endpoints: `PATCH /api/tasks/:id` (title/description edit) and `DELETE /api/tasks/:id`.
+  2. Store layer now supports `UpdateTaskFields` (with `task.fields.updated` audit event) and `DeleteTask`.
+  3. Board card UI now exposes inline `Edit / Delete` controls directly in lane cards (no route hop).
+- Added focused regression coverage:
+  - `backend/tests/api_endpoints_test.go` (`TestTaskUpdateAndDeleteEndpoints`)
+  - `frontend/tests/board-lanes-rendering.test.tsx` (board-card edit/delete control presence)
+
 ## Data Model (high-level)
 ```mermaid
 erDiagram

@@ -5,19 +5,19 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority Next task #34 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
-- [x] Executed board-first task #60 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
-- [x] Shipped board-first shareable `/board` filter preset templates in-board (no route hop required).
+- [x] Executed highest-priority Next task #61 through full flow (`Next -> In Progress -> Done`) with explicit `samwise` assignment.
+- [x] Shipped board-first inline task edit/delete controls directly on board cards (`/board`) with no route hopping.
 - [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #61 Board UX: inline task edit/delete controls directly on board cards (**next**, priority=1)
 - [ ] #62 Board UX: drag-drop column moves with optimistic persistence + rollback (**next**, priority=1)
 - [ ] #63 Board UX: board-card quick controls for assignee/project/priority/due (**next**, priority=2)
+- [ ] Board UX hardening: optimistic/error feedback polish for inline board-card edit/delete actions (**next**, priority=2)
 
 ## Verification
-- `npm test -- --run tests/board-filter-presets.test.ts tests/board-lanes-rendering.test.tsx` ✅
-- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task state transitions (#34/#60) ... PY` ✅
+- `/home/bot/.nix-profile/bin/go test ./tests -run 'TestTaskUpdateAndDeleteEndpoints|TestTaskBoardColumnEndpointAndEvent|TestTaskAssigneeEndpointAndEvent'` ✅
+- `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
+- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task state transitions (#61) ... PY` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

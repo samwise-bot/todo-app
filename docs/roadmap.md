@@ -48,6 +48,16 @@
 ## Phase 5 - v1 Handoff
 - docs/handoff/v1.md, known limitations, ops runbook
 
+## Current Iteration Status (2026-03-04 22:26 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.
+- ✅ Completed: task #61 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
+- ✅ Completed: board-first UX increment shipped — inline board-card `Edit / Delete` controls now operate directly from `/board` without route hopping.
+- ▶ Next milestone:
+  - #62 Board UX: drag-drop column moves with optimistic persistence + rollback.
+  - #63 Board UX: board-card quick controls for assignee/project/priority/due.
+  - Board UX hardening: optimistic/error feedback polish for inline board-card edit/delete actions.
+
 ## Current Iteration Status (2026-03-04 22:20 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.

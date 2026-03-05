@@ -12,6 +12,7 @@ type Column = {
 type Task = {
   id: number;
   title: string;
+  description?: string;
   state: string;
   assigneeId?: number | null;
   projectId?: number | null;

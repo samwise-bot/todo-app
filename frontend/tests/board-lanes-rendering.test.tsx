@@ -150,6 +150,9 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Done');
     expect(html).toContain('Prepare release notes');
     expect(html).toContain('Ship patch');
+    expect(html).toContain('Edit / Delete');
+    expect(html).toContain('Delete task 201');
+    expect(html).toContain('aria-label="Edit title for task 202"');
     expect(html).not.toContain('No tasks in this column.');
     expect(html).not.toContain('No boards yet.');
   });

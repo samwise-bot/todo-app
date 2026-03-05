@@ -249,6 +249,42 @@ export async function setTaskBoardColumnAction(_: ActionState, formData: FormDat
   });
 }
 
+export async function updateTaskAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  const taskIdRaw = String(formData.get('taskId') ?? '').trim();
+  const title = String(formData.get('title') ?? '').trim();
+  const description = String(formData.get('description') ?? '').trim();
+
+  const taskID = asPositiveInt(taskIdRaw);
+  if (taskID === null) {
+    return validationErrorState({ taskId: 'Task is invalid.' });
+  }
+  if (!title) {
+    return validationErrorState({ title: 'Title is required.' });
+  }
+
+  return runAction('Task details updated.', async () => {
+    await apiFetch(`/api/tasks/${taskID}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ title, description })
+    });
+  });
+}
+
+export async function deleteTaskAction(_: ActionState, formData: FormData): Promise<ActionState> {
+  const taskIdRaw = String(formData.get('taskId') ?? '').trim();
+  const taskID = asPositiveInt(taskIdRaw);
+  if (taskID === null) {
+    return validationErrorState({ taskId: 'Task is invalid.' });
+  }
+
+  return runAction('Task deleted.', async () => {
+    await apiFetch(`/api/tasks/${taskID}`, {
+      method: 'DELETE',
+      body: JSON.stringify({})
+    });
+  });
+}
+
 export async function createBoardAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const name = String(formData.get('name') ?? '').trim();
   const projectIdRaw = String(formData.get('projectId') ?? '').trim();

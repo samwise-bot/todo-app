@@ -1,6 +1,6 @@
 import React from 'react';
 import type { BoardLaneView } from '../../lib/board-lanes';
-import { createColumnAction, createTaskAction } from '../actions';
+import { createColumnAction, createTaskAction, deleteTaskAction, updateTaskAction } from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
@@ -10,10 +10,22 @@ function TaskCard({
   principalName,
   projectName
 }: {
-  task: { id: number; title: string; state: string; assigneeId?: number | null; projectId?: number | null };
+  task: { id: number; title: string; description?: string; state: string; assigneeId?: number | null; projectId?: number | null };
   principalName: string;
   projectName: string;
 }) {
+  async function inlineUpdateTask(formData: FormData) {
+    'use server';
+    formData.set('taskId', String(task.id));
+    await updateTaskAction(INITIAL_ACTION_STATE, formData);
+  }
+
+  async function inlineDeleteTask(formData: FormData) {
+    'use server';
+    formData.set('taskId', String(task.id));
+    await deleteTaskAction(INITIAL_ACTION_STATE, formData);
+  }
+
   return (
     <article
       className="task-card"
@@ -28,6 +40,19 @@ function TaskCard({
         <span className="badge">{principalName}</span>
         <span className="badge">{projectName}</span>
       </div>
+      <details style={{ marginTop: 8 }}>
+        <summary style={{ cursor: 'pointer' }}>Edit / Delete</summary>
+        <form action={inlineUpdateTask} className="form-stack" style={{ marginTop: 8 }}>
+          <input name="title" defaultValue={task.title} aria-label={`Edit title for task ${task.id}`} required />
+          <input name="description" defaultValue={task.description ?? ''} aria-label={`Edit description for task ${task.id}`} />
+          <div className="form-row">
+            <button type="submit">Save</button>
+            <button type="submit" formAction={inlineDeleteTask} className="btn btn-secondary" aria-label={`Delete task ${task.id}`}>
+              Delete
+            </button>
+          </div>
+        </form>
+      </details>
     </article>
   );
 }

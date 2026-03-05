@@ -605,6 +605,38 @@ func (s *SQLiteStore) UpdateTaskBoardColumn(ctx context.Context, taskID int64, b
 	return s.appendEvent(ctx, taskID, actorID, "task.board_column.changed", map[string]any{"from": previous, "to": boardColumnID})
 }
 
+func (s *SQLiteStore) UpdateTaskFields(ctx context.Context, taskID int64, title string, description string, actorID *int64) error {
+	var previousTitle, previousDescription string
+	if err := s.db.QueryRowContext(ctx, `SELECT title, description FROM tasks WHERE id=?`, taskID).Scan(&previousTitle, &previousDescription); err != nil {
+		if err == sql.ErrNoRows {
+			return ErrNotFound
+		}
+		return err
+	}
+	if _, err := s.db.ExecContext(ctx, `UPDATE tasks SET title=?, description=?, updated_at=? WHERE id=?`, title, description, time.Now().UTC().Format(time.RFC3339), taskID); err != nil {
+		return err
+	}
+	return s.appendEvent(ctx, taskID, actorID, "task.fields.updated", map[string]any{
+		"from": map[string]any{"title": previousTitle, "description": previousDescription},
+		"to":   map[string]any{"title": title, "description": description},
+	})
+}
+
+func (s *SQLiteStore) DeleteTask(ctx context.Context, taskID int64) error {
+	result, err := s.db.ExecContext(ctx, `DELETE FROM tasks WHERE id=?`, taskID)
+	if err != nil {
+		return err
+	}
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
 func (s *SQLiteStore) appendEvent(ctx context.Context, taskID int64, actorID *int64, event string, payload any) error {
 	b, _ := json.Marshal(payload)
 	_, err := s.db.ExecContext(ctx, `INSERT INTO task_events(task_id, actor_id, event_type, payload, created_at) VALUES(?,?,?,?,?)`, taskID, actorID, event, string(b), time.Now().UTC().Format(time.RFC3339))

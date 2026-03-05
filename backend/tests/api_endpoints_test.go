@@ -830,6 +830,61 @@ func TestMetricsExposeWeeklyReviewAndBoardLaneFailureCounters(t *testing.T) {
 	}
 }
 
+func TestTaskUpdateAndDeleteEndpoints(t *testing.T) {
+	h := newAPIHarness(t)
+
+	status, task := h.jsonRequest(http.MethodPost, "/api/tasks", map[string]any{"title": "Draft spec", "description": "v1"})
+	if status != http.StatusCreated {
+		t.Fatalf("create task: expected 201, got %d", status)
+	}
+	taskID := mustInt64(t, task["id"])
+
+	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d", taskID), map[string]any{"title": "", "description": "x"})
+	if status != http.StatusBadRequest {
+		t.Fatalf("expected 400 for empty title update, got %d", status)
+	}
+
+	status, _ = h.jsonRequest(http.MethodPatch, fmt.Sprintf("/api/tasks/%d", taskID), map[string]any{"title": "Draft spec updated", "description": "v2"})
+	if status != http.StatusOK {
+		t.Fatalf("expected 200 for task update, got %d", status)
+	}
+
+	status, _, tasks := h.jsonRequestPaginated(http.MethodGet, "/api/tasks", nil)
+	if status != http.StatusOK {
+		t.Fatalf("list tasks: expected 200, got %d", status)
+	}
+	if len(tasks) != 1 {
+		t.Fatalf("expected 1 task, got %d", len(tasks))
+	}
+	if got := strings.TrimSpace(fmt.Sprint(tasks[0]["title"])); got != "Draft spec updated" {
+		t.Fatalf("expected updated title, got %q", got)
+	}
+	if got := strings.TrimSpace(fmt.Sprint(tasks[0]["description"])); got != "v2" {
+		t.Fatalf("expected updated description, got %q", got)
+	}
+
+	events, err := h.store.ListTaskEvents(context.Background(), taskID)
+	if err != nil {
+		t.Fatalf("list task events: %v", err)
+	}
+	if len(events) < 2 || events[len(events)-1].EventType != "task.fields.updated" {
+		t.Fatalf("expected task.fields.updated event, got %#v", events)
+	}
+
+	status, _ = h.jsonRequest(http.MethodDelete, fmt.Sprintf("/api/tasks/%d", taskID), map[string]any{})
+	if status != http.StatusOK {
+		t.Fatalf("expected 200 for task delete, got %d", status)
+	}
+
+	status, page, _ := h.jsonRequestPaginated(http.MethodGet, "/api/tasks", nil)
+	if status != http.StatusOK {
+		t.Fatalf("list tasks after delete: expected 200, got %d", status)
+	}
+	if mustInt64(t, page["totalItems"]) != 0 {
+		t.Fatalf("expected no tasks after delete, got totalItems=%v", page["totalItems"])
+	}
+}
+
 func TestMetricsPrometheusTextFormatCompatibility(t *testing.T) {
 	h := newAPIHarness(t)
 
