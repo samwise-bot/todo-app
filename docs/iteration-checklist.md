@@ -6,6 +6,22 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
+- [x] Executed highest-priority UI `Next` task #83 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped compact settings breadcrumb context (`Board workspace / Advanced settings`) while preserving `← Board workspace` return chip.
+- [x] Added follow-up UI task #88 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.
+- [x] Synced architecture/roadmap/checklist docs.
+
+## Current App Task Board (Project: TODO App)
+- [ ] #84 Board UX: add compact active-filter diagnostics in empty-state helper (**next**, priority=4)
+- [ ] #87 Board UX: add subtle lane-edge fade labels for mobile scroll discoverability (**next**, priority=4)
+- [ ] #88 Board UX: add sticky board-filter shadow cue beneath top nav on scroll (**next**, priority=4)
+
+## Verification
+- `npm --prefix frontend test -- --run tests/settings-page.test.tsx tests/top-nav.test.tsx` ✅
+
+## Completed This Iteration
+- [x] Re-validated principal/project/board/columns for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Processed Inbox first (0 `inbox` tasks this cycle).
 - [x] Executed highest-priority UI `Next` task #86 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
 - [x] Shipped lane-container edge-fade indicators for horizontal scroll discoverability on `/board` (desktop + mobile-safe CSS treatment).
 - [x] Added follow-up UI task #87 (`next`, priority 4) so top-3 Next queue stays populated in strike mode.

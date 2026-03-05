@@ -15,6 +15,8 @@ describe('settings page', () => {
     expect(html).toContain('30 (default)');
     expect(html).toContain('Board-first focus defaults');
     expect(html).toContain('id="advanced-controls"');
+    expect(html).toContain('Board workspace</a>');
+    expect(html).toContain('aria-label="Board workspace breadcrumb context"');
     expect(html).toContain('← Board workspace');
     expect(html).toContain('aria-label="Return to board workspace"');
 

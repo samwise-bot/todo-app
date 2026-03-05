@@ -45,6 +45,11 @@ export default function SettingsPage() {
         <div className="settings-header-row">
           <div>
             <p className="eyebrow">Settings</p>
+            <p className="settings-breadcrumb" aria-label="Board workspace breadcrumb context">
+              <Link href="/board">Board workspace</Link>
+              <span aria-hidden="true">/</span>
+              <strong>Advanced settings</strong>
+            </p>
             <h1>Advanced settings</h1>
             <p className="muted">Operational controls and current runtime defaults for TODO App power users.</p>
           </div>

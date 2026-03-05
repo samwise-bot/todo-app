@@ -122,6 +122,29 @@ a:hover {
   margin-bottom: 10px;
 }
 
+.settings-breadcrumb {
+  margin: 6px 0 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.settings-breadcrumb a {
+  color: #2d5fc0;
+  font-weight: 600;
+}
+
+.settings-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.settings-breadcrumb strong {
+  color: #2a3342;
+  font-weight: 600;
+}
+
 .settings-return-chip {
   display: inline-flex;
   align-items: center;
