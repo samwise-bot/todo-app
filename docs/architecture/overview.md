@@ -1,5 +1,18 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 12:53 PT)
+- Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (no `inbox` tasks) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).
+- Executed highest-priority UI task #99 through full workflow with explicit assignment (`Next -> In Progress -> Done`, `samwise`).
+- Shipped board visual polish updates:
+  1. Added a compact divider marker between sticky board filters and lane content in `frontend/app/ui/board-lanes-section.tsx`.
+  2. Added gradient divider styling and scrolled-state emphasis in `frontend/app/globals.css` for clearer board hierarchy.
+  3. Increased lane move-control hit areas on coarse pointers (including mobile overrides) in `frontend/app/globals.css` for better touch ergonomics.
+- Added follow-up UI task #101 (`next`, priority 4) to keep top-3 strike queue depth.
+- Validation:
+  - `npm --prefix frontend test -- board-page-defaults.test.tsx`
+  - `npm --prefix frontend test -- tests/board-lanes-rendering.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 12:23 PT)
 - Re-validated source-of-truth entities idempotently via TODO DB/API checks (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (no `inbox` tasks) and ranked eligible UI `Next` tasks by (`priority`, `dueAt`, `id`).
