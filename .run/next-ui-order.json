@@ -1,29 +1,6 @@
 {
+  "count": 3,
   "items": [
-    {
-      "id": 77,
-      "title": "Board UX: persist active saved-view chip state in toolbar",
-      "description": "Make saved-view chips indicate current match to improve orientation on board.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 3,
-      "createdAt": "2026-03-05T12:25:48Z",
-      "updatedAt": "2026-03-05T12:25:48Z"
-    },
-    {
-      "id": 74,
-      "title": "Settings: add board-to-settings advanced-controls shortcut card",
-      "description": "UI strike follow-up to keep board focused while preserving quick access to advanced controls.",
-      "state": "next",
-      "projectId": 2,
-      "assigneeId": 2,
-      "boardColumnId": 2,
-      "priority": 4,
-      "createdAt": "2026-03-05T11:37:57Z",
-      "updatedAt": "2026-03-05T11:37:57Z"
-    },
     {
       "id": 76,
       "title": "Navigation: add compact board quick-jump between /board and /settings",
@@ -35,6 +12,30 @@
       "priority": 4,
       "createdAt": "2026-03-05T12:07:52Z",
       "updatedAt": "2026-03-05T12:07:52Z"
+    },
+    {
+      "id": 78,
+      "title": "Board UX: add active saved-view helper text + clear affordance in toolbar",
+      "description": "Clarify why a saved view is active and provide one-click reset to all views from the saved-views row.",
+      "state": "next",
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2,
+      "priority": 4,
+      "createdAt": "2026-03-05T12:40:34Z",
+      "updatedAt": "2026-03-05T12:40:34Z"
+    },
+    {
+      "id": 79,
+      "title": "Board UX: add compact board empty-state CTA linking to /settings advanced controls",
+      "description": "When board has no matching cards after filters, show one-tap CTA to clear filters or open settings advanced controls.",
+      "state": "next",
+      "projectId": 2,
+      "assigneeId": 2,
+      "boardColumnId": 2,
+      "priority": 4,
+      "createdAt": "2026-03-05T12:56:08Z",
+      "updatedAt": "2026-03-05T12:56:08Z"
     }
   ]
 }

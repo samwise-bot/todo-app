@@ -1,5 +1,17 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 04:56 PT)
+- Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #74 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).
+- Shipped board→settings IA affordance on `/board` (`frontend/app/ui/board-lanes-section.tsx`, `frontend/app/globals.css`):
+  1. Added an in-context `Advanced controls` shortcut card that keeps board execution flow focused while exposing deeper configuration off-board.
+  2. Linked shortcut directly to `/settings#advanced-controls` to reduce navigation friction.
+  3. Added dedicated styling for visual hierarchy without reintroducing dashboard clutter.
+- Added focused regression coverage for shortcut visibility/target and settings anchor wiring (`frontend/tests/board-lanes-rendering.test.tsx`, `frontend/tests/settings-page.test.tsx`).
+- Added follow-up UI task #79 (`next`, priority 4) to keep board-first backlog at three actionable items.
+- Validation:
+  - `npm test -- --run tests/board-lanes-rendering.test.tsx tests/settings-page.test.tsx`
+
 ## Architecture Delta (2026-03-05, autonomous loop 04:41 PT)
 - Re-validated source-of-truth entities idempotently in TODO DB/API scope (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 inbox items), re-ranked UI-strike `Next` by (`priority`, `dueAt`, `id`), and executed task #77 through full lifecycle with explicit `samwise` assignment (`Next -> In Progress -> Done`).

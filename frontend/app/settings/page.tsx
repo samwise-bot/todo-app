@@ -40,7 +40,7 @@ export default function SettingsPage() {
 
   return (
     <main className="app-shell">
-      <section className="panel">
+      <section className="panel" id="advanced-controls">
         <p className="eyebrow">Settings</p>
         <h1>Advanced settings</h1>
         <p className="muted">Operational controls and current runtime defaults for TODO App power users.</p>

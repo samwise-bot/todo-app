@@ -1,5 +1,22 @@
 # Roadmap
 
+## Current Iteration Status (2026-03-05 04:56 PT)
+- ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
+- ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).
+- ✅ Completed: task #74 moved `Next -> In Progress -> Done` with explicit `samwise` assignment.
+- ✅ Completed: board IA increment shipped — `/board` now includes a dedicated shortcut card to `/settings#advanced-controls` so advanced controls stay off-board but one click away.
+- ✅ Added follow-up UI task #79 to keep board-first pipeline full (`next`, priority 4).
+- ▶ Next milestone:
+  - #76 Navigation: add compact board quick-jump between `/board` and `/settings`.
+  - #78 Board UX: add active saved-view helper text + clear affordance in toolbar.
+  - #79 Board UX: add compact board empty-state CTA linking to `/settings` advanced controls.
+- Board-first criteria snapshot:
+  - A) `/board` focused workspace: **On track**.
+  - B) Core card/header actions: **On track**.
+  - C) Strong filtering + chips/reset: **On track**.
+  - D) Visual polish/mobile safety: **Improving**.
+  - E) Advanced controls moved off board: **Improving** (explicit board→settings bridge shipped).
+
 ## Current Iteration Status (2026-03-05 04:41 PT)
 - ✅ Completed: re-validated principal/project/board/column prerequisites idempotently via source-of-truth DB/API (`samwise`, `TODO App`, `TODO App Board`, Inbox/Next/In Progress/Blocked/Done).
 - ✅ Completed: processed Inbox-first queue (0 inbox tasks), then ranked UI-strike `Next` by (`priority`, `dueAt`, `id`).

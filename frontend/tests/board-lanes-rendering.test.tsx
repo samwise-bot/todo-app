@@ -24,6 +24,8 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Boards data is unavailable (HTTP 503).');
     expect(html).toContain('Every task is currently assigned to a board column.');
     expect(html).toContain('No boards yet. Create your first board to start planning.');
+    expect(html).toContain('Open advanced controls in Settings');
+    expect(html).toContain('/settings#advanced-controls');
   });
 
   test('renders board-level and column-level empty states', () => {

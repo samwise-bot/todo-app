@@ -598,6 +598,17 @@ export function BoardLanesSection({
         )}
       </section>
 
+      <section className="board-shortcut-card" aria-label="Board advanced controls shortcut">
+        <p className="eyebrow">Advanced controls</p>
+        <h3>Need deeper board configuration?</h3>
+        <p className="muted">
+          Keep /board focused on execution. Open Settings for cache/runtime controls and roadmap-scope toggles.
+        </p>
+        <a className="btn btn-secondary" href="/settings#advanced-controls">
+          Open advanced controls in Settings
+        </a>
+      </section>
+
       {activeFilterBadges.length > 0 && (
         <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Active board filters">
           <span className="muted">Active filters:</span>

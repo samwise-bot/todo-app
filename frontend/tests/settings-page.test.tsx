@@ -14,6 +14,7 @@ describe('settings page', () => {
     expect(html).toContain('Read cache policy (TODO_APP_SWR_SECONDS)');
     expect(html).toContain('30 (default)');
     expect(html).toContain('Board-first focus defaults');
+    expect(html).toContain('id="advanced-controls"');
 
     vi.unstubAllEnvs();
   });
