@@ -51,13 +51,12 @@
 ## Current Iteration Status (2026-03-05)
 - ✅ Completed: re-validated principal/project/board/column prerequisites for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical GTD columns).
 - ✅ Completed: processed Inbox first (0 inbox tasks this cycle) and re-ranked `Next` by `priority`, `dueAt`, `id`.
-- ✅ Completed: task #58 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB.
-- ✅ Completed: captured live non-fixture worker-outcome artifact (`.run/subagent-worker-results.json`) and defined initial timeout threshold (`ops/config/subagent-timeout-thresholds.json`, maxTimeoutRatio=0.4).
-- ✅ Completed: fanout sweep report now evaluates timeout threshold compliance (`timeoutThreshold.withinThreshold`) in `.run/subagent-fanout-sweep-report.json`.
-- ✅ Unblocked: task #52 moved `Blocked/Waiting -> Next` after artifact + threshold gate landed.
+- ✅ Completed: task #52 moved `Next -> In Progress -> Done` with explicit `samwise` assignment in source-of-truth DB; task #34 was unblocked back to `Next` with blocker-note event evidence.
+- ✅ Completed: task #57 moved `Next -> In Progress -> Done` with explicit `samwise` assignment after shipping board-lane active-filter summary badges.
+- ✅ Completed: board-first UX increment shipped — `/board` now shows first-class active filter badges (assignee/project/state/priority/due-window/search) directly above lanes.
 - ▶ Next milestone:
-  - #52 Unblock #34: run worker outcome sweep and set timeout threshold.
-  - #57 Board UX: show active filter summary badges above lanes.
+  - #34 Ops: close fanout timeout/cap issue now that unblock prerequisites are done.
+  - Board UX: make active-filter badges removable inline (single-click clear).
 
 ## Current Iteration Status (2026-03-03)
 - ✅ Completed: task #14 moved `Next -> In Progress -> Done`; expanded unified client-state snapshot to emit deterministic `Next` task groupings by assignee (`nextTaskIdsByAssignee`) with regression coverage.

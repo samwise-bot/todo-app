@@ -56,6 +56,28 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('No tasks in this column.');
   });
 
+  test('renders active filter summary badges when board filters are applied', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [],
+          tasksWithoutColumn: [],
+          fetchErrors: []
+        }}
+        boards={[]}
+        columns={[]}
+        principals={[]}
+        projects={[]}
+        activeFilterBadges={['Assignee: Samwise', 'Priority: P2', 'Due: 3d']}
+      />
+    );
+
+    expect(html).toContain('Active filters:');
+    expect(html).toContain('Assignee: Samwise');
+    expect(html).toContain('Priority: P2');
+    expect(html).toContain('Due: 3d');
+  });
+
   test('renders mixed assigned and unassigned tasks in their respective lanes', () => {
     const html = renderToStaticMarkup(
       <BoardLanesSection

@@ -291,3 +291,11 @@ sequenceDiagram
 - Added timeout-threshold config `ops/config/subagent-timeout-thresholds.json` (`maxTimeoutRatio: 0.4`) as the first explicit operational gate.
 - Extended `ops/run/validate_subagent_fanout_sweep.py` to include threshold evaluation in report output (`timeoutThreshold.withinThreshold`).
 - Added focused regression coverage for live-capture helper in `ops/tests/test_capture_worker_outcomes.py`.
+
+## Architecture Delta (2026-03-05, autonomous loop 19:20 PT)
+- Completed highest-priority operational Next task #52 (`Next -> In Progress -> Done`) with explicit `samwise` assignment.
+- Unblocked #34 by moving it from `waiting` to `next` and recording an explicit unblock note in task events after threshold evidence validation.
+- Shipped board-first UX increment for task #57: `BoardLanesSection` now renders active filter summary badges directly above kanban lanes.
+  1. Badge set includes assignee, project, state, priority, due-window, and search query.
+  2. Badge generation is centralized in `_dashboard.tsx` from the same filter params already driving lane/explorer matching.
+  3. Added regression coverage in `frontend/tests/board-lanes-rendering.test.tsx` for active-filter badge rendering.

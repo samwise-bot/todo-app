@@ -5,20 +5,19 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Mainline execution completed on highest-priority Next task #58; moved `Next -> In Progress -> Done` assigned to `samwise`.
-- [x] Captured live worker-outcome artifact (`.run/subagent-worker-results.json`) via local timeout harness and set initial timeout threshold (`ops/config/subagent-timeout-thresholds.json`, 0.4).
-- [x] Extended fanout sweep report with threshold evaluation (`timeoutThreshold.withinThreshold`) and synced docs (`docs/architecture/overview.md`, `docs/roadmap.md`).
-- [x] Unblocked #52 by moving it back to `next` after threshold evidence landed.
+- [x] Executed highest-priority Next task #52 through full flow (`Next -> In Progress -> Done`) with `samwise` assignment.
+- [x] Unblocked #34 by moving it from `waiting` to `next` and writing an explicit unblock note event after threshold evidence verification.
+- [x] Completed task #57 (`Next -> In Progress -> Done`) and shipped board-lane active-filter summary badges above `/board` lanes.
+- [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #52 Unblock #34: run worker outcome sweep and set timeout threshold (**next**, priority=1)
-- [ ] #57 Board UX: show active filter summary badges above lanes (**next**, priority=2)
-- [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**waiting/blocked**, priority=1)
+- [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**next**, priority=1)
+- [ ] #7 Mutation smoke task (**next**, priority=3)
+- [ ] #9 Mutation smoke task (**next**, priority=3)
 
 ## Verification
-- `python3 -m unittest ops.tests.test_capture_worker_outcomes ops.tests.test_validate_subagent_fanout_sweep` ✅
-- `python3 ops/run/capture_worker_outcomes.py --output .run/subagent-worker-results.json --timeout-seconds 2 --success-cases 2 --timeout-cases 1` ✅
-- `python3 ops/run/validate_subagent_fanout_sweep.py --max-cycles 1 --report-path .run/subagent-fanout-sweep-report.json` ✅
+- `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
+- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task state transition checks ... PY` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

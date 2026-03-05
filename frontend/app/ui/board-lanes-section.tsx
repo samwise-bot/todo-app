@@ -91,13 +91,15 @@ export function BoardLanesSection({
   boards,
   columns,
   principals,
-  projects
+  projects,
+  activeFilterBadges = []
 }: {
   laneView: BoardLaneView;
   boards: Entity[];
   columns: Entity[];
   principals: Entity[];
   projects: Entity[];
+  activeFilterBadges?: string[];
 }) {
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -125,6 +127,15 @@ export function BoardLanesSection({
           <h2>Board workflow</h2>
         </div>
       </div>
+
+      {activeFilterBadges.length > 0 && (
+        <div className="badge-row" style={{ marginBottom: 10, gap: 8 }} aria-label="Active board filters">
+          <span className="muted">Active filters:</span>
+          {activeFilterBadges.map((badge) => (
+            <span key={badge} className="badge">{badge}</span>
+          ))}
+        </div>
+      )}
 
       {laneView.fetchErrors.length > 0 && (
         <div className="inline-alert" role="alert">

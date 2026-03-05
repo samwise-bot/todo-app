@@ -206,6 +206,30 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
     principalByID.set(principal.id, principal);
   }
 
+  const activeBoardFilterBadges: string[] = [];
+  if (taskAssigneeId) {
+    const principal = principalByID.get(Number(taskAssigneeId));
+    activeBoardFilterBadges.push(`Assignee: ${principal?.displayName ?? `#${taskAssigneeId}`}`);
+  }
+  if (taskProjectId) {
+    const project = projectByID.get(Number(taskProjectId));
+    activeBoardFilterBadges.push(`Project: ${project?.name ?? `#${taskProjectId}`}`);
+  }
+  if (taskState) {
+    activeBoardFilterBadges.push(`State: ${taskState}`);
+  }
+  if (taskPriority) {
+    activeBoardFilterBadges.push(`Priority: P${taskPriority}`);
+  }
+  if (taskDueWindow) {
+    const dueWindowLabel =
+      taskDueWindow === '24' ? '24h' : taskDueWindow === '72' ? '3d' : taskDueWindow === '168' ? '7d' : `${taskDueWindow}h`;
+    activeBoardFilterBadges.push(`Due: ${dueWindowLabel}`);
+  }
+  if (taskQ) {
+    activeBoardFilterBadges.push(`Search: ${taskQ}`);
+  }
+
   const principalHidden = hiddenParamEntries(currentParams, ['principalKind', 'principalQ', 'principalPage', 'principalPageSize']);
   const taskHidden = hiddenParamEntries(currentParams, ['taskState', 'taskQ', 'taskProjectId', 'taskAssigneeId', 'taskBoardColumnId', 'taskPriority', 'taskDueWindow', 'taskPage', 'taskPageSize']);
 
@@ -259,7 +283,14 @@ export default async function HomePage({ searchParams }: { searchParams?: Search
         <CreatePrincipalForm />
       </section>
 
-      <BoardLanesSection laneView={laneView} boards={boards} columns={columns} principals={principals} projects={projects} />
+      <BoardLanesSection
+        laneView={laneView}
+        boards={boards}
+        columns={columns}
+        principals={principals}
+        projects={projects}
+        activeFilterBadges={activeBoardFilterBadges}
+      />
 
       <section className="panel" aria-label="Board inspector">
         <div className="panel-header-row">
