@@ -10,10 +10,52 @@
     "Done": 5
   },
   "inboxCount": 0,
-  "nextOrdered": [
-    66,
-    67,
-    68
+  "selectedTask": {
+    "id": 67,
+    "title": "Board UX: add direct column rename/delete controls on board headers",
+    "description": "",
+    "state": "next",
+    "projectId": 2,
+    "assigneeId": 2,
+    "boardColumnId": 2,
+    "priority": 2,
+    "createdAt": "2026-03-05T10:03:04Z",
+    "updatedAt": "2026-03-05T10:03:04Z"
+  },
+  "transitions": [
+    [
+      67,
+      "assign",
+      2
+    ],
+    [
+      67,
+      "next->scheduled",
+      null
+    ],
+    [
+      67,
+      "column->In Progress",
+      3
+    ],
+    [
+      67,
+      "scheduled->done",
+      null
+    ],
+    [
+      67,
+      "column->Done",
+      5
+    ]
   ],
-  "executedTaskId": 65
+  "topNext": [
+    {
+      "id": 68,
+      "title": "Board UX: add assignee/project filter dropdown quick-clear chips in board header",
+      "priority": 3,
+      "dueAt": null,
+      "state": "next"
+    }
+  ]
 }

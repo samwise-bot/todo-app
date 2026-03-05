@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 02:35 PT)
+- Re-validated source-of-truth prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), then executed highest-ranked UI `Next` task #67 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.
+- Shipped board-first column header management controls on `/board` (`frontend/app/ui/board-lanes-section.tsx`):
+  1. Added inline column rename form in each column header (`updateColumnAction`) so naming updates happen in-lane.
+  2. Added inline column delete action (`deleteColumnAction`) directly in header controls.
+  3. Guarded destructive delete with `taskCount > 0` disablement + helper hint to keep lane/task integrity obvious during board operations.
+- Added focused regression coverage update:
+  - `frontend/tests/board-lanes-rendering.test.tsx` (asserts edit-column controls and rename/delete affordances render in headers)
+
 ## Architecture Delta (2026-03-05, autonomous loop 02:20 PT)
 - Re-validated source-of-truth prerequisites idempotently in SQLite/API data (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #66 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.

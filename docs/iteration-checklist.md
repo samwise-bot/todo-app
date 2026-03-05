@@ -3,20 +3,20 @@
 _Source of truth is the app API. This file is an export snapshot for quick reference._
 
 ## Completed This Iteration
-- [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth DB/API checks.
+- [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done) via source-of-truth API checks.
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Executed highest-priority Next task #66 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
-- [x] Shipped board-first keyboard-hint persistence on `/board` by appending reorder guidance to post-submit success status announcements.
+- [x] Executed highest-priority UI `Next` task #67 through full flow with assignment (`next -> scheduled -> done`, board column `Next -> In Progress -> Done`) under `samwise`.
+- [x] Shipped board-first column header controls on `/board` for direct rename/delete workflows without leaving lane context.
 - [x] Synced architecture/roadmap/checklist docs for this cycle.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #67 Board UX: add direct column rename/delete controls on board headers (**next**, priority=2)
 - [ ] #68 Board UX: add assignee/project filter dropdown quick-clear chips in board header (**next**, priority=3)
 - [ ] #7 Mutation smoke task (**next**, priority=3)
+- [ ] #9 Mutation smoke task (**next**, priority=3)
 
 ## Verification
-- `npm test -- --run tests/board-lanes-rendering.test.tsx` ✅
-- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task #66 lifecycle transitions + task_events ... PY` ✅
+- `npm test -- tests/board-lanes-rendering.test.tsx` ✅
+- `python3 - <<'PY' ... idempotent principal/project/board/column ensure + task #67 lifecycle transitions + refresh .run/tasks.json ... PY` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

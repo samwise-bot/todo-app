@@ -56,6 +56,9 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('No tasks in this column.');
     expect(html).toContain('Move left');
     expect(html).toContain('Move right');
+    expect(html).toContain('Edit column');
+    expect(html).toContain('Rename column Doing');
+    expect(html).toContain('Delete column Doing');
     expect(html).toContain('Keyboard tip: use Tab to focus move buttons');
   });
 

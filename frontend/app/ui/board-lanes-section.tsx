@@ -1,7 +1,15 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import type { BoardLaneView } from '../../lib/board-lanes';
-import { assignTaskAction, createColumnAction, createTaskAction, deleteTaskAction, updateColumnAction, updateTaskAction } from '../actions';
+import {
+  assignTaskAction,
+  createColumnAction,
+  createTaskAction,
+  deleteColumnAction,
+  deleteTaskAction,
+  updateColumnAction,
+  updateTaskAction
+} from '../actions';
 import { INITIAL_ACTION_STATE } from '../../lib/action-state';
 
 type Entity = { id: number; name?: string; displayName?: string; [key: string]: unknown };
@@ -155,6 +163,49 @@ function InlineCreateColumnForm({ boardId, nextPosition }: { boardId: number; ne
       <input name="name" placeholder="Add column" aria-label="New column name" required />
       <button type="submit">Add column</button>
     </form>
+  );
+}
+
+function InlineColumnControls({
+  columnId,
+  columnName,
+  columnPosition,
+  taskCount
+}: {
+  columnId: number;
+  columnName: string;
+  columnPosition: number;
+  taskCount: number;
+}) {
+  async function inlineRenameColumn(formData: FormData) {
+    'use server';
+    formData.set('columnId', String(columnId));
+    formData.set('position', String(columnPosition));
+    await updateColumnAction(INITIAL_ACTION_STATE, formData);
+  }
+
+  async function inlineDeleteColumn(formData: FormData) {
+    'use server';
+    formData.set('columnId', String(columnId));
+    await deleteColumnAction(INITIAL_ACTION_STATE, formData);
+  }
+
+  return (
+    <details style={{ marginTop: 6 }}>
+      <summary style={{ cursor: 'pointer' }}>Edit column</summary>
+      <form action={inlineRenameColumn} className="form-row" style={{ marginTop: 8 }}>
+        <input name="name" defaultValue={columnName} aria-label={`Rename column ${columnName}`} required />
+        <button type="submit" className="btn btn-secondary">Rename</button>
+      </form>
+      <form action={inlineDeleteColumn} style={{ marginTop: 6 }}>
+        <input type="hidden" name="name" value={columnName} readOnly />
+        <input type="hidden" name="position" value={String(columnPosition)} readOnly />
+        <button type="submit" className="btn btn-secondary" aria-label={`Delete column ${columnName}`} disabled={taskCount > 0}>
+          Delete column
+        </button>
+      </form>
+      {taskCount > 0 && <p className="muted">Move or complete tasks before deleting this column.</p>}
+    </details>
   );
 }
 
@@ -401,6 +452,12 @@ export function BoardLanesSection({
                         <span className="count-pill">{column.tasks.length}</span>
                       </div>
                     </div>
+                    <InlineColumnControls
+                      columnId={column.id}
+                      columnName={column.name}
+                      columnPosition={column.position}
+                      taskCount={column.tasks.length}
+                    />
                     <InlineCreateTaskForm
                       boardName={board.name}
                       columnId={column.id}
