@@ -1,5 +1,15 @@
 # Architecture Overview
 
+## Architecture Delta (2026-03-05, autonomous loop 01:59 PT)
+- Re-validated source-of-truth prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
+- Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #65 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.
+- Shipped board-first keyboard-first column reordering polish on `/board`:
+  1. Column move buttons now provide explicit keyboard instructions (`sr-only` hint + `aria-describedby`) per column header.
+  2. Column move controls now emit one-shot success announcements via `columnMoveStatus` rendered in an `aria-live` status region.
+  3. Move controls keep rollback error alerts for failed persistence, preserving optimistic-reorder transparency.
+- Added focused regression coverage updates:
+  - `frontend/tests/board-lanes-rendering.test.tsx` (keyboard hints, move-button labels, `role="status"` announcement rendering)
+
 ## Architecture Delta (2026-03-05, autonomous loop 00:33 PT)
 - Re-validated source-of-truth board prerequisites idempotently via API (`samwise`, `TODO App`, `TODO App Board`, columns Inbox/Next/In Progress/Blocked/Done).
 - Processed Inbox-first queue (0 items), then executed highest-ranked `Next` task #64 through full lifecycle (`next -> scheduled -> done`) with explicit `samwise` assignment.

@@ -54,6 +54,9 @@ describe('BoardLanesSection', () => {
     expect(html).toContain('Add column');
     expect(html).toContain('No columns defined for this board yet.');
     expect(html).toContain('No tasks in this column.');
+    expect(html).toContain('Move left');
+    expect(html).toContain('Move right');
+    expect(html).toContain('Keyboard tip: use Tab to focus move buttons');
   });
 
   test('renders shareable preset links on the board panel', () => {
@@ -125,6 +128,26 @@ describe('BoardLanesSection', () => {
     );
 
     expect(html).toContain('Column move failed for &quot;Next&quot;. Optimistic reorder was rolled back.');
+  });
+
+  test('renders column move status announcement when provided', () => {
+    const html = renderToStaticMarkup(
+      <BoardLanesSection
+        laneView={{
+          boards: [],
+          tasksWithoutColumn: [],
+          fetchErrors: []
+        }}
+        boards={[]}
+        columns={[]}
+        principals={[]}
+        projects={[]}
+        columnMoveStatus={'Moved "Next" right.'}
+      />
+    );
+
+    expect(html).toContain('Moved &quot;Next&quot; right.');
+    expect(html).toContain('role="status"');
   });
 
   test('renders mixed assigned and unassigned tasks in their respective lanes', () => {

@@ -165,7 +165,8 @@ function MoveColumnForm({
   boardHref,
   toPosition,
   disabled,
-  direction
+  direction,
+  instructionId
 }: {
   columnId: number;
   columnName: string;
@@ -174,6 +175,7 @@ function MoveColumnForm({
   toPosition: number;
   disabled: boolean;
   direction: 'left' | 'right';
+  instructionId: string;
 }) {
   async function moveColumn(formData: FormData) {
     'use server';
@@ -181,12 +183,16 @@ function MoveColumnForm({
     formData.set('name', columnName);
     formData.set('position', String(toPosition));
 
+    const sep = boardHref.includes('?') ? '&' : '?';
     const result = await updateColumnAction(INITIAL_ACTION_STATE, formData);
     if (result.status === 'error') {
-      const sep = boardHref.includes('?') ? '&' : '?';
       const message = encodeURIComponent(`Column move failed for "${columnName}". Optimistic reorder was rolled back.`);
       redirect(`${boardHref}${sep}columnMoveNotice=${message}`);
     }
+
+    const movedDirection = direction === 'left' ? 'left' : 'right';
+    const status = encodeURIComponent(`Moved "${columnName}" ${movedDirection}.`);
+    redirect(`${boardHref}${sep}columnMoveStatus=${status}`);
   }
 
   return (
@@ -197,9 +203,10 @@ function MoveColumnForm({
         className="btn btn-secondary"
         disabled={disabled}
         aria-label={direction === 'left' ? `Move ${columnName} left` : `Move ${columnName} right`}
+        aria-describedby={instructionId}
         title={direction === 'left' ? 'Move column left' : 'Move column right'}
       >
-        {direction === 'left' ? '←' : '→'}
+        {direction === 'left' ? 'Move left' : 'Move right'}
       </button>
     </form>
   );
@@ -214,7 +221,8 @@ export function BoardLanesSection({
   activeFilterBadges = [],
   presetLinks = [],
   boardHref = '/board',
-  columnMoveNotice = ''
+  columnMoveNotice = '',
+  columnMoveStatus = ''
 }: {
   laneView: BoardLaneView;
   boards: Entity[];
@@ -225,6 +233,7 @@ export function BoardLanesSection({
   presetLinks?: { key: string; label: string; href: string }[];
   boardHref?: string;
   columnMoveNotice?: string;
+  columnMoveStatus?: string;
 }) {
   const principalNames = new Map<number, string>();
   for (const principal of principals) {
@@ -278,6 +287,12 @@ export function BoardLanesSection({
       {columnMoveNotice && (
         <div className="inline-alert" role="alert">
           <strong>{columnMoveNotice}</strong>
+        </div>
+      )}
+
+      {columnMoveStatus && (
+        <div className="inline-alert" role="status" aria-live="polite" aria-atomic="true">
+          <strong>{columnMoveStatus}</strong>
         </div>
       )}
 
@@ -351,8 +366,13 @@ export function BoardLanesSection({
                             ? 'done'
                             : 'next';
 
+                const moveInstructionId = `column-reorder-hint-${column.id}`;
+
                 return (
                   <section key={column.id} className="kanban-column">
+                    <p id={moveInstructionId} className="sr-only">
+                      Keyboard tip: use Tab to focus move buttons, then press Enter or Space to reorder column {column.name}.
+                    </p>
                     <div className="column-header-row">
                       <h4>{column.name}</h4>
                       <div className="form-row" style={{ gap: 6 }}>
@@ -364,6 +384,7 @@ export function BoardLanesSection({
                           toPosition={leftNeighbor ? leftNeighbor.position - 1 : column.position}
                           disabled={!leftNeighbor}
                           direction="left"
+                          instructionId={moveInstructionId}
                         />
                         <MoveColumnForm
                           columnId={column.id}
@@ -373,6 +394,7 @@ export function BoardLanesSection({
                           toPosition={rightNeighbor ? rightNeighbor.position + 1 : column.position}
                           disabled={!rightNeighbor}
                           direction="right"
+                          instructionId={moveInstructionId}
                         />
                         <span className="count-pill">{column.tasks.length}</span>
                       </div>
