@@ -282,11 +282,12 @@ sequenceDiagram
 - Added first-class board filters for `priority` and `due window` (`24h`, `3d`, `7d`) while preserving existing assignee/project/state/search controls.
 - Updated board health inspector to compute metrics from the active filtered set, keeping triage stats aligned with the visible board slice.
 
-## Architecture Delta (2026-03-05, autonomous loop 16:15 PT)
-- Completed TODO task #56 lifecycle (`Next -> In Progress -> Done`) in source-of-truth DB with explicit `samwise` assignment retained.
-- Added reusable board filter preset model in `frontend/lib/board-filter-presets.ts`:
-  1. `my-active` (`assignee=2`, active states),
-  2. `due-24h` (due-window + active states),
-  3. `p1-work` (priority-1 active queue).
-- Wired `/board` Task explorer to expose preset links that persist filter sets in URL query templates without route-hopping.
-- Added focused regression coverage in `frontend/tests/board-filter-presets.test.ts` for preset stability and query-reset semantics.
+## Architecture Delta (2026-03-05, autonomous loop 17:45 PT)
+- Completed TODO task #58 lifecycle (`Next -> In Progress -> Done`) in source-of-truth DB with explicit `samwise` assignment retained.
+- Added live worker-outcome capture utility `ops/run/capture_worker_outcomes.py` for no-subagent environments:
+  1. Runs local commands with hard timeout enforcement,
+  2. Emits `.run/subagent-worker-results.json` with durations/statuses,
+  3. Keeps provenance explicit via `source: local-timeout-harness`.
+- Added timeout-threshold config `ops/config/subagent-timeout-thresholds.json` (`maxTimeoutRatio: 0.4`) as the first explicit operational gate.
+- Extended `ops/run/validate_subagent_fanout_sweep.py` to include threshold evaluation in report output (`timeoutThreshold.withinThreshold`).
+- Added focused regression coverage for live-capture helper in `ops/tests/test_capture_worker_outcomes.py`.

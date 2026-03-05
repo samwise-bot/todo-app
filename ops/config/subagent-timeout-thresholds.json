@@ -1,0 +1,5 @@
+{
+  "maxTimeoutRatio": 0.4,
+  "source": ".run/subagent-worker-results.json",
+  "notes": "Initial threshold from local timeout harness evidence (task #58). Tighten after first true subagent-run dataset."
+}

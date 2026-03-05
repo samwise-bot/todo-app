@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-03-05T01:45:40.137781+00:00",
+  "source": "local-timeout-harness",
+  "timeoutSeconds": 2,
+  "items": [
+    {
+      "taskId": 9100,
+      "status": "completed",
+      "durationSeconds": 0.215,
+      "timedOut": false,
+      "timeoutSeconds": 2,
+      "command": "python3 -c \"import time; time.sleep(0.2)\"",
+      "exitCode": 0,
+      "startedAt": "2026-03-05T01:45:37.703258+00:00",
+      "finishedAt": "2026-03-05T01:45:37.918426+00:00"
+    },
+    {
+      "taskId": 9101,
+      "status": "completed",
+      "durationSeconds": 0.216,
+      "timedOut": false,
+      "timeoutSeconds": 2,
+      "command": "python3 -c \"import time; time.sleep(0.2)\"",
+      "exitCode": 0,
+      "startedAt": "2026-03-05T01:45:37.918445+00:00",
+      "finishedAt": "2026-03-05T01:45:38.134310+00:00"
+    },
+    {
+      "taskId": 9102,
+      "status": "timed_out",
+      "durationSeconds": 2.003,
+      "timedOut": true,
+      "timeoutSeconds": 2,
+      "command": "python3 -c \"import time; time.sleep(5)\"",
+      "exitCode": null,
+      "startedAt": "2026-03-05T01:45:38.134334+00:00",
+      "finishedAt": "2026-03-05T01:45:40.137762+00:00"
+    }
+  ]
+}

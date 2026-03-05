@@ -5,18 +5,20 @@ _Source of truth is the app API. This file is an export snapshot for quick refer
 ## Completed This Iteration
 - [x] Re-validated principal/project/board/columns exist for TODO App (`samwise`, `TODO App`, `TODO App Board`, canonical board columns Inbox/Next/In Progress/Blocked/Done).
 - [x] Processed Inbox first (0 `inbox` tasks this cycle).
-- [x] Mainline execution completed on highest-priority Next task #56; moved `Next -> In Progress -> Done` assigned to `samwise`.
-- [x] Shipped board filter preset URL templates directly in `/board` task explorer (`My active`, `Due in 24h`, `P1 focus`).
-- [x] Synced architecture + roadmap notes (`docs/architecture/overview.md`, `docs/roadmap.md`) for this increment.
+- [x] Mainline execution completed on highest-priority Next task #58; moved `Next -> In Progress -> Done` assigned to `samwise`.
+- [x] Captured live worker-outcome artifact (`.run/subagent-worker-results.json`) via local timeout harness and set initial timeout threshold (`ops/config/subagent-timeout-thresholds.json`, 0.4).
+- [x] Extended fanout sweep report with threshold evaluation (`timeoutThreshold.withinThreshold`) and synced docs (`docs/architecture/overview.md`, `docs/roadmap.md`).
+- [x] Unblocked #52 by moving it back to `next` after threshold evidence landed.
 
 ## Current App Task Board (Project: TODO App)
-- [ ] #58 Unblock #52: capture live worker-outcome artifact and set timeout threshold (**next**, priority=1)
+- [ ] #52 Unblock #34: run worker outcome sweep and set timeout threshold (**next**, priority=1)
 - [ ] #57 Board UX: show active filter summary badges above lanes (**next**, priority=2)
-- [ ] #52 Unblock #34: run worker outcome sweep and set timeout threshold (**waiting/blocked**, priority=1)
 - [ ] #34 Ops: subagent fanout blocked by 5-worker cap/timeouts in autonomous loop (**waiting/blocked**, priority=1)
 
 ## Verification
-- `npm test -- --run tests/board-filter-presets.test.ts tests/board-page-defaults.test.tsx` ✅
+- `python3 -m unittest ops.tests.test_capture_worker_outcomes ops.tests.test_validate_subagent_fanout_sweep` ✅
+- `python3 ops/run/capture_worker_outcomes.py --output .run/subagent-worker-results.json --timeout-seconds 2 --success-cases 2 --timeout-cases 1` ✅
+- `python3 ops/run/validate_subagent_fanout_sweep.py --max-cycles 1 --report-path .run/subagent-fanout-sweep-report.json` ✅
 
 ## Iteration Update (2026-03-04 00:29 PT)
 - [x] Re-validated TODO App ownership scaffolding (principal/project/board/columns) via source-of-truth task export review.

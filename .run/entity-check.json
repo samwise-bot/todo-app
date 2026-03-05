@@ -1,0 +1,58 @@
+{
+  "principal": {
+    "id": 2,
+    "kind": "agent",
+    "handle": "samwise",
+    "displayName": "Samwise",
+    "createdAt": "2026-03-03T15:27:25Z"
+  },
+  "project": {
+    "id": 2,
+    "name": "TODO App",
+    "description": "Primary roadmap for TODO app autonomous loop",
+    "createdAt": "2026-03-03T15:27:25Z"
+  },
+  "board": {
+    "id": 1,
+    "projectId": 2,
+    "name": "TODO App Board",
+    "createdAt": "2026-03-03T15:27:25Z"
+  },
+  "columns": [
+    {
+      "id": 1,
+      "boardId": 1,
+      "name": "Inbox",
+      "position": 10,
+      "createdAt": "2026-03-03T15:27:25Z"
+    },
+    {
+      "id": 2,
+      "boardId": 1,
+      "name": "Next",
+      "position": 20,
+      "createdAt": "2026-03-03T15:27:25Z"
+    },
+    {
+      "id": 3,
+      "boardId": 1,
+      "name": "In Progress",
+      "position": 30,
+      "createdAt": "2026-03-03T15:27:25Z"
+    },
+    {
+      "id": 7,
+      "boardId": 1,
+      "name": "Blocked",
+      "position": 40,
+      "createdAt": "2026-03-03T16:03:43Z"
+    },
+    {
+      "id": 5,
+      "boardId": 1,
+      "name": "Done",
+      "position": 50,
+      "createdAt": "2026-03-03T15:27:25Z"
+    }
+  ]
+}

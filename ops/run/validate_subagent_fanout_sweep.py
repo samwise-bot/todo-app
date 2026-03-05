@@ -21,6 +21,7 @@ DEFAULT_MAX_CYCLES = 20
 DEFAULT_REPORT_PATH = Path('.run/subagent-fanout-sweep-report.json')
 DEFAULT_WORKER_RESULTS_PATH = Path('.run/subagent-worker-results.json')
 DEFAULT_WORKER_RESULTS_FIXTURE_PATH = Path('ops/fixtures/subagent-worker-results.sample.json')
+DEFAULT_TIMEOUT_THRESHOLDS_PATH = Path('ops/config/subagent-timeout-thresholds.json')
 
 
 def _run_select(api_base: str, project_id: int, batch_size: int) -> dict:
@@ -108,6 +109,30 @@ def _worker_outcome_summary(path: Path, fixture_path: Path | None = None) -> dic
     }
 
 
+def _timeout_threshold_summary(worker_outcome: dict, thresholds_path: Path) -> dict:
+    if not thresholds_path.exists():
+        return {
+            'found': False,
+            'path': str(thresholds_path),
+            'maxTimeoutRatio': None,
+            'withinThreshold': None,
+        }
+
+    payload = json.loads(thresholds_path.read_text())
+    max_timeout_ratio = payload.get('maxTimeoutRatio')
+    timeout_ratio = worker_outcome.get('timeoutRatio', 0.0)
+    within = None
+    if isinstance(max_timeout_ratio, (int, float)):
+        within = timeout_ratio <= float(max_timeout_ratio)
+
+    return {
+        'found': True,
+        'path': str(thresholds_path),
+        'maxTimeoutRatio': max_timeout_ratio,
+        'withinThreshold': within,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description='Validate fanout coverage over full Next queue.')
     parser.add_argument('--api-base', default=DEFAULT_API_BASE)
@@ -117,6 +142,7 @@ def main() -> int:
     parser.add_argument('--tasks-json', type=Path, default=Path('.run/tasks.json'))
     parser.add_argument('--worker-results-json', type=Path, default=DEFAULT_WORKER_RESULTS_PATH)
     parser.add_argument('--worker-results-fixture-json', type=Path, default=DEFAULT_WORKER_RESULTS_FIXTURE_PATH)
+    parser.add_argument('--timeout-thresholds-json', type=Path, default=DEFAULT_TIMEOUT_THRESHOLDS_PATH)
     parser.add_argument('--report-path', type=Path, default=DEFAULT_REPORT_PATH)
     args = parser.parse_args()
 
@@ -146,6 +172,12 @@ def main() -> int:
             break
 
     completed = not bool(sorted(set(final_expected) - seen))
+    worker_outcome = _worker_outcome_summary(
+        args.worker_results_json,
+        fixture_path=args.worker_results_fixture_json,
+    )
+    timeout_threshold = _timeout_threshold_summary(worker_outcome, args.timeout_thresholds_json)
+
     report = {
         'timestamp': datetime.now(timezone.utc).isoformat(),
         'apiBase': args.api_base,
@@ -157,10 +189,8 @@ def main() -> int:
         'seenIds': sorted(seen),
         'coverageRatio': (len(set(final_expected) & seen) / len(final_expected)) if final_expected else 1.0,
         'completedFullSweep': completed,
-        'workerOutcomeSummary': _worker_outcome_summary(
-            args.worker_results_json,
-            fixture_path=args.worker_results_fixture_json,
-        ),
+        'workerOutcomeSummary': worker_outcome,
+        'timeoutThreshold': timeout_threshold,
         'cycleSummaries': cycle_summaries,
     }
 
